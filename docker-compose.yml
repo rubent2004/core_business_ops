@@ -1,0 +1,18 @@
+services:
+  sara-erp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sara-core-business-ops
+    ports:
+      - "80:80"
+    volumes:
+      - erp-db:/opt/moqui/runtime/db
+      - erp-log:/opt/moqui/runtime/log
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx1g
+    restart: unless-stopped
+
+volumes:
+  erp-db:
+  erp-log:
