@@ -16,28 +16,11 @@ COPY components/ framework/runtime/component/
 WORKDIR /build/framework
 RUN ./gradlew build addRuntime -x test
 
-# Unzip the combined WAR
+# Unzip the WAR and overlay the full runtime on top
 RUN mkdir -p /opt/moqui && \
     cd /opt/moqui && \
-    unzip -q /build/framework/moqui-plus-runtime.war
-
-# Copy runtime/conf from the framework source (the WAR doesn't include it)
-RUN mkdir -p /opt/moqui/runtime/conf && \
-    cp /build/framework/runtime/conf/*.xml /opt/moqui/runtime/conf/ 2>/dev/null || true && \
-    cp /build/framework/runtime/conf/*.xsd /opt/moqui/runtime/conf/ 2>/dev/null || true && \
-    # Copy runtime/lib for JDBC drivers etc
-    mkdir -p /opt/moqui/runtime/lib && \
-    cp /build/framework/runtime/lib/*.jar /opt/moqui/runtime/lib/ 2>/dev/null || true && \
-    # Copy component data (our demo component)
-    mkdir -p /opt/moqui/runtime/component && \
-    cp -r /build/framework/runtime/component/moqui-sv-localization /opt/moqui/runtime/component/ && \
-    cp -r /build/framework/runtime/component/MarbleERP /opt/moqui/runtime/component/ 2>/dev/null || true && \
-    # Copy base components
-    for d in tools webroot; do \
-      [ -d "/build/framework/runtime/base-component/$d" ] && \
-      mkdir -p /opt/moqui/runtime/base-component && \
-      cp -r "/build/framework/runtime/base-component/$d" /opt/moqui/runtime/base-component/; \
-    done
+    unzip -q /build/framework/moqui-plus-runtime.war && \
+    cp -r /build/framework/runtime /opt/moqui/runtime
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre
@@ -46,7 +29,6 @@ WORKDIR /opt/moqui
 
 COPY --from=builder /opt/moqui/ .
 
-# Volumes for persistent data
 VOLUME ["/opt/moqui/runtime/db", "/opt/moqui/runtime/log"]
 
 EXPOSE 80
