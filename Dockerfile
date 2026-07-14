@@ -29,6 +29,9 @@ WORKDIR /opt/moqui
 
 COPY --from=builder /opt/moqui/ .
 
+# Copy the demo conf file (not in WAR or framework repo)
+COPY runtime/conf/MoquiDevConf.xml /opt/moqui/runtime/conf/MoquiDevConf.xml
+
 VOLUME ["/opt/moqui/runtime/db", "/opt/moqui/runtime/log"]
 
 EXPOSE 80
