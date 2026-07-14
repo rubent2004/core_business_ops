@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <!--
+        ensure#FiscalMonth
+
+        Asegura que existe el TimePeriod FiscalMonth para una organizacion
+        y periodo YYYY-MM. Es idempotente: si existe lo devuelve. Si no,
+        lo crea (fromDate=1ro del mes, thruDate=ultimo dia del mes).
+    -->
+    <service verb="ensure" noun="FiscalMonth" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PeriodCloseServices.groovy"
+             method="ensureFiscalMonth">
+        <description>Crea (o devuelve si existe) el TimePeriod FiscalMonth para org+periodo.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true">
+                <text-length min="7" max="7"/>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="timePeriodId"/>
+            <parameter name="isClosed"/>
+            <parameter name="created" type="Boolean"/>
+        </out-parameters>
+    </service>
+
+    <!--
+        close#FiscalPeriod
+
+        Cierra un TimePeriod fiscal mensual para una organizacion. Una vez
+        cerrado, la SECA SvBlockRetroactivePosting rechaza cualquier intento
+        de crear AcctgTrans con transactionDate dentro del periodo.
+
+        Validaciones:
+          - El TimePeriod debe existir y pertenecer a la organizacion
+          - No debe estar ya cerrado (returns alreadyClosed=true en ese caso)
+    -->
+    <service verb="close" noun="FiscalPeriod" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PeriodCloseServices.groovy"
+             method="closeFiscalPeriod">
+        <description>Cierra un TimePeriod fiscal. Bloquea posting retroactivo.</description>
+        <in-parameters>
+            <parameter name="timePeriodId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="timePeriodId"/>
+            <parameter name="alreadyClosed" type="Boolean"/>
+            <parameter name="closedDate"/>
+        </out-parameters>
+    </service>
+
+    <!--
+        reopen#FiscalPeriod
+
+        Reabre un TimePeriod cerrado. Solo para correcciones excepcionales.
+        Recomendado restringir a rol SvAdmin a nivel de permisos.
+    -->
+    <service verb="reopen" noun="FiscalPeriod" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PeriodCloseServices.groovy"
+             method="reopenFiscalPeriod">
+        <description>Reabre un TimePeriod fiscal cerrado (solo correcciones excepcionales).</description>
+        <in-parameters>
+            <parameter name="timePeriodId" required="true"/>
+            <parameter name="reason" required="true">
+                <description>Justificacion auditable de la reapertura.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="timePeriodId"/>
+            <parameter name="wasOpen" type="Boolean"/>
+        </out-parameters>
+    </service>
+
+    <!--
+        check#TransactionDateNotInClosedPeriod
+
+        Chequeo invocado por SECA antes de crear AcctgTrans. Si transactionDate
+        cae en un FiscalMonth de organizationPartyId con isClosed=Y, retorna
+        error.
+
+        Se separa como servicio para que sea facilmente testeable.
+    -->
+    <service verb="check" noun="TransactionDateNotInClosedPeriod" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PeriodCloseServices.groovy"
+             method="checkTransactionDateNotInClosedPeriod">
+        <description>Verifica que transactionDate no caiga en periodo cerrado.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="transactionDate" type="Timestamp" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="allowed" type="Boolean"/>
+            <parameter name="blockingTimePeriodId"/>
+        </out-parameters>
+    </service>
+
+    <!--
+        reconcile#DteVsGl
+
+        Cruza DTEs aceptados (DteAccepted, DteMockAccepted) de una organizacion
+        en un periodo (YYYY-MM) contra AcctgTrans posteados con invoiceId.
+
+        Reporta:
+          - DTEs sin AcctgTrans (huerfanos contables)
+          - AcctgTrans sin DTE (asientos manuales o reversiones)
+          - Total aceptados, total con asiento, % cobertura
+    -->
+    <service verb="reconcile" noun="DteVsGl" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PeriodCloseServices.groovy"
+             method="reconcileDteVsGl">
+        <description>Concilia DTEs aceptados vs AcctgTrans para un periodo.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true">
+                <text-length min="7" max="7"/>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="periodYearMonth"/>
+            <parameter name="totalAccepted" type="Integer"/>
+            <parameter name="totalPosted" type="Integer"/>
+            <parameter name="coverage"/>
+            <parameter name="dtesWithoutAcctgTrans" type="List"/>
+            <parameter name="acctgTransWithoutDte" type="List"/>
+        </out-parameters>
+    </service>
+
+    <!--
+        compute#TrialBalance
+
+        Genera el balance de comprobacion (sumas y saldos) por GlAccount
+        para una organizacion en un periodo.
+    -->
+    <service verb="compute" noun="TrialBalance" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PeriodCloseServices.groovy"
+             method="computeTrialBalance">
+        <description>Balance de comprobacion del periodo.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true">
+                <text-length min="7" max="7"/>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="periodYearMonth"/>
+            <parameter name="lines" type="List">
+                <description>Lista de Maps con: glAccountId, accountCode, accountName,
+                    debitTotal, creditTotal, balance (debit-credit), isDebit (clase).</description>
+            </parameter>
+            <parameter name="grandTotalDebit"/>
+            <parameter name="grandTotalCredit"/>
+            <parameter name="balanced" type="Boolean"/>
+        </out-parameters>
+    </service>
+
+</services>

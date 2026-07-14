@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+
+    <!-- ========================================================= -->
+    <!-- Extensiones a Invoice / InvoiceItem para DTE              -->
+    <!-- ========================================================= -->
+
+    <extend-entity entity-name="OrderPart" package="mantle.order">
+        <field name="svCondicionOperacionEnumId" type="id">
+            <description>Condición de la operación SV (CAT-016): contado/crédito/otro. Se copia a Invoice al facturar.</description>
+        </field>
+        <field name="svFormaPagoEnumId" type="id">
+            <description>Forma de pago SV (CAT-017). Se copia a Invoice al facturar.</description>
+        </field>
+        <field name="svTipoDteCode" type="text-short">
+            <description>Tipo de DTE sugerido para la factura que se genere (01 FC, 03 CCF, etc.)</description>
+        </field>
+    </extend-entity>
+
+    <extend-entity entity-name="Invoice" package="mantle.account.invoice">
+        <field name="dteEmisionId" type="id">
+            <description>FK opcional al DteEmision asociado. Una factura puede tener un solo DTE activo.</description>
+        </field>
+        <field name="tipoDteCode" type="text-short">
+            <description>Cache del código MH (01, 03, 05, 06, etc). Canónico en DteEmision.</description>
+        </field>
+        <field name="condicionOperacionEnumId" type="id">
+            <description>SvCondContado / SvCondCredito / SvCondOtro (MH CAT-016)</description>
+        </field>
+        <field name="formaPagoEnumId" type="id">
+            <description>SvPago01..SvPago99 (MH CAT-017: Efectivo, Tarjeta, Transferencia, etc.)</description>
+        </field>
+        <field name="plazoEnumId" type="id">
+            <description>SvPlazo: 01=Días, 02=Meses, 03=Años (MH CAT-018, aplica si condición=crédito)</description>
+        </field>
+        <field name="plazoPeriodo" type="text-short">
+            <description>Valor numérico del plazo (ej. 30 días)</description>
+        </field>
+        <field name="dteReferenceEmisionId" type="id">
+            <description>FK al DTE original que esta NC (05) / ND (06) modifica. Obligatorio
+                para esos tipos; se serializa en el bloque documentoRelacionado del JSON DTE.</description>
+        </field>
+        <field name="fusionNit" type="text-short">
+            <description>NIT relacionado a fusiones u otros, cuando el schema DTE lo requiere.</description>
+        </field>
+        <field name="svRecintoFiscalCode" type="text-short">
+            <description>CAT-027 Recinto fiscal para FEX/retornos/exportaciones.</description>
+        </field>
+        <field name="svRegimenCode" type="text-short">
+            <description>CAT-028 Régimen aduanero para FEX/retornos/exportaciones.</description>
+        </field>
+        <field name="svTipoRegimenCode" type="text-short">
+            <description>CAT-033 Tipo de régimen para FEX/retornos/exportaciones.</description>
+        </field>
+        <field name="svTipoItemExportCode" type="text-short">
+            <description>Tipo de item de exportación requerido por eventos de retorno.</description>
+        </field>
+        <field name="svOperacionEspecialCode" type="text-short">
+            <description>CAT-023 Operación especial: 02=factura simplificada, 97=control interno.</description>
+        </field>
+        <relationship type="one" related="sv.localization.dte.DteEmision"/>
+        <relationship type="one" title="DteReference" related="sv.localization.dte.DteEmision">
+            <key-map field-name="dteReferenceEmisionId" related="dteEmisionId"/>
+        </relationship>
+        <relationship type="one" title="SvCondicionOperacion" related="moqui.basic.Enumeration">
+            <key-map field-name="condicionOperacionEnumId"/>
+        </relationship>
+    </extend-entity>
+
+    <extend-entity entity-name="InvoiceItem" package="mantle.account.invoice">
+        <field name="tributoCode" type="text-short">
+            <description>Código MH CAT-015 (20=IVA 13%, C3=IVA exportación 0%, etc.)</description>
+        </field>
+        <field name="numeroDocumentoRelacionado" type="text-medium">
+            <description>Para NC/ND: número del DTE referenciado</description>
+        </field>
+        <field name="ivaPerci" type="currency-amount">
+            <description>IVA percibido por línea cuando aplica en schemas DTE 2026.</description>
+        </field>
+        <field name="ivaRete" type="currency-amount">
+            <description>IVA retenido por línea cuando aplica en schemas DTE 2026.</description>
+        </field>
+        <field name="noGravado" type="currency-amount">
+            <description>Monto no gravado por línea cuando aplica en schemas DTE 2026.</description>
+        </field>
+        <field name="totalIva" type="currency-amount">
+            <description>IVA total explícito por línea para NC/ND v4.</description>
+        </field>
+        <field name="codDomiciliado" type="text-short">
+            <description>CAT-032 Domicilio fiscal para venta/compra por cuenta de tercero.</description>
+        </field>
+    </extend-entity>
+
+    <!-- ========================================================= -->
+    <!-- Certificado de firma electrónica (uno por NIT)            -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="DteCertificate" package="sv.localization.dte">
+        <description>Certificado .crt entregado por el MH al contribuyente. La password
+            NUNCA se guarda aquí; passwordSecretKey referencia el secreto en Moqui.</description>
+        <field name="dteCertificateId" type="id" is-pk="true"/>
+        <field name="nit" type="text-short"/>
+        <field name="pathCrt" type="text-medium">
+            <description>Path absoluto al archivo .crt visible para el firmador</description>
+        </field>
+        <field name="passwordSecretKey" type="text-medium"/>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="commonName" type="text-medium"/>
+        <field name="comments" type="text-long"/>
+
+        <index name="DteCertificateNitIdx" unique="true"><index-field name="nit"/></index>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Emisión DTE: núcleo del modelo                            -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="DteEmision" package="sv.localization.dte" cache="never" optimistic-lock="true">
+        <description>Emisión de un DTE asociada a una Invoice. codigoGeneracion es el UUID
+            que va al MH; numeroControl es el correlativo formato DTE-NN-XXXXXXXX-YYYYYYYYYYYYYYY.</description>
+        <field name="dteEmisionId" type="id" is-pk="true"/>
+        <field name="codigoGeneracion" type="text-long">
+            <description>UUID v4 mayúsculas, único; el identificador del DTE ante el MH.</description>
+        </field>
+        <field name="invoiceId" type="id"/>
+        <field name="tipoDteCode" type="text-short">
+            <description>MH CAT-002: 01=FC, 03=CCF, 05=NC, 06=ND, 11=FEX, 14=FSE, etc.</description>
+        </field>
+        <field name="versionDte" type="number-integer"/>
+        <field name="schemaName" type="text-medium">
+            <description>Nombre del schema oficial usado al generar/validar este DTE. Conserva compatibilidad histórica.</description>
+        </field>
+        <field name="numeroControl" type="text-long"/>
+        <field name="ambienteEnumId" type="id">
+            <description>SvAmbTest (00) o SvAmbProd (01)</description>
+        </field>
+        <field name="tipoTransmisionEnumId" type="id">
+            <description>SvTransNormal o SvTransContingencia (MH CAT-004)</description>
+        </field>
+        <field name="motivoContingenciaEnumId" type="id">
+            <description>MH CAT-005 (1..5)</description>
+        </field>
+        <field name="statusId" type="id">
+            <description>StatusItem nuevos: DteCreated, DteSigned, DteTransmitted,
+                DteAccepted, DteRejected, DteCanceled, DteContingency, DteError.</description>
+        </field>
+        <field name="selloRecepcion" type="text-long"/>
+        <field name="jwsCompactSerialization" type="text-very-long"/>
+        <field name="jsonOriginal" type="text-very-long"/>
+        <field name="jsonFirmadoResp" type="text-very-long"/>
+        <field name="fechaGeneracion" type="date-time"/>
+        <field name="fechaTransmision" type="date-time"/>
+        <field name="fechaProcesamientoMh" type="date-time"/>
+        <field name="observacionesMh" type="text-long"/>
+        <field name="errorCode" type="text-short"/>
+        <field name="errorMessage" type="text-long"/>
+        <field name="intentos" type="number-integer" default="0"/>
+
+        <relationship type="one" related="mantle.account.invoice.Invoice"/>
+        <relationship type="one" title="SvAmbiente" related="moqui.basic.Enumeration">
+            <key-map field-name="ambienteEnumId"/>
+        </relationship>
+        <relationship type="one" title="SvTipoTransmision" related="moqui.basic.Enumeration">
+            <key-map field-name="tipoTransmisionEnumId"/>
+        </relationship>
+        <relationship type="one" title="SvMotivoContingencia" related="moqui.basic.Enumeration">
+            <key-map field-name="motivoContingenciaEnumId"/>
+        </relationship>
+        <relationship type="one" title="Status" related="moqui.basic.StatusItem">
+            <key-map field-name="statusId"/>
+        </relationship>
+
+        <index name="DteEmisionCodGenIdx" unique="true"><index-field name="codigoGeneracion"/></index>
+        <index name="DteEmisionNumCtrlIdx" unique="true"><index-field name="numeroControl"/></index>
+        <index name="DteEmisionInvoiceIdx" unique="true"><index-field name="invoiceId"/></index>
+        <index name="DteEmisionStatusIdx"><index-field name="statusId"/><index-field name="fechaProcesamientoMh"/></index>
+    </entity>
+
+    <entity entity-name="DteEmisionEvent" package="sv.localization.dte">
+        <description>Auditoría cronológica de todos los eventos sobre un DteEmision:
+            Generated, SignedOk, SignedFail, TransmittedOk, TransmittedFail, AcceptedMh,
+            RejectedMh, RetryScheduled, ManualOverride.</description>
+        <field name="dteEmisionId" type="id" is-pk="true"/>
+        <field name="eventDate" type="date-time" is-pk="true"/>
+        <field name="eventTypeEnumId" type="id"/>
+        <field name="httpStatus" type="number-integer"/>
+        <field name="responsePayload" type="text-very-long"/>
+        <field name="userId" type="id"/>
+        <field name="comments" type="text-long"/>
+
+        <relationship type="one" related="sv.localization.dte.DteEmision"/>
+        <relationship type="one" title="EventType" related="moqui.basic.Enumeration">
+            <key-map field-name="eventTypeEnumId"/>
+        </relationship>
+        <relationship type="one" related="moqui.security.UserAccount"/>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Anulación y contingencia                                  -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="DteAnulacion" package="sv.localization.dte">
+        <description>Solicitud de invalidación de un DTE previamente emitido.</description>
+        <field name="dteAnulacionId" type="id" is-pk="true"/>
+        <field name="dteEmisionId" type="id"/>
+        <field name="codigoGeneracionInvalidacion" type="text-long">
+            <description>UUID propio del evento de invalidación</description>
+        </field>
+        <field name="tipoAnulacionEnumId" type="id">
+            <description>MH CAT-024: 1=Error en información, 2=Rescindir, 3=Otro</description>
+        </field>
+        <field name="versionInvalidacion" type="number-integer" default="3"/>
+        <field name="schemaName" type="text-medium" default="'invalidacion-schema-v3.json'"/>
+        <field name="motivo" type="text-long"/>
+        <field name="selloAnulacion" type="text-long"/>
+        <field name="jwsAnulacion" type="text-very-long"/>
+        <field name="jsonOriginal" type="text-very-long">
+            <description>JSON oficial de invalidación antes de la firma. Necesario para entregar al receptor el evento completo.</description>
+        </field>
+        <field name="statusId" type="id"/>
+        <field name="fechaSolicitud" type="date-time"/>
+        <field name="fechaProcesamientoMh" type="date-time"/>
+        <field name="responsablePartyId" type="id"/>
+        <field name="solicitantePartyId" type="id"/>
+
+        <relationship type="one" related="sv.localization.dte.DteEmision"/>
+        <relationship type="one" title="SvTipoAnulacion" related="moqui.basic.Enumeration">
+            <key-map field-name="tipoAnulacionEnumId"/>
+        </relationship>
+        <relationship type="one" title="Status" related="moqui.basic.StatusItem">
+            <key-map field-name="statusId"/>
+        </relationship>
+        <relationship type="one" title="Responsable" related="mantle.party.Party">
+            <key-map field-name="responsablePartyId" related="partyId"/>
+        </relationship>
+        <relationship type="one" title="Solicitante" related="mantle.party.Party">
+            <key-map field-name="solicitantePartyId" related="partyId"/>
+        </relationship>
+
+        <index name="DteAnulacionEmisionIdx" unique="true"><index-field name="dteEmisionId"/></index>
+    </entity>
+
+    <entity entity-name="DteContingencia" package="sv.localization.dte">
+        <description>Reporte agrupado de DTEs emitidos durante una ventana de contingencia.</description>
+        <field name="dteContingenciaId" type="id" is-pk="true"/>
+        <field name="codigoGeneracionContingencia" type="text-long"/>
+        <field name="versionContingencia" type="number-integer" default="4"/>
+        <field name="schemaName" type="text-medium" default="'contingencia-schema-v4.json'"/>
+        <field name="tipoContingenciaEnumId" type="id">
+            <description>MH CAT-005</description>
+        </field>
+        <field name="motivoTexto" type="text-long">
+            <description>Texto libre cuando tipoContingencia=5 (Otro)</description>
+        </field>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="selloContingencia" type="text-long"/>
+        <field name="jwsContingencia" type="text-very-long"/>
+        <field name="statusId" type="id"/>
+
+        <relationship type="one" title="SvMotivoContingencia" related="moqui.basic.Enumeration">
+            <key-map field-name="tipoContingenciaEnumId"/>
+        </relationship>
+        <relationship type="one" title="Status" related="moqui.basic.StatusItem">
+            <key-map field-name="statusId"/>
+        </relationship>
+    </entity>
+
+    <entity entity-name="DteContingenciaItem" package="sv.localization.dte">
+        <description>DTEs incluidos en un reporte de contingencia (M:N).</description>
+        <field name="dteContingenciaId" type="id" is-pk="true"/>
+        <field name="dteEmisionId" type="id" is-pk="true"/>
+        <field name="noItem" type="number-integer"/>
+
+        <relationship type="one" related="sv.localization.dte.DteContingencia"/>
+        <relationship type="one" related="sv.localization.dte.DteEmision"/>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Eventos fiscales 2026: EGES/EOP/ERET                     -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="DteFiscalEvent" package="sv.localization.dte" cache="never" optimistic-lock="true">
+        <description>Evento fiscal separado de DteEmision. Cubre EGES (16), EOP (17) y ERET (18)
+            sin mezclar eventos con facturas normales.</description>
+        <field name="dteFiscalEventId" type="id" is-pk="true"/>
+        <field name="tipoEventoCode" type="text-short"/>
+        <field name="versionEvento" type="number-integer"/>
+        <field name="schemaName" type="text-medium"/>
+        <field name="codigoGeneracion" type="text-long"/>
+        <field name="ambienteEnumId" type="id"/>
+        <field name="statusId" type="id"/>
+        <field name="jsonOriginal" type="text-very-long"/>
+        <field name="jwsCompactSerialization" type="text-very-long"/>
+        <field name="jsonFirmadoResp" type="text-very-long"/>
+        <field name="selloRecepcion" type="text-long"/>
+        <field name="fechaGeneracion" type="date-time"/>
+        <field name="fechaTransmision" type="date-time"/>
+        <field name="fechaProcesamientoMh" type="date-time"/>
+        <field name="observacionesMh" type="text-long"/>
+        <field name="errorCode" type="text-short"/>
+        <field name="errorMessage" type="text-long"/>
+        <field name="intentos" type="number-integer" default="0"/>
+
+        <relationship type="one" title="SvAmbiente" related="moqui.basic.Enumeration">
+            <key-map field-name="ambienteEnumId"/>
+        </relationship>
+        <relationship type="one" title="Status" related="moqui.basic.StatusItem">
+            <key-map field-name="statusId"/>
+        </relationship>
+
+        <index name="DteFiscalEventCodGenIdx" unique="true"><index-field name="codigoGeneracion"/></index>
+        <index name="DteFiscalEventTypeIdx"><index-field name="tipoEventoCode"/><index-field name="statusId"/></index>
+    </entity>
+
+    <entity entity-name="DteFiscalEventItem" package="sv.localization.dte">
+        <description>Items o referencias incluidas en un evento fiscal.</description>
+        <field name="dteFiscalEventId" type="id" is-pk="true"/>
+        <field name="noItem" type="number-integer" is-pk="true"/>
+        <field name="dteEmisionId" type="id"/>
+        <field name="payloadJson" type="text-very-long"/>
+
+        <relationship type="one" related="sv.localization.dte.DteFiscalEvent"/>
+        <relationship type="one" related="sv.localization.dte.DteEmision"/>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Simulador MH local (Fase 2A)                              -->
+    <!-- ========================================================= -->
+
+    <!-- ========================================================= -->
+    <!-- Estado de salud del sistema MH (circuit breaker)          -->
+    <!-- Singleton: una sola fila con healthId='DEFAULT'.          -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvDteSystemHealth" package="sv.localization.dte" cache="never">
+        <description>Estado actual del sistema de Hacienda observado por nuestro emisor.
+            Se actualiza tras cada intento de transmisión y por el job periódico de health
+            check. Cuando el estado es DOWN se activa la auto-contingencia: los DTEs nuevos
+            se marcan DteContingency sin intentar HTTP, evitando timeouts en cascada.</description>
+        <field name="healthId" type="id" is-pk="true" default="'DEFAULT'"/>
+        <field name="statusEnumId" type="id" default="'SvHealthUp'"/>
+        <field name="consecutiveFailures" type="number-integer" default="0"/>
+        <field name="lastSuccessAt" type="date-time"/>
+        <field name="lastFailureAt" type="date-time"/>
+        <field name="lastCheckAt" type="date-time"/>
+        <field name="lastFailureMessage" type="text-long"/>
+        <field name="contingencyOpenedAt" type="date-time"/>
+        <field name="activeContingenciaId" type="id"/>
+
+        <relationship type="one" title="HealthStatus" related="moqui.basic.Enumeration">
+            <key-map field-name="statusEnumId"/>
+        </relationship>
+        <relationship type="one" related="sv.localization.dte.DteContingencia">
+            <key-map field-name="activeContingenciaId"/>
+        </relationship>
+    </entity>
+
+    <entity entity-name="SvDteSimulatorReceipt" package="sv.localization.dte">
+        <description>Recibo persistido por el simulador MH local para idempotencia.
+            Si llega un codigoGeneracion ya procesado se devuelve el mismo sello,
+            replicando el comportamiento del MH real. Sólo se usa en modo simulador.</description>
+        <field name="codigoGeneracion" type="text-long" is-pk="true"/>
+        <field name="tipoDte" type="text-short"/>
+        <field name="ambiente" type="text-short"/>
+        <field name="selloRecibido" type="text-long"/>
+        <field name="estado" type="text-short"/>
+        <field name="codigoMsg" type="text-short"/>
+        <field name="descripcionMsg" type="text-medium"/>
+        <field name="fhProcesamiento" type="date-time"/>
+        <field name="nitEmisor" type="text-short"/>
+        <field name="recibidoPayload" type="text-very-long"/>
+        <field name="respuestaPayload" type="text-very-long"/>
+
+        <index name="SvDteSimReceiptNitIdx"><index-field name="nitEmisor"/></index>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- DTE recibido de proveedor (compras). La organización es    -->
+    <!-- receptora, no emisora. Registro independiente: no crea     -->
+    <!-- Invoice en Mantle; alimenta el libro de IVA compras.       -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="DteRecepcion" package="sv.localization.dte" cache="never">
+        <description>DTE recibido de un proveedor e importado desde su JSON. La organización
+            (receptorPartyId) es la receptora. Se valida contra el schema oficial al importar.
+            Es fuente independiente del libro de IVA compras: no crea ni concilia Invoice de Mantle.</description>
+        <field name="dteRecepcionId" type="id" is-pk="true"/>
+        <field name="codigoGeneracion" type="text-long">
+            <description>UUID del DTE ante el MH. Clave de deduplicación de recibidos.</description>
+        </field>
+        <field name="numeroControl" type="text-long"/>
+        <field name="selloRecepcion" type="text-long">
+            <description>Sello de recepción MH del DTE recibido. Sin sello no entra al libro.</description>
+        </field>
+        <field name="tipoDteCode" type="text-short"/>
+        <field name="versionDte" type="number-integer"/>
+        <field name="schemaName" type="text-medium"/>
+        <field name="receptorPartyId" type="id">
+            <description>Organización interna que recibió el DTE (la nuestra).</description>
+        </field>
+        <field name="emisorNit" type="text-short"/>
+        <field name="emisorNrc" type="text-short"/>
+        <field name="emisorNombre" type="text-medium"/>
+        <field name="fechaEmision" type="date-time"/>
+        <field name="montoExento" type="currency-amount"/>
+        <field name="montoNoSujeto" type="currency-amount"/>
+        <field name="montoGravado" type="currency-amount"/>
+        <field name="iva" type="currency-amount"/>
+        <field name="iva1pctRetenido" type="currency-amount"/>
+        <field name="iva1pctPercibido" type="currency-amount"/>
+        <field name="total" type="currency-amount"/>
+        <field name="validatedBySchema" type="text-indicator">
+            <description>Y si el JSON pasó la validación contra el schema oficial al importar.</description>
+        </field>
+        <field name="schemaErrors" type="text-very-long">
+            <description>Mensajes de validación de schema si los hubo (vacío si validó limpio).</description>
+        </field>
+        <field name="jsonOriginal" type="text-very-long"/>
+        <field name="consultaEstado" type="text-short">
+            <description>Estado observado al consultar MH (consultadte): PROCESADO, INVALIDADO, etc.</description>
+        </field>
+        <field name="consultaSello" type="text-long">
+            <description>Sello observado en la última consulta MH, si lo devuelve consultadte.</description>
+        </field>
+        <field name="consultaPayloadJson" type="text-very-long">
+            <description>Respuesta cruda de la última consulta MH para auditoría.</description>
+        </field>
+        <field name="consultaDate" type="date-time"/>
+        <field name="eventosRelacionadosJson" type="text-very-long">
+            <description>Eventos asociados devueltos por MH al consultar el DTE recibido.</description>
+        </field>
+        <field name="requiresReview" type="text-indicator">
+            <description>Y si la consulta dejó alerta: invalidado, retornado o sin sello válido.</description>
+        </field>
+        <field name="reviewMessage" type="text-long"/>
+        <field name="importedByUserId" type="id"/>
+        <field name="importedDate" type="date-time"/>
+
+        <relationship type="one" title="Receptor" related="mantle.party.Party">
+            <key-map field-name="receptorPartyId" related="partyId"/>
+        </relationship>
+        <relationship type="one" title="ImportedByUser" related="moqui.security.UserAccount">
+            <key-map field-name="importedByUserId" related="userId"/>
+        </relationship>
+
+        <index name="DteRecepcionCodGenIdx" unique="true"><index-field name="codigoGeneracion"/></index>
+        <index name="DteRecepcionOrgIdx"><index-field name="receptorPartyId"/><index-field name="fechaEmision"/></index>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Entrega al receptor + acuse de recibo (Normativa v2.0 §11, -->
+    <!-- §13.1, §13.3). Al invalidar o retornar, el emisor debe     -->
+    <!-- entregar al receptor el JSON del evento + representación    -->
+    <!-- gráfica (+ DTE original con leyenda "Invalidado") y obtener -->
+    <!-- acuse de recibo. Esta entidad rastrea esa obligación.       -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="DteEntrega" package="sv.localization.dte" cache="never">
+        <description>Registro de entrega al receptor de un evento de invalidación o retorno y su
+            acuse de recibo. El sobre entregado (envelopeJson) incluye los campos con los nombres
+            exactos exigidos por MH: firmaElectronica (JWS) y selloRecibido (sello de recepción).</description>
+        <field name="dteEntregaId" type="id" is-pk="true"/>
+        <field name="eventoTipo" type="text-short">
+            <description>INVALIDACION | RETORNO</description>
+        </field>
+        <field name="dteEmisionId" type="id"><description>DTE original afectado.</description></field>
+        <field name="dteAnulacionId" type="id"><description>Evento de invalidación origen (si aplica).</description></field>
+        <field name="dteFiscalEventId" type="id"><description>Evento fiscal origen, p. ej. retorno (si aplica).</description></field>
+        <field name="codigoGeneracionEvento" type="text-long"/>
+        <field name="receptorPartyId" type="id"/>
+        <field name="receptorNombre" type="text-medium"/>
+        <field name="receptorEmail" type="text-medium"/>
+        <field name="statusId" type="id">
+            <description>EntregaPendiente | EntregaEnviada | EntregaAcusada | EntregaFallida</description>
+        </field>
+        <field name="canal" type="text-short"><description>email | manual</description></field>
+        <field name="entregaToken" type="text-long">
+            <description>Token único para que el receptor confirme el acuse.</description>
+        </field>
+        <field name="envelopeJson" type="text-very-long">
+            <description>Sobre entregado: { firmaElectronica, selloRecibido, evento, dteOriginal }.</description>
+        </field>
+        <field name="attachmentsJson" type="text-very-long">
+            <description>Metadatos de adjuntos preparados: JSON del evento, PDF del evento y PDF del DTE original.</description>
+        </field>
+        <field name="eventPdfSize" type="number-integer"/>
+        <field name="dtePdfSize" type="number-integer"/>
+        <field name="intentos" type="number-integer" default="0"/>
+        <field name="fechaPreparada" type="date-time"/>
+        <field name="fechaUltimoIntento" type="date-time"/>
+        <field name="fechaEnviada" type="date-time"/>
+        <field name="fechaAcuse" type="date-time"/>
+        <field name="acuseMetodo" type="text-short"><description>token | manual</description></field>
+        <field name="acuseNota" type="text-long"/>
+        <field name="acuseByUserId" type="id"/>
+        <field name="emailMessageId" type="id"/>
+        <field name="errorMessage" type="text-long"/>
+
+        <relationship type="one" related="sv.localization.dte.DteEmision"/>
+        <relationship type="one" title="Receptor" related="mantle.party.Party">
+            <key-map field-name="receptorPartyId" related="partyId"/>
+        </relationship>
+
+        <index name="DteEntregaTokenIdx" unique="true"><index-field name="entregaToken"/></index>
+        <index name="DteEntregaEventIdx"><index-field name="dteEmisionId"/><index-field name="eventoTipo"/></index>
+    </entity>
+
+</entities>

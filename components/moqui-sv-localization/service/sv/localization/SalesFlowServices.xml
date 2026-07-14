@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="create" noun="SvInvoiceFromOrderPart" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SalesFlowServices.groovy"
+             method="createSvInvoiceFromOrderPart">
+        <description>Crea una factura desde una parte de orden y copia los defaults fiscales SV. No emite DTE.</description>
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+            <parameter name="orderPartSeqId" required="true"/>
+            <parameter name="statusId"/>
+            <parameter name="invoiceDate" type="Timestamp"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="invoiceId"/>
+            <parameter name="tipoDteCode"/>
+            <parameter name="condicionOperacionEnumId"/>
+            <parameter name="formaPagoEnumId"/>
+        </out-parameters>
+    </service>
+
+</services>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <!-- Simulador local del Ministerio de Hacienda SV. Reproduce los endpoints
+         del manual técnico de Transmisión DTE (auth + recepción + anulación +
+         contingencia + consulta). Se usa mientras no hay credenciales reales. -->
+
+    <service verb="auth" noun="Token" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteMhSimulatorServices.groovy"
+             method="authToken" allow-remote="true" authenticate="anonymous-all">
+        <description>Simula POST /seguridad/auth. Recibe form-urlencoded user/pwd
+            (o JSON equivalente) y devuelve un token Bearer falso si el user está
+            en los fixtures.</description>
+    </service>
+
+    <service verb="recepcion" noun="Dte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteMhSimulatorServices.groovy"
+             method="recepcionDte" allow-remote="true" authenticate="anonymous-all">
+        <description>Simula POST /fesv/recepciondte. Recibe {ambiente, idEnvio,
+            version, tipoDte, documento (JWS compact)} y header Authorization.
+            Devuelve sello determinístico SHA1(codigoGeneracion) en hex.</description>
+    </service>
+
+    <service verb="anular" noun="Dte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteMhSimulatorServices.groovy"
+             method="anularDte" allow-remote="true" authenticate="anonymous-all">
+        <description>Simula POST /fesv/anulardte. Similar a recepción pero
+            persiste estado=ANULADO y devuelve selloInvalidacion.</description>
+    </service>
+
+    <service verb="contingencia" noun="Dte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteMhSimulatorServices.groovy"
+             method="contingenciaDte" allow-remote="true" authenticate="anonymous-all">
+        <description>Simula POST /fesv/contingenciadte. Devuelve selloContingencia.</description>
+    </service>
+
+    <service verb="consultar" noun="Dte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteMhSimulatorServices.groovy"
+             method="consultarDte" allow-remote="true" authenticate="anonymous-all">
+        <description>Simula GET /fesv/recepcion/consultadte/{codigoGeneracion}.
+            Devuelve el último recibo persistido o 404 si no existe.</description>
+        <in-parameters><parameter name="codigoGeneracion"/></in-parameters>
+    </service>
+
+</services>

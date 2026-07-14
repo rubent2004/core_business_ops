@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="IVA ventas" default-menu-index="1">
+    <transition name="buildSalesBook">
+        <service-call name="sv.localization.IvaBookServices.build#IvaSalesBook"/>
+        <default-response url=".">
+            <parameter name="organizationPartyId"/>
+            <parameter name="periodYearMonth"/>
+        </default-response>
+    </transition>
+    <transition name="exportCsv" read-only="true">
+        <actions>
+            <service-call name="sv.localization.IvaBookServices.export#IvaSalesBookCsv" in-map="context" out-map="csvResult"/>
+            <script>
+                ec.web.response.setHeader('Content-Disposition', "attachment; filename=\"${csvResult.filename}\"")
+                ec.web.sendTextResponse(csvResult.csvText ?: '', csvResult.contentType ?: 'text/csv', null)
+            </script>
+        </actions>
+        <default-response url="."/>
+    </transition>
+    <transition name="snapshotBook">
+        <service-call name="sv.localization.IvaBookServices.snapshot#IvaSalesBook"/>
+        <default-response url=".">
+            <parameter name="organizationPartyId"/>
+            <parameter name="periodYearMonth"/>
+        </default-response>
+    </transition>
+
+    <actions>
+        <set field="periodYearMonth" from="periodYearMonth ?: ec.user.nowTimestamp.toString().substring(0, 7)"/>
+        <set field="ivaSalesBookEntryList" from="[]"/>
+        <set field="ivaSalesBookSummary" from="[:]"/>
+        <set field="ivaSalesBookSnapshotList" from="[]"/>
+        <set field="canceledResult" from="[canceledList:[], canceledCount:0]"/>
+        <set field="fiscalEventResult" from="[eventList:[], eventCount:0]"/>
+        <if condition="organizationPartyId">
+            <service-call name="sv.localization.IvaBookServices.get#CanceledDtesForPeriod"
+                    in-map="[organizationPartyId:organizationPartyId, periodYearMonth:periodYearMonth]"
+                    out-map="canceledResult"/>
+            <entity-find entity-name="sv.localization.tax.SvIvaBookEntry" list="ivaSalesBookEntryList">
+                <econdition field-name="organizationPartyId" from="organizationPartyId"/>
+                <econdition field-name="bookTypeEnumId" value="SvBookSales"/>
+                <econdition field-name="periodYearMonth" from="periodYearMonth"/>
+                <order-by field-name="numeroCorrelativo"/>
+            </entity-find>
+            <service-call name="sv.localization.IvaBookServices.get#IvaSalesBookSummary"
+                    in-map="[organizationPartyId:organizationPartyId, periodYearMonth:periodYearMonth]"
+                    out-map="ivaSalesBookSummary"/>
+            <service-call name="sv.localization.IvaBookServices.get#FiscalEventsForPeriod"
+                    in-map="[organizationPartyId:organizationPartyId, periodYearMonth:periodYearMonth]"
+                    out-map="fiscalEventResult"/>
+            <entity-find entity-name="sv.localization.tax.SvIvaBookSnapshot" list="ivaSalesBookSnapshotList">
+                <econdition field-name="organizationPartyId" from="organizationPartyId"/>
+                <econdition field-name="bookTypeEnumId" value="SvBookSales"/>
+                <econdition field-name="periodYearMonth" from="periodYearMonth"/>
+                <order-by field-name="-versionNum"/>
+            </entity-find>
+        </if>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Libro IVA Ventas"/>
+            <box-body>
+                <label text="Libro operativo regenerable desde DTEs aceptados. No es formato oficial certificado MH/DGI." type="p"/>
+                <form-single name="IvaSalesBookFilter" transition="buildSalesBook">
+                    <field name="organizationPartyId"><default-field title="Organización emisora">
+                        <text-line size="24"/>
+                    </default-field></field>
+                    <field name="periodYearMonth"><default-field title="Periodo YYYY-MM">
+                        <text-line size="8" default-value="${periodYearMonth}"/>
+                    </default-field></field>
+                    <field name="includeMockAccepted"><default-field title="Incluir aceptados mock">
+                        <drop-down no-current-selected-key="true"><option key="true" text="Sí"/><option key="false" text="No"/></drop-down>
+                    </default-field></field>
+                    <field name="rebuild"><default-field title="Regenerar periodo">
+                        <drop-down no-current-selected-key="true"><option key="true" text="Sí"/><option key="false" text="No"/></drop-down>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Regenerar ventas"><submit/></default-field></field>
+                </form-single>
+                <container>
+                    <link url="." text="Ver resumen" link-type="anchor-button">
+                        <parameter name="organizationPartyId"/>
+                        <parameter name="periodYearMonth"/>
+                    </link>
+                    <link url="exportCsv" text="Exportar CSV" link-type="anchor-button">
+                        <parameter name="organizationPartyId"/>
+                        <parameter name="periodYearMonth"/>
+                    </link>
+                    <link url="/fop/apps/SvLocalization/Books/PrintIvaBook" text="Exportar PDF" link-type="anchor-button" target-window="_blank">
+                        <parameter name="bookTypeEnumId" value="SvBookSales"/>
+                        <parameter name="organizationPartyId"/>
+                        <parameter name="periodYearMonth"/>
+                    </link>
+                    <link url="snapshotBook" text="Generar snapshot fiscal" link-type="anchor-button"
+                          confirmation="Congela el libro actual como snapshot inmutable con hash. ¿Continuar?">
+                        <parameter name="organizationPartyId"/>
+                        <parameter name="periodYearMonth"/>
+                    </link>
+                </container>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Totales del periodo"/>
+            <box-body>
+                <form-single name="IvaSalesBookTotals" map="ivaSalesBookSummary.totals" skip-form="true">
+                    <field name="entryCount"><default-field title="Entradas"><display/></default-field></field>
+                    <field name="montoExento"><default-field title="Exento"><display/></default-field></field>
+                    <field name="montoNoSujeto"><default-field title="No sujeto"><display/></default-field></field>
+                    <field name="montoGravado"><default-field title="Gravado"><display/></default-field></field>
+                    <field name="iva"><default-field title="IVA"><display/></default-field></field>
+                    <field name="iva1pctRetenido"><default-field title="IVA retenido 1%"><display/></default-field></field>
+                    <field name="iva1pctPercibido"><default-field title="IVA percibido 1%"><display/></default-field></field>
+                    <field name="total"><default-field title="Total"><display/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Entradas IVA ventas"/>
+            <box-body>
+                <form-list name="IvaSalesBookEntryList" list="ivaSalesBookEntryList" skip-form="true" show-csv-button="true" show-xlsx-button="true">
+                    <field name="numeroCorrelativo"><default-field title="#"><display/></default-field></field>
+                    <field name="fechaEmision"><default-field title="Fecha"><display/></default-field></field>
+                    <field name="tipoDteCode"><default-field title="Tipo"><display/></default-field></field>
+                    <field name="nitNrcCounterParty"><default-field title="Documento"><display/></default-field></field>
+                    <field name="nombreCounterParty"><default-field title="Receptor"><display/></default-field></field>
+                    <field name="montoExento"><default-field title="Exento"><display/></default-field></field>
+                    <field name="montoNoSujeto"><default-field title="No sujeto"><display/></default-field></field>
+                    <field name="montoGravado"><default-field title="Gravado"><display/></default-field></field>
+                    <field name="iva"><default-field title="IVA"><display/></default-field></field>
+                    <field name="iva1pctRetenido"><default-field title="Retenido"><display/></default-field></field>
+                    <field name="iva1pctPercibido"><default-field title="Percibido"><display/></default-field></field>
+                    <field name="total"><default-field title="Total"><display/></default-field></field>
+                    <field name="invoiceId"><default-field title="Factura"><display/></default-field></field>
+                    <field name="dteEmisionId"><default-field title="DTE"><link url="../../Dte/DteDetail" text="${dteEmisionId}">
+                        <parameter name="dteEmisionId"/>
+                    </link></default-field></field>
+                    <field name="dteFiscalEventId"><default-field title="Evento">
+                        <link url="/fop/apps/SvLocalization/Dte/PrintEventPdf" text="${dteFiscalEventId ?: '-'}" target-window="_blank">
+                            <parameter name="eventoTipo" value="RETORNO"/>
+                            <parameter name="dteFiscalEventId"/>
+                        </link>
+                    </default-field></field>
+                    <field name="origen"><default-field title="Origen">
+                        <display text="${dteSourceStatusId == 'DfeMockAccepted' ? 'EVENTO MOCK' : (dteSourceStatusId == 'DfeAccepted' ? 'EVENTO REAL' : (dteSourceStatusId == 'DteMockAccepted' ? 'MOCK' : (dteSourceStatusId == 'DteAccepted' ? 'REAL' : 'Interno')))}"/>
+                    </default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Eventos fiscales del periodo"/>
+            <box-body>
+                <label type="p" text="Reporte auxiliar de ERET/EOP aceptados. Los ERET aceptados se netean en el libro; EOP se conserva como respaldo interno."/>
+                <form-list name="FiscalEventList" list="fiscalEventResult.eventList" skip-form="true" show-csv-button="true">
+                    <field name="fechaEvento"><default-field title="Fecha"><display/></default-field></field>
+                    <field name="tipoEventoCode"><default-field title="Tipo evento"><display/></default-field></field>
+                    <field name="codigoGeneracion"><default-field title="Código evento"><display/></default-field></field>
+                    <field name="codigoGeneracionRef"><default-field title="DTE original"><display/></default-field></field>
+                    <field name="montoEvento"><default-field title="Monto"><display/></default-field></field>
+                    <field name="statusId"><default-field title="Estado"><display/></default-field></field>
+                    <field name="selloRecepcion"><default-field title="Sello"><display text="${selloRecepcion ? 'Sí' : 'No'}"/></default-field></field>
+                    <field name="dteFiscalEventId"><default-field title="PDF">
+                        <link url="/fop/apps/SvLocalization/Dte/PrintEventPdf" text="PDF" target-window="_blank"
+                              parameter-map="[eventoTipo:(tipoEventoCode == '17' ? 'EOP' : 'RETORNO'), dteFiscalEventId:dteFiscalEventId]"/>
+                    </default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="DTE anulados/invalidados del periodo"/>
+            <box-body>
+                <label type="p" text="DTE emitidos en el periodo que fueron anulados ante MH. NO entran a los totales del libro (el libro solo incluye DTE aceptados). Se muestran como control y como insumo del futuro anexo F-07 de documentos anulados."/>
+                <form-list name="CanceledDteList" list="canceledResult.canceledList" skip-form="true" show-csv-button="true">
+                    <field name="fechaEmision"><default-field title="Fecha emisión"><display/></default-field></field>
+                    <field name="tipoDteCode"><default-field title="Tipo"><display/></default-field></field>
+                    <field name="numeroControl"><default-field title="Núm. control"><display/></default-field></field>
+                    <field name="codigoGeneracion"><default-field title="Cód. generación"><display/></default-field></field>
+                    <field name="anulStatusId"><default-field title="Estado anulación"><display/></default-field></field>
+                    <field name="fechaAnulacion"><default-field title="Fecha anulación"><display/></default-field></field>
+                    <field name="selloAnulacion"><default-field title="Sello anulación">
+                        <display text="${selloAnulacion ? 'Sí' : 'No'}"/>
+                    </default-field></field>
+                    <field name="motivoAnulacion"><default-field title="Motivo"><display/></default-field></field>
+                    <field name="dteEmisionId"><default-field title="DTE"><link url="../../Dte/DteDetail" text="${dteEmisionId}">
+                        <parameter name="dteEmisionId"/>
+                    </link></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Snapshots fiscales del periodo"/>
+            <box-body>
+                <label text="Cierres inmutables con hash SHA-256. Cada uno congela el libro tal cual estaba al generarse. containsMock=Sí indica que incluye DTE de simulador (no evidencia real plena)." type="p"/>
+                <form-list name="IvaSalesBookSnapshotList" list="ivaSalesBookSnapshotList" skip-form="true">
+                    <field name="versionNum"><default-field title="Versión"><display/></default-field></field>
+                    <field name="generatedDate"><default-field title="Generado"><display/></default-field></field>
+                    <field name="generatedByUserId"><default-field title="Usuario"><display/></default-field></field>
+                    <field name="entryCount"><default-field title="Entradas"><display/></default-field></field>
+                    <field name="mockEntryCount"><default-field title="Mock"><display/></default-field></field>
+                    <field name="containsMock"><default-field title="Contiene mock"><display/></default-field></field>
+                    <field name="total"><default-field title="Total"><display/></default-field></field>
+                    <field name="contentHash"><default-field title="Hash SHA-256"><display/></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

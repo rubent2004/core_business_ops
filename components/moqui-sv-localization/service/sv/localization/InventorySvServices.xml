@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="receive" noun="MaterialInventory" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/InventorySvServices.groovy"
+             method="receiveMaterialInventory">
+        <description>Receives raw material or finished product inventory through Mantle AssetServices, preserving
+            cost, facility/location, owner and optional production-run traceability.</description>
+        <in-parameters>
+            <parameter name="productId" required="true"/>
+            <parameter name="facilityId" required="true"/>
+            <parameter name="quantity" type="BigDecimal" required="true"/>
+            <parameter name="unitCost" type="BigDecimal" required="true"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="locationSeqId"/>
+            <parameter name="receivedDate" type="Timestamp"/>
+            <parameter name="workEffortId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="assetId"/>
+            <parameter name="assetReceiptId"/>
+            <parameter name="assetDetailId"/>
+            <parameter name="productId"/>
+            <parameter name="facilityId"/>
+            <parameter name="locationSeqId"/>
+            <parameter name="quantityAccepted" type="BigDecimal"/>
+            <parameter name="unitCost" type="BigDecimal"/>
+        </out-parameters>
+    </service>
+
+    <service verb="move" noun="Inventory" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/InventorySvServices.groovy"
+             method="moveInventory">
+        <description>Moves inventory between facilities/locations using Mantle move#Asset. Partial moves create or
+            merge destination Asset records while preserving product, owner, cost and lot information.</description>
+        <in-parameters>
+            <parameter name="assetId" required="true"/>
+            <parameter name="toFacilityId" required="true"/>
+            <parameter name="quantity" type="BigDecimal"/>
+            <parameter name="toLocationSeqId"/>
+            <parameter name="forceNewAsset" type="Boolean" default-value="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="assetId"/>
+            <parameter name="movedAssetId"/>
+            <parameter name="fromFacilityId"/>
+            <parameter name="toFacilityId"/>
+            <parameter name="quantityMoved" type="BigDecimal"/>
+        </out-parameters>
+    </service>
+
+    <service verb="calculate" noun="AverageCost" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/InventorySvServices.groovy"
+             method="calculateAverageCost">
+        <description>Calculates weighted average cost from available costed inventory for a product, optionally
+            scoped by owner and facility.</description>
+        <in-parameters>
+            <parameter name="productId" required="true"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="facilityId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="productId"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="facilityId"/>
+            <parameter name="averageCost" type="BigDecimal"/>
+            <parameter name="quantityOnHand" type="BigDecimal"/>
+            <parameter name="inventoryValue" type="BigDecimal"/>
+            <parameter name="assetCount" type="Integer"/>
+            <parameter name="costUomId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="get" noun="ProductKardex" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/InventorySvServices.groovy"
+             method="getProductKardex">
+        <description>Builds a movement-by-movement inventory kardex for a product from AssetDetail records,
+            computing a moving weighted-average cost and running balance. Outflows are valued at the prevailing
+            average (presentation/consultation only; does not change FIFO issuing).</description>
+        <in-parameters>
+            <parameter name="productId" required="true"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="facilityId"/>
+            <parameter name="fromDate" type="Timestamp"/>
+            <parameter name="thruDate" type="Timestamp"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="productId"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="facilityId"/>
+            <parameter name="kardexRows" type="List"/>
+            <parameter name="currentAvgCost" type="BigDecimal"/>
+            <parameter name="balanceQty" type="BigDecimal"/>
+            <parameter name="balanceValue" type="BigDecimal"/>
+        </out-parameters>
+    </service>
+
+    <service verb="recost" noun="ProductToAverage" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/InventorySvServices.groovy"
+             method="recostProductToAverage">
+        <description>Re-stamps the acquireCost of all available lots of a product to the current weighted
+            average, so the physical inventory value matches the average-cost valuation. The original per-lot
+            cost is preserved in SvAssetAcquireCost for kardex history.</description>
+        <in-parameters>
+            <parameter name="productId" required="true"/>
+            <parameter name="ownerPartyId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="productId"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="averageCost" type="BigDecimal"/>
+            <parameter name="quantityOnHand" type="BigDecimal"/>
+            <parameter name="restampedCount" type="Integer"/>
+        </out-parameters>
+    </service>
+
+</services>

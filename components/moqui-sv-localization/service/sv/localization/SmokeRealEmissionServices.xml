@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="smoke" noun="FcRealEmission" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SmokeRealEmissionServices.groovy"
+             method="smokeFcRealEmission">
+        <description>SMOKE end-to-end de emisión FC 01 REAL contra MH apitest.
+            Crea una Invoice mínima SARA_ROBOTICS → toPartyId con 1 ítem gravado,
+            ejecuta emit#FromInvoice (generate→validate→sign→transmit) y devuelve el
+            resultado. No persiste nada útil para producción; es una prueba de
+            integración manual.
+
+            Pre-requisitos:
+              1. Seed install cargado (SARA_ROBOTICS existe + cert + TA_SV_MH real)
+              2. Firmador Docker arriba en :8113 con cert real montado
+              3. Env vars: SV_DTE_MH_PASSWORD_APITEST, SV_DTE_CERT_PASSWORD_00000000000000
+              4. Mode flags: SV_DTE_MH_MOCK_ENABLED=false, SV_DTE_TEST_LOCAL=false,
+                 SV_DTE_SIGN_MOCK_ENABLED=false
+
+            Si statusId=DteAccepted y selloRecepcion no-null → MH apitest aceptó el
+            DTE real. El sistema está validado end-to-end.</description>
+        <in-parameters>
+            <parameter name="fromPartyId" default-value="ORG_SARA_ROBOTICS"/>
+            <parameter name="toPartyId" default-value="SV_CLI_CONS"/>
+            <parameter name="amount" type="BigDecimal" default-value="1.13"/>
+            <parameter name="description" default-value="Smoke FC 01 real apitest"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoDte"/>
+            <parameter name="invoiceId"/>
+            <parameter name="dteEmisionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="numeroControl"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+            <parameter name="errorMessage"/>
+            <parameter name="errorCode"/>
+        </out-parameters>
+    </service>
+
+    <service verb="smoke" noun="CcfRealEmission" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SmokeRealEmissionServices.groovy"
+             method="smokeCcfRealEmission">
+        <description>SMOKE CCF 03 real. Crea receptor empresa con NIT+NRC si falta.</description>
+        <in-parameters>
+            <parameter name="fromPartyId" default-value="ORG_SARA_ROBOTICS"/>
+            <parameter name="toPartyId" default-value="SMOKE_BIZ_MOLVU"/>
+            <parameter name="amount" type="BigDecimal" default-value="11.30"/>
+            <parameter name="description" default-value="Smoke CCF 03 real apitest"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoDte"/>
+            <parameter name="invoiceId"/>
+            <parameter name="dteEmisionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="numeroControl"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+            <parameter name="errorMessage"/>
+            <parameter name="errorCode"/>
+        </out-parameters>
+    </service>
+
+    <service verb="smoke" noun="NcRealEmission" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SmokeRealEmissionServices.groovy"
+             method="smokeNcRealEmission">
+        <description>SMOKE NC 05 real. Requiere referenceDteEmisionId del CCF aceptado.</description>
+        <in-parameters>
+            <parameter name="fromPartyId" default-value="ORG_SARA_ROBOTICS"/>
+            <parameter name="toPartyId" default-value="SMOKE_BIZ_MOLVU"/>
+            <parameter name="referenceDteEmisionId" required="true"/>
+            <parameter name="amount" type="BigDecimal" default-value="11.30"/>
+            <parameter name="description" default-value="Smoke NC 05 real apitest"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoDte"/>
+            <parameter name="invoiceId"/>
+            <parameter name="dteEmisionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="numeroControl"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+            <parameter name="errorMessage"/>
+            <parameter name="errorCode"/>
+        </out-parameters>
+    </service>
+
+    <service verb="smoke" noun="NdRealEmission" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SmokeRealEmissionServices.groovy"
+             method="smokeNdRealEmission">
+        <description>SMOKE ND 06 real. Requiere referenceDteEmisionId del CCF aceptado.</description>
+        <in-parameters>
+            <parameter name="fromPartyId" default-value="ORG_SARA_ROBOTICS"/>
+            <parameter name="toPartyId" default-value="SMOKE_BIZ_MOLVU"/>
+            <parameter name="referenceDteEmisionId" required="true"/>
+            <parameter name="amount" type="BigDecimal" default-value="11.30"/>
+            <parameter name="description" default-value="Smoke ND 06 real apitest"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoDte"/>
+            <parameter name="invoiceId"/>
+            <parameter name="dteEmisionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="numeroControl"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+            <parameter name="errorMessage"/>
+            <parameter name="errorCode"/>
+        </out-parameters>
+    </service>
+
+    <service verb="smoke" noun="FseRealEmission" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SmokeRealEmissionServices.groovy"
+             method="smokeFseRealEmission">
+        <description>SMOKE FSE 14 real. SARA compra a sujeto excluido (DUI sin NIT).</description>
+        <in-parameters>
+            <parameter name="orgPartyId" default-value="ORG_SARA_ROBOTICS"/>
+            <parameter name="supplierPartyId" default-value="SMOKE_EXCL_SUPP"/>
+            <parameter name="amount" type="BigDecimal" default-value="100.00"/>
+            <parameter name="description" default-value="Smoke FSE 14 real apitest"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoDte"/>
+            <parameter name="invoiceId"/>
+            <parameter name="dteEmisionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="numeroControl"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+            <parameter name="errorMessage"/>
+            <parameter name="errorCode"/>
+        </out-parameters>
+    </service>
+
+    <service verb="smoke" noun="AllTypesRealEmission" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SmokeRealEmissionServices.groovy"
+             method="smokeAllTypesRealEmission">
+        <description>Orquesta los 5 smokes en orden: FC → CCF → NC → ND → FSE.
+            NC/ND referencian el CCF emitido en este run. Si CCF falla, NC/ND se omiten.</description>
+        <out-parameters>
+            <parameter name="results" type="List"/>
+        </out-parameters>
+    </service>
+
+</services>

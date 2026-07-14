@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Preview nómina" default-menu-index="4">
+    <transition name="calculatePayroll" read-only="true">
+        <actions>
+            <service-call name="sv.localization.PayrollSvServices.calculate#MonthlyPayroll" in-map="context" out-map="payrollResult"/>
+            <set field="appliedSchemeList" from="payrollResult?.appliedSchemes ?: []"/>
+        </actions>
+        <default-response url="."/>
+    </transition>
+
+    <widgets>
+        <container-box>
+            <box-header title="Calcular salario neto mensual"/>
+            <box-body>
+                <form-single name="PayrollPreviewInput" transition="calculatePayroll">
+                    <field name="grossMonthlyAmount"><default-field title="Salario bruto mensual"><text-line size="12" default-value="700.00"/></default-field></field>
+                    <field name="asOfDate"><default-field title="Fecha de cálculo"><date-time/></default-field></field>
+                    <field name="currencyUomId"><default-field title="Moneda"><text-line size="6" default-value="USD"/></default-field></field>
+                    <field name="includeEmployerContributions"><default-field title="Incluir aportes patronales">
+                        <drop-down no-current-selected-key="true"><option key="true" text="Sí"/><option key="false" text="No"/></drop-down>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Calcular"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-row>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Resultado empleado"/>
+                    <box-body>
+                        <form-single name="PayrollPreviewResult" map="payrollResult" skip-form="true">
+                            <field name="grossPay"><default-field title="Bruto"><display/></default-field></field>
+                            <field name="isssEmployee"><default-field title="ISSS empleado"><display/></default-field></field>
+                            <field name="afpEmployee"><default-field title="AFP empleado"><display/></default-field></field>
+                            <field name="rentaBase"><default-field title="Base renta"><display/></default-field></field>
+                            <field name="rentaTaxableBase"><default-field title="Base renta ajustada"><display/></default-field></field>
+                            <field name="rentaMonthly"><default-field title="Renta mensual"><display/></default-field></field>
+                            <field name="totalEmployeeDeductions"><default-field title="Total descuentos"><display/></default-field></field>
+                            <field name="netPay"><default-field title="Neto"><display/></default-field></field>
+                        </form-single>
+                    </box-body>
+                </container-box>
+            </row-col>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Costo patronal"/>
+                    <box-body>
+                        <form-single name="PayrollPreviewEmployer" map="payrollResult" skip-form="true">
+                            <field name="isssEmployer"><default-field title="ISSS patronal"><display/></default-field></field>
+                            <field name="afpEmployer"><default-field title="AFP patronal"><display/></default-field></field>
+                            <field name="totalEmployerContributions"><default-field title="Total aportes"><display/></default-field></field>
+                            <field name="employerCost"><default-field title="Costo patronal"><display/></default-field></field>
+                            <field name="currencyUomId"><default-field title="Moneda"><display/></default-field></field>
+                        </form-single>
+                    </box-body>
+                </container-box>
+            </row-col>
+        </container-row>
+
+        <container-box>
+            <box-header title="Reglas aplicadas"/>
+            <box-body>
+                <form-list name="AppliedSchemeList" list="appliedSchemeList" skip-form="true">
+                    <field name="schemeTypeEnumId"><default-field title="Tipo"><display-entity entity-name="moqui.basic.Enumeration"/></default-field></field>
+                    <field name="svPayrollSchemeId"><default-field title="Esquema"><display/></default-field></field>
+                    <field name="bracketSeq"><default-field title="Tramo"><display/></default-field></field>
+                    <field name="base"><default-field title="Base"><display/></default-field></field>
+                    <field name="amount"><default-field title="Monto"><display/></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

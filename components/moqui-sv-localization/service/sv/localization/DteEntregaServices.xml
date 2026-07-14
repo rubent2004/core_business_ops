@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="deliver" noun="DteEvento" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEntregaServices.groovy"
+             method="deliverDteEvento">
+        <description>Prepara entrega al receptor de un evento DTE de invalidación o retorno:
+            sobre JSON con firmaElectronica/selloRecibido, PDF del evento, PDF del DTE original
+            y token de acuse.</description>
+        <in-parameters>
+            <parameter name="eventoTipo" required="true">
+                <description>INVALIDACION o RETORNO.</description>
+            </parameter>
+            <parameter name="dteAnulacionId"/>
+            <parameter name="dteFiscalEventId"/>
+            <parameter name="sendEmail" type="Boolean" default-value="false"/>
+            <parameter name="emailTemplateId">
+                <description>Opcional. Si se proporciona, se usa org.moqui.impl.EmailServices.send#EmailTemplate con adjuntos.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="delivered" type="Boolean"/>
+            <parameter name="created" type="Boolean"/>
+            <parameter name="emailSent" type="Boolean"/>
+            <parameter name="dteEntregaId"/>
+            <parameter name="entregaToken"/>
+            <parameter name="statusId"/>
+            <parameter name="receptorEmail"/>
+            <parameter name="envelopeJson"/>
+            <parameter name="attachmentsJson"/>
+            <parameter name="eventPdfSize" type="Integer"/>
+            <parameter name="dtePdfSize" type="Integer"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="DteEventPdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEntregaServices.groovy"
+             method="renderDteEventPdf">
+        <description>Renderiza la representación gráfica PDF de un evento de invalidación, retorno u operaciones especiales.</description>
+        <in-parameters>
+            <parameter name="eventoTipo" required="true"/>
+            <parameter name="dteAnulacionId"/>
+            <parameter name="dteFiscalEventId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="titulo"/>
+        </out-parameters>
+    </service>
+
+    <service verb="record" noun="DteAcuse" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEntregaServices.groovy"
+             method="recordDteAcuse">
+        <description>Registra acuse de recibo del receptor por token o por captura manual.</description>
+        <in-parameters>
+            <parameter name="dteEntregaId"/>
+            <parameter name="entregaToken"/>
+            <parameter name="acuseMetodo"/>
+            <parameter name="acuseNota"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="acknowledged" type="Boolean"/>
+            <parameter name="alreadyAcknowledged" type="Boolean"/>
+            <parameter name="dteEntregaId"/>
+            <parameter name="statusId"/>
+        </out-parameters>
+    </service>
+
+</services>

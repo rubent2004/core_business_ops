@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Status items y flow para SvPayrollRun + SvPayrollRunEmployee.
+    Cargado como seed: estos catálogos definen la máquina de estados de la
+    corrida de nómina y deben existir antes de crear instancias.
+-->
+<entity-facade-xml type="seed">
+
+    <!-- ============================================================== -->
+    <!-- SvPayrollRun status flow                                       -->
+    <!-- ============================================================== -->
+
+    <moqui.basic.StatusType description="Sv Payroll Run" statusTypeId="SvPayrollRun"/>
+
+    <moqui.basic.StatusItem description="Creada" sequenceNum="1"
+            statusId="SvPayCreated" statusTypeId="SvPayrollRun"/>
+    <moqui.basic.StatusItem description="Calculada" sequenceNum="2"
+            statusId="SvPayCalculated" statusTypeId="SvPayrollRun"/>
+    <moqui.basic.StatusItem description="Aprobada" sequenceNum="3"
+            statusId="SvPayApproved" statusTypeId="SvPayrollRun"/>
+    <moqui.basic.StatusItem description="Contabilizada" sequenceNum="4"
+            statusId="SvPayPosted" statusTypeId="SvPayrollRun"/>
+
+    <moqui.basic.StatusFlow description="Sv Payroll Run Default"
+            statusFlowId="SvPayrollRunDefault"/>
+
+    <moqui.basic.StatusFlowTransition statusFlowId="SvPayrollRunDefault"
+            statusId="SvPayCreated" toStatusId="SvPayCalculated"
+            transitionName="Calcular"/>
+    <moqui.basic.StatusFlowTransition statusFlowId="SvPayrollRunDefault"
+            statusId="SvPayCalculated" toStatusId="SvPayCreated"
+            transitionName="Reabrir"/>
+    <moqui.basic.StatusFlowTransition statusFlowId="SvPayrollRunDefault"
+            statusId="SvPayCalculated" toStatusId="SvPayApproved"
+            transitionName="Aprobar"/>
+    <moqui.basic.StatusFlowTransition statusFlowId="SvPayrollRunDefault"
+            statusId="SvPayApproved" toStatusId="SvPayPosted"
+            transitionName="Contabilizar"/>
+
+    <!-- ============================================================== -->
+    <!-- SvPayrollRunEmployee status flow                               -->
+    <!-- ============================================================== -->
+
+    <moqui.basic.StatusType description="Sv Payroll Run Employee"
+            statusTypeId="SvPayrollRunEmp"/>
+
+    <moqui.basic.StatusItem description="Calculada" sequenceNum="1"
+            statusId="SvPayLineCalculated" statusTypeId="SvPayrollRunEmp"/>
+    <moqui.basic.StatusItem description="Omitida" sequenceNum="2"
+            statusId="SvPayLineSkipped" statusTypeId="SvPayrollRunEmp"/>
+    <moqui.basic.StatusItem description="Aprobada" sequenceNum="3"
+            statusId="SvPayLineApproved" statusTypeId="SvPayrollRunEmp"/>
+    <moqui.basic.StatusItem description="Pagada" sequenceNum="4"
+            statusId="SvPayLinePaid" statusTypeId="SvPayrollRunEmp"/>
+
+</entity-facade-xml>

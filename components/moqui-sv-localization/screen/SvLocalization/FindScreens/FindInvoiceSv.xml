@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Buscar por DTE" default-menu-index="2">
+
+    <transition name="editInvoice"><default-response url="//${appRoot}/Accounting/Invoice/EditInvoice"/></transition>
+    <transition name="dtTab"><default-response url="//${appRoot}/Accounting/Invoice/Dte"/></transition>
+
+    <actions>
+        <entity-find entity-name="sv.localization.search.SvInvoiceDteSearch" list="invoiceList" limit="50">
+            <econdition field-name="statusId" operator="not-equals" value="InvoiceCancelled" ignore="filterInvStatus"/>
+            <econdition field-name="tipoDteCode" from="filterTipoDte" ignore-if-empty="true"/>
+            <econdition field-name="dteStatusId" from="filterDteStatus" ignore-if-empty="true"/>
+            <econdition field-name="numeroControl" operator="like" value="%${filterNumControl}%" ignore-if-empty="true"/>
+            <econdition field-name="codigoGeneracion" operator="like" value="%${filterCodGen}%" ignore-if-empty="true"/>
+            <econdition field-name="invoiceDate" operator="greater-equals" from="filterDateFrom" ignore-if-empty="true"/>
+            <econdition field-name="invoiceDate" operator="less-equals" from="filterDateTo" ignore-if-empty="true"/>
+            <econdition field-name="statusId" from="filterInvStatus" ignore-if-empty="true"/>
+            <order-by field-name="-invoiceDate,-invoiceId"/>
+        </entity-find>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Buscar Factura"/>
+            <box-body>
+                <form-single name="InvoiceSearchForm" transition="." pass-through-parameters="true">
+                    <field name="filterTipoDte"><default-field title="Tipo DTE">
+                        <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvTipoDte"/>
+                                <econdition field-name="optionValue" operator="not-in" value="16,17,18"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="filterDteStatus"><default-field title="Estado DTE">
+                        <drop-down allow-empty="true"><entity-options key="${statusId}" text="${description}">
+                            <entity-find entity-name="moqui.basic.StatusItem">
+                                <econdition field-name="statusTypeId" value="SvDteEmision"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="filterNumControl"><default-field title="Número control">
+                        <text-line size="30"/>
+                    </default-field></field>
+                    <field name="filterCodGen"><default-field title="Código generación">
+                        <text-line size="30"/>
+                    </default-field></field>
+                    <field name="filterDateFrom"><default-field title="Desde">
+                        <date-time type="date"/>
+                    </default-field></field>
+                    <field name="filterDateTo"><default-field title="Hasta">
+                        <date-time type="date"/>
+                    </default-field></field>
+                    <field name="filterInvStatus"><default-field title="Estado factura">
+                        <drop-down allow-empty="true"><entity-options key="${statusId}" text="${description}">
+                            <entity-find entity-name="moqui.basic.StatusItem">
+                                <econdition field-name="statusTypeId" value="Invoice"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Buscar"><submit/></default-field></field>
+                    <field-layout>
+                        <field-row><field-ref name="filterTipoDte"/><field-ref name="filterDteStatus"/><field-ref name="filterInvStatus"/></field-row>
+                        <field-row><field-ref name="filterNumControl"/><field-ref name="filterCodGen"/></field-row>
+                        <field-row><field-ref name="filterDateFrom"/><field-ref name="filterDateTo"/></field-row>
+                        <field-ref name="submitButton"/>
+                    </field-layout>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container style="table-responsive">
+            <form-list name="InvoiceSvList" list="invoiceList" skip-form="true">
+                <field name="invoiceId"><default-field title="Factura">
+                    <link url="editInvoice" text="${invoiceId}" link-type="anchor"/>
+                </default-field></field>
+                <field name="invoiceDate"><default-field title="Fecha"><display/></default-field></field>
+                <field name="statusId"><default-field title="Estado">
+                    <display-entity entity-name="moqui.basic.StatusItem"/>
+                </default-field></field>
+                <field name="tipoDteCode"><default-field title="Tipo DTE"><display/></default-field></field>
+                <field name="dteStatusId"><default-field title="Estado DTE">
+                    <display-entity entity-name="moqui.basic.StatusItem" text="${description}"/>
+                </default-field></field>
+                <field name="numeroControl"><default-field title="Número control"><display/></default-field></field>
+                <field name="selloRecepcion"><default-field title="Sello">
+                    <display text="${selloRecepcion ? selloRecepcion.substring(0, Math.min(12, selloRecepcion.size())) + '...' : ''}"/>
+                </default-field></field>
+                <field name="toPartyName"><default-field title="Receptor"><display/></default-field></field>
+                <field name="invoiceTotal"><default-field title="Total" align="right">
+                    <display currency-unit-field="currencyUomId"/>
+                </default-field></field>
+                <field name="actions"><default-field title="">
+                    <link url="dtTab" text="DTE" link-type="anchor" parameter-map="[invoiceId:invoiceId]"
+                          condition="tipoDteCode"/>
+                </default-field></field>
+            </form-list>
+        </container>
+    </widgets>
+</screen>

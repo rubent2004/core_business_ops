@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+    <moqui.basic.Enumeration description="Tipo de contribuyente SV" enumId="PcltSvTipoContribuyente" enumTypeId="PartyClassificationType" sequenceNum="900"/>
+    <mantle.party.PartyClassification partyClassificationId="TcGrande" classificationTypeEnumId="PcltSvTipoContribuyente" description="Gran Contribuyente" standardCode="GRANDE"/>
+    <mantle.party.PartyClassification partyClassificationId="TcMediano" classificationTypeEnumId="PcltSvTipoContribuyente" description="Mediano Contribuyente" standardCode="MEDIANO"/>
+    <mantle.party.PartyClassification partyClassificationId="TcOtros" classificationTypeEnumId="PcltSvTipoContribuyente" description="Otros Contribuyentes" standardCode="OTROS"/>
+    <mantle.party.PartyClassification partyClassificationId="TcExcluido" classificationTypeEnumId="PcltSvTipoContribuyente" description="Sujeto Excluido" standardCode="EXCLUIDO"/>
+</entity-facade-xml>

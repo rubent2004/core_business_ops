@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Usuarios y Permisos — listado de cuentas del sistema con su empleado ligado
+    y sus roles SV, más alta guiada de un nuevo usuario. Todas las operaciones
+    privilegiadas pasan por sv.localization.UserAdminServices (sólo SvAdmin).
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Usuarios y Permisos" default-menu-index="1">
+
+    <transition name="createUser">
+        <service-call name="sv.localization.UserAdminServices.create#SvUserForEmployee"/>
+        <default-response url="../EditUserRole"><parameter name="userId" from="userId"/></default-response>
+        <error-response url="."/>
+    </transition>
+    <transition name="editUser">
+        <default-response url="../EditUserRole"/>
+    </transition>
+
+    <actions>
+        <!-- Empleados disponibles (Party con rol Employee) para ligar a la cuenta -->
+        <entity-find entity-name="mantle.party.PartyRole" list="employeeRoleList">
+            <econdition field-name="roleTypeId" value="Employee"/>
+        </entity-find>
+        <set field="employeeOptions" from="[]"/>
+        <iterate list="employeeRoleList" entry="empRole">
+            <entity-find-one entity-name="mantle.party.PartyDetail" value-field="empParty">
+                <field-map field-name="partyId" from="empRole.partyId"/>
+            </entity-find-one>
+            <if condition="empParty != null">
+                <set field="empLabel" from="(empParty.organizationName ?: ((empParty.firstName ?: '') + ' ' + (empParty.lastName ?: '')).trim()) ?: empParty.partyId"/>
+                <script>employeeOptions.add([partyId: empParty.partyId, label: empLabel + ' (' + empParty.partyId + ')'])</script>
+            </if>
+        </iterate>
+
+        <!-- Roles SV disponibles -->
+        <entity-find entity-name="moqui.security.UserGroup" list="svGroupList">
+            <econdition field-name="userGroupId" operator="like" value="Sv%"/>
+            <order-by field-name="userGroupId"/>
+        </entity-find>
+
+        <!-- Cuentas existentes -->
+        <entity-find entity-name="moqui.security.UserAccount" list="userList">
+            <order-by field-name="username"/>
+        </entity-find>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Crear usuario del sistema"/>
+            <box-body>
+                <form-single name="CreateUserForm" transition="createUser" focus-field="username">
+                    <field name="username"><default-field title="Usuario">
+                        <text-line size="24" input-type="text"/></default-field></field>
+                    <field name="userFullName"><default-field title="Nombre completo">
+                        <text-line size="36"/></default-field></field>
+                    <field name="emailAddress"><default-field title="Correo electrónico">
+                        <text-line size="32" input-type="email"/></default-field></field>
+                    <field name="partyId"><default-field title="Empleado ligado">
+                        <drop-down allow-empty="true">
+                            <list-options list="employeeOptions" key="${partyId}" text="${label}"/>
+                        </drop-down></default-field></field>
+                    <field name="roleIds"><default-field title="Roles">
+                        <drop-down allow-multiple="true" allow-empty="true">
+                            <entity-options key="${userGroupId}" text="${userGroupId} — ${description}">
+                                <entity-find entity-name="moqui.security.UserGroup">
+                                    <econdition field-name="userGroupId" operator="like" value="Sv%"/>
+                                    <order-by field-name="userGroupId"/>
+                                </entity-find>
+                            </entity-options>
+                        </drop-down></default-field></field>
+                    <field name="newPassword"><default-field title="Contraseña temporal">
+                        <password size="20"/></default-field></field>
+                    <field name="newPasswordVerify"><default-field title="Repetir contraseña">
+                        <password size="20"/></default-field></field>
+                    <field name="requirePasswordChange"><default-field title="Forzar cambio al ingresar">
+                        <drop-down no-current-selected-key="Y">
+                            <option key="Y" text="Sí"/><option key="N" text="No"/>
+                        </drop-down></default-field></field>
+                    <field name="submitButton"><default-field title="Crear usuario"><submit/></default-field></field>
+
+                    <field-layout>
+                        <field-row><field-ref name="username"/><field-ref name="userFullName"/></field-row>
+                        <field-row><field-ref name="emailAddress"/><field-ref name="partyId"/></field-row>
+                        <field-ref name="roleIds"/>
+                        <field-row><field-ref name="newPassword"/><field-ref name="newPasswordVerify"/></field-row>
+                        <field-ref name="requirePasswordChange"/>
+                        <field-ref name="submitButton"/>
+                    </field-layout>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Usuarios existentes"/>
+            <box-body>
+                <form-list name="UserList" list="userList" skip-form="true">
+                    <row-actions>
+                        <entity-find entity-name="moqui.security.UserGroupMember" list="ugmList">
+                            <econdition field-name="userId" from="userId"/>
+                            <econdition field-name="userGroupId" operator="like" value="Sv%"/>
+                            <date-filter/>
+                        </entity-find>
+                        <set field="rolesText" from="ugmList ? ugmList.collect{ it.userGroupId }.join(', ') : '—'"/>
+                        <set field="empLabel" from="'—'"/>
+                        <if condition="partyId">
+                            <entity-find-one entity-name="mantle.party.PartyDetail" value-field="empParty">
+                                <field-map field-name="partyId" from="partyId"/>
+                            </entity-find-one>
+                            <if condition="empParty != null">
+                                <set field="empLabel" from="(empParty.organizationName ?: ((empParty.firstName ?: '') + ' ' + (empParty.lastName ?: '')).trim()) ?: partyId"/>
+                            </if>
+                        </if>
+                    </row-actions>
+                    <field name="username"><default-field title="Usuario">
+                        <link url="editUser" text="${username}" parameter-map="[userId:userId]"/></default-field></field>
+                    <field name="userFullName"><default-field title="Nombre"><display/></default-field></field>
+                    <field name="empLabel"><default-field title="Empleado"><display/></default-field></field>
+                    <field name="rolesText"><default-field title="Roles"><display/></default-field></field>
+                    <field name="disabled"><default-field title="Deshabilitado"><display/></default-field></field>
+                    <field name="editBtn"><default-field title="">
+                        <link url="editUser" text="Editar" parameter-map="[userId:userId]" btn-type="info"/></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+    <mantle.other.tax.TaxAuthority taxAuthorityId="TA_SV_MH" taxAuthorityTypeEnumId="TatFederal"
+            description="Ministerio de Hacienda El Salvador" taxAuthGeoId="SLV"
+            requireTaxIdForExemption="Y" includeTaxInPrice="Y" requiereDte="Y"/>
+    <mantle.other.tax.TaxAuthority taxAuthorityId="TA_SV_DGI" taxAuthorityTypeEnumId="TatFederal"
+            description="Dirección General de Impuestos Internos El Salvador" taxAuthGeoId="SLV"
+            requireTaxIdForExemption="Y" includeTaxInPrice="Y" requiereDte="Y"/>
+
+    <sv.localization.tax.SvTaxAuthorityConfig taxAuthorityId="TA_SV_MH" mhAmbienteEnumId="SvAmbTest"
+            mhAuthUrl="https://apitest.dtes.mh.gob.sv/seguridad/auth"
+            mhRecepcionUrl="https://apitest.dtes.mh.gob.sv/fesv/recepciondte"
+            mhConsultaUrl="https://apitest.dtes.mh.gob.sv/fesv/recepcion/consultadte"
+            nitEmisor="05142107981015"
+            defaultUserMh="demo" passwordMhSecretKey="sv.dte.demo.mh.password" mockEnabled="Y"/>
+
+    <!-- Certificado DEMO ficticio. En modo mock (mockEnabled="Y") NO se firma ni
+         transmite nada; el .crt es un placeholder autofirmado sin valor real. -->
+    <sv.localization.dte.DteCertificate dteCertificateId="DteCertDemo05142107981015" nit="05142107981015"
+            pathCrt="runtime/component/moqui-sv-localization/certs/demo-05142107981015.crt"
+            passwordSecretKey="sv.dte.demo.cert.password" fromDate="2024-01-01 00:00:00"
+            commonName="Certificado DEMO ficticio (mock) — Metalúrgica del Pacífico"/>
+</entity-facade-xml>

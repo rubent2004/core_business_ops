@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+
+    <!-- ========================================================= -->
+    <!-- Extensión TaxAuthority para datos MH                      -->
+    <!-- ========================================================= -->
+
+    <extend-entity entity-name="TaxAuthority" package="mantle.other.tax">
+        <field name="mhCodigoActividad" type="text-short">
+            <description>Código de actividad económica MH CAT-019 asociada a esta autoridad</description>
+        </field>
+        <field name="requiereDte" type="text-indicator" default="'N'">
+            <description>Indica si las facturas emitidas para esta autoridad requieren DTE</description>
+        </field>
+    </extend-entity>
+
+    <!-- ========================================================= -->
+    <!-- Configuración fiscal MH por TaxAuthority                  -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvTaxAuthorityConfig" package="sv.localization.tax">
+        <description>Configuración de credenciales y endpoints del Ministerio de Hacienda
+            asociada a una TaxAuthority. Las passwords NUNCA se guardan aquí; este campo
+            referencia una clave en el sistema de secretos de Moqui.</description>
+        <field name="taxAuthorityId" type="id" is-pk="true"/>
+        <field name="mhAmbienteEnumId" type="id">
+            <description>SvAmbTest (00) o SvAmbProd (01) — código MH CAT-001</description>
+        </field>
+        <field name="mhAuthUrl" type="text-medium"/>
+        <field name="mhRecepcionUrl" type="text-medium"/>
+        <field name="mhConsultaUrl" type="text-medium"/>
+        <field name="mhAnulacionUrl" type="text-medium"/>
+        <field name="mhContingenciaUrl" type="text-medium"/>
+        <field name="nitEmisor" type="text-short"/>
+        <field name="defaultUserMh" type="text-medium"/>
+        <field name="passwordMhSecretKey" type="text-medium">
+            <description>Nombre de la clave del secreto en Moqui que contiene la password MH.
+                NO almacenar la password aquí.</description>
+        </field>
+        <field name="mockEnabled" type="text-indicator" default="'Y'">
+            <description>Modo desarrollo: simula respuesta MH sin llamar endpoints reales.</description>
+        </field>
+
+        <relationship type="one" related="mantle.other.tax.TaxAuthority"/>
+        <relationship type="one" title="SvAmbiente" related="moqui.basic.Enumeration">
+            <key-map field-name="mhAmbienteEnumId"/>
+        </relationship>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Cubo regenerable para libro de IVA (compras/ventas)       -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvIvaBookEntry" package="sv.localization.tax">
+        <description>Entrada del libro de IVA (compras o ventas). Regenerable por servicio
+            a partir de Invoice + DteEmision del periodo. NO es fuente de verdad.</description>
+        <field name="svIvaBookEntryId" type="id" is-pk="true"/>
+        <field name="bookTypeEnumId" type="id">
+            <description>SvBookSales o SvBookPurchases</description>
+        </field>
+        <field name="periodYearMonth" type="text-short">
+            <description>Formato YYYY-MM</description>
+        </field>
+        <field name="organizationPartyId" type="id"/>
+        <field name="invoiceId" type="id"/>
+        <field name="dteEmisionId" type="id"/>
+        <field name="dteRecepcionId" type="id">
+            <description>DTE recibido de proveedor (DteRecepcion) que origina esta entrada de compras.
+                Null cuando la entrada proviene de Invoice/DteEmision interno.</description>
+        </field>
+        <field name="dteFiscalEventId" type="id">
+            <description>Evento fiscal aceptado que origina esta entrada, por ejemplo ERET como movimiento negativo.</description>
+        </field>
+        <field name="dteSourceStatusId" type="text-short">
+            <description>statusId del DteEmision origen: DteAccepted = sello real MH;
+                DteMockAccepted = aceptado por simulador (no es DTE real sellado). Null cuando la
+                entrada proviene solo de la factura interna de Mantle sin DTE. Permite distinguir
+                evidencia real de mock al exportar o auditar.</description>
+        </field>
+        <field name="numeroCorrelativo" type="number-integer"/>
+        <field name="fechaEmision" type="date"/>
+        <field name="tipoDteCode" type="text-short"/>
+        <field name="nitNrcCounterParty" type="text-short"/>
+        <field name="nombreCounterParty" type="text-medium"/>
+        <field name="montoExento" type="currency-amount"/>
+        <field name="montoNoSujeto" type="currency-amount"/>
+        <field name="montoGravado" type="currency-amount"/>
+        <field name="iva" type="currency-amount"/>
+        <field name="iva1pctRetenido" type="currency-amount"/>
+        <field name="iva1pctPercibido" type="currency-amount"/>
+        <field name="total" type="currency-amount"/>
+
+        <relationship type="one" title="BookType" related="moqui.basic.Enumeration">
+            <key-map field-name="bookTypeEnumId"/>
+        </relationship>
+        <relationship type="one" title="Organization" related="mantle.party.Party">
+            <key-map field-name="organizationPartyId" related="partyId"/>
+        </relationship>
+        <relationship type="one" related="mantle.account.invoice.Invoice"/>
+        <relationship type="one" related="sv.localization.dte.DteEmision"/>
+        <relationship type="one" related="sv.localization.dte.DteRecepcion"/>
+        <relationship type="one" related="sv.localization.dte.DteFiscalEvent"/>
+
+        <index name="SvIvaBookEntryPeriodIdx"><index-field name="organizationPartyId"/><index-field name="bookTypeEnumId"/><index-field name="periodYearMonth"/></index>
+        <index name="SvIvaBookEntryInvoiceIdx" unique="true"><index-field name="invoiceId"/><index-field name="bookTypeEnumId"/></index>
+        <index name="SvIvaBookEntryRecepcionIdx" unique="true"><index-field name="dteRecepcionId"/><index-field name="bookTypeEnumId"/></index>
+        <index name="SvIvaBookEntryFiscalEventIdx" unique="true"><index-field name="dteFiscalEventId"/><index-field name="bookTypeEnumId"/></index>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Feriados nacionales SV (días no hábiles) para cálculo de   -->
+    <!-- plazos DTE. Los fijos y Semana Santa se calculan en código;-->
+    <!-- esta entidad permite añadir/ajustar feriados sin recompilar.-->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvHoliday" package="sv.localization.tax">
+        <description>Feriado o día no hábil adicional para el cálculo de días hábiles en plazos DTE.
+            Complementa los feriados nacionales fijos y de Semana Santa calculados en
+            SvBusinessCalendarServices. Útil para feriados locales/patronales o ajustes puntuales.</description>
+        <field name="svHolidayId" type="id" is-pk="true"/>
+        <field name="holidayDate" type="date"/>
+        <field name="description" type="text-medium"/>
+        <field name="scope" type="text-short"><description>national | local</description></field>
+        <index name="SvHolidayDateIdx"><index-field name="holidayDate"/></index>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Snapshot inmutable del Libro IVA por periodo (auditoría)   -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvIvaBookSnapshot" package="sv.localization.tax">
+        <description>Cierre inmutable de un Libro IVA (compras o ventas) para un periodo y
+            organización. A diferencia de SvIvaBookEntry (regenerable y mutable), un snapshot
+            congela el contenido exacto, su hash SHA-256, quién lo generó y cuándo. Append-only:
+            nunca se actualiza ni borra; cada regeneración crea una versión nueva. Sirve como
+            evidencia de auditoría de qué se reportó en un momento dado.</description>
+        <field name="svIvaBookSnapshotId" type="id" is-pk="true"/>
+        <field name="bookTypeEnumId" type="id">
+            <description>SvBookSales o SvBookPurchases</description>
+        </field>
+        <field name="periodYearMonth" type="text-short"><description>Formato YYYY-MM</description></field>
+        <field name="organizationPartyId" type="id"/>
+        <field name="versionNum" type="number-integer">
+            <description>Correlativo de versión por (organización, libro, periodo). 1, 2, 3...</description>
+        </field>
+        <field name="generatedByUserId" type="id"/>
+        <field name="generatedDate" type="date-time"/>
+        <field name="entryCount" type="number-integer"/>
+        <field name="mockEntryCount" type="number-integer">
+            <description>Cuántas entradas del snapshot provienen de DTE mock (DteMockAccepted).
+                Si es &gt; 0 el snapshot NO debe considerarse evidencia real plena.</description>
+        </field>
+        <field name="containsMock" type="text-indicator">
+            <description>Y si mockEntryCount &gt; 0.</description>
+        </field>
+        <field name="hashAlgorithm" type="text-short"><description>SHA-256</description></field>
+        <field name="contentHash" type="text-long">
+            <description>Hash hex del payload congelado. Permite detectar alteración posterior.</description>
+        </field>
+        <field name="payloadFormat" type="text-short"><description>CSV</description></field>
+        <field name="payloadText" type="text-very-long">
+            <description>Contenido exacto congelado (idéntico al export CSV operativo del periodo).</description>
+        </field>
+        <field name="totalGravado" type="currency-amount"/>
+        <field name="totalIva" type="currency-amount"/>
+        <field name="total" type="currency-amount"/>
+
+        <relationship type="one" title="BookType" related="moqui.basic.Enumeration">
+            <key-map field-name="bookTypeEnumId"/>
+        </relationship>
+        <relationship type="one" title="Organization" related="mantle.party.Party">
+            <key-map field-name="organizationPartyId" related="partyId"/>
+        </relationship>
+        <relationship type="one" title="GeneratedByUser" related="moqui.security.UserAccount">
+            <key-map field-name="generatedByUserId" related="userId"/>
+        </relationship>
+
+        <index name="SvIvaBookSnapshotIdx"><index-field name="organizationPartyId"/><index-field name="bookTypeEnumId"/><index-field name="periodYearMonth"/><index-field name="versionNum"/></index>
+    </entity>
+
+</entities>

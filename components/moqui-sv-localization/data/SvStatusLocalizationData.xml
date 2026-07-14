@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Traducciones es_SV para StatusItem y Enumeration usados en dropdowns,
+    display-entity y banners. Cubre el flujo principal Cliente → Orden →
+    Factura → DTE + manufactura y nómina.
+
+    Mecanismo: moqui.basic.LocalizedEntityField mapea pkValue (statusId o
+    enumId) + locale a un texto traducido que reemplaza el original al
+    renderizar `display-entity` y `entity-options` en `text="${description}"`.
+
+    Locale es_SV con fallback a es (genérico) implícito por Moqui.
+-->
+<entity-facade-xml type="seed">
+
+    <!-- ================================================================ -->
+    <!-- 1. StatusItem — flujo de orden de venta                          -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderOpen" locale="es_SV" localized="Abierta"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderPlaced" locale="es_SV" localized="Colocada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderApproved" locale="es_SV" localized="Aprobada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderProcessing" locale="es_SV" localized="En proceso"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderHold" locale="es_SV" localized="Retenida"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderCompleted" locale="es_SV" localized="Completada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderCancelled" locale="es_SV" localized="Cancelada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="OrderRejected" locale="es_SV" localized="Rechazada"/>
+
+    <!-- ================================================================ -->
+    <!-- 2. StatusItem — flujo de factura                                 -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceIncoming" locale="es_SV" localized="Recibida"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceInProcess" locale="es_SV" localized="En proceso"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceApproved" locale="es_SV" localized="Aprobada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceFinalized" locale="es_SV" localized="Finalizada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceAckRecd" locale="es_SV" localized="Acuse recibido"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoicePmtSent" locale="es_SV" localized="Pagada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceReceived" locale="es_SV" localized="Recibida"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceCancelled" locale="es_SV" localized="Cancelada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoicePmtRecvd" locale="es_SV" localized="Pago recibido"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="InvoiceWriteOff" locale="es_SV" localized="Cuenta incobrable"/>
+
+    <!-- ================================================================ -->
+    <!-- 3. StatusItem — DTE                                              -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteCreated" locale="es_SV" localized="Creado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteSigned" locale="es_SV" localized="Firmado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteTransmitted" locale="es_SV" localized="Transmitido"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteAccepted" locale="es_SV" localized="Aceptado por MH"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteMockAccepted" locale="es_SV" localized="Aceptado (simulador)"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteRejected" locale="es_SV" localized="Rechazado por MH"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteContingency" locale="es_SV" localized="En contingencia"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteCancelled" locale="es_SV" localized="Anulado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="DteError" locale="es_SV" localized="Error"/>
+
+    <!-- ================================================================ -->
+    <!-- 4. StatusItem — Manufactura / WorkEffort                         -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="WeInPlanning" locale="es_SV" localized="En planificación"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="WeApproved" locale="es_SV" localized="Aprobada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="WeInProgress" locale="es_SV" localized="En curso"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="WeOnHold" locale="es_SV" localized="En espera"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="WeComplete" locale="es_SV" localized="Completada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="WeClosed" locale="es_SV" localized="Cerrada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="WeCancelled" locale="es_SV" localized="Cancelada"/>
+
+    <!-- ================================================================ -->
+    <!-- 5. StatusItem — Nómina SV                                        -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayCreated" locale="es_SV" localized="Creada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayCalculated" locale="es_SV" localized="Calculada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayApproved" locale="es_SV" localized="Aprobada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayPosted" locale="es_SV" localized="Contabilizada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayLineCalculated" locale="es_SV" localized="Calculada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayLineApproved" locale="es_SV" localized="Aprobada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayLinePaid" locale="es_SV" localized="Pagada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="SvPayLineSkipped" locale="es_SV" localized="Omitida"/>
+
+    <!-- ================================================================ -->
+    <!-- 6. Enumeration — tipos de WorkEffortGood (BOM)                   -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="WeptConsume" locale="es_SV" localized="Consumo"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="WeptProduce" locale="es_SV" localized="Producción"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="WeptRouting" locale="es_SV" localized="Ruteo"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="WeptResource" locale="es_SV" localized="Recurso"/>
+
+    <!-- ================================================================ -->
+    <!-- 7. Enumeration — tipos de Asset (inventario)                     -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="AstAvailable" locale="es_SV" localized="Disponible"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="AstInUse" locale="es_SV" localized="En uso"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="AstReserved" locale="es_SV" localized="Reservado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.Enumeration" fieldName="description"
+            pkValue="AstUsed" locale="es_SV" localized="Consumido"/>
+
+    <!-- ================================================================ -->
+    <!-- 8. StatusItem — Inventario / Asset                               -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="AstAvailable" locale="es_SV" localized="Disponible"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="AstReserved" locale="es_SV" localized="Reservado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="AstAssigned" locale="es_SV" localized="Asignado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="AstReturned" locale="es_SV" localized="Devuelto"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="AstWritten" locale="es_SV" localized="Dado de baja"/>
+
+    <!-- ================================================================ -->
+    <!-- 9. StatusItem — Shipment / Remisión                              -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="ShipInput" locale="es_SV" localized="Captura"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="ShipScheduled" locale="es_SV" localized="Programada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="ShipPicked" locale="es_SV" localized="Recolectada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="ShipPacked" locale="es_SV" localized="Empacada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="ShipShipped" locale="es_SV" localized="Enviada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="ShipDelivered" locale="es_SV" localized="Entregada"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="ShipCancelled" locale="es_SV" localized="Cancelada"/>
+
+    <!-- ================================================================ -->
+    <!-- 10. StatusItem — Payment / Pago                                  -->
+    <!-- ================================================================ -->
+
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="PmntPromised" locale="es_SV" localized="Comprometido"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="PmntAuthorized" locale="es_SV" localized="Autorizado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="PmntDelivered" locale="es_SV" localized="Entregado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="PmntConfirmed" locale="es_SV" localized="Confirmado"/>
+    <moqui.basic.LocalizedEntityField entityName="moqui.basic.StatusItem" fieldName="description"
+            pkValue="PmntCancelled" locale="es_SV" localized="Cancelado"/>
+
+</entity-facade-xml>

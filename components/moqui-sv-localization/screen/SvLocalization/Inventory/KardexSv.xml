@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Kardex" default-menu-index="4">
+
+    <parameter name="productId"/>
+    <parameter name="facilityId"/>
+    <parameter name="fromDate"/>
+    <parameter name="thruDate"/>
+
+    <transition name="editProduct"><default-response url="//${appRoot}/Catalog/Product/EditProduct"/></transition>
+
+    <transition-include name="getProductList" location="component://SimpleScreens/template/product/ProductTransitions.xml"/>
+    <transition-include name="getFacilityList" location="component://SimpleScreens/template/facility/FacilityTransitions.xml"/>
+
+    <actions>
+        <!-- Org del usuario para acotar el kardex a su propio inventario, igual que ReceiveMaterialSv. -->
+        <set field="userPartyId" from="ec.user.userAccount?.partyId"/>
+        <entity-find entity-name="mantle.party.PartyRelationship" list="orgRels" limit="1">
+            <econdition field-name="fromPartyId" from="userPartyId"/>
+            <econdition field-name="relationshipTypeEnumId" value="PrtEmployee"/>
+            <date-filter/>
+        </entity-find>
+        <set field="effectiveOwnerPartyId" from="orgRels ? orgRels[0]?.toPartyId : null"/>
+
+        <if condition="productId">
+            <service-call name="sv.localization.InventorySvServices.calculate#AverageCost"
+                          in-map="[productId:productId, ownerPartyId:effectiveOwnerPartyId, facilityId:facilityId]"
+                          out-map="costSummary"/>
+            <service-call name="sv.localization.InventorySvServices.get#ProductKardex"
+                          in-map="[productId:productId, ownerPartyId:effectiveOwnerPartyId, facilityId:facilityId,
+                                   fromDate:fromDate, thruDate:thruDate]"
+                          out-map="kardex"/>
+            <set field="kardexRows" from="kardex?.kardexRows ?: []"/>
+        </if>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Kardex de Inventario (Costo Promedio Ponderado)"/>
+            <box-body>
+                <form-single name="KardexFilterForm" transition="." pass-through-parameters="true">
+                    <field name="productId"><default-field title="Producto">
+                        <drop-down><dynamic-options transition="getProductList" server-search="true" min-length="1"/></drop-down>
+                    </default-field></field>
+                    <field name="facilityId"><default-field title="Bodega">
+                        <drop-down allow-empty="true"><dynamic-options transition="getFacilityList" server-search="true" min-length="0"
+                                parameter-map="[facilityTypeEnumId:'FcTpLine,FcTpPlant,FcTpWarehouse']"/></drop-down>
+                    </default-field></field>
+                    <field name="fromDate"><default-field title="Desde"><date-time type="date"/></default-field></field>
+                    <field name="thruDate"><default-field title="Hasta"><date-time type="date"/></default-field></field>
+                    <field name="submitButton"><default-field title="Consultar"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <section name="KardexResultSection" condition="productId"><widgets>
+            <container-box>
+                <box-header title="Resumen del Producto"/>
+                <box-body>
+                    <container-row>
+                        <row-col lg="3">
+                            <label text="Producto:" type="strong"/>
+                            <link url="editProduct" text="${productId}" link-type="anchor" parameter-map="[productId:productId]"/>
+                        </row-col>
+                        <row-col lg="3">
+                            <label text="Costo Promedio Actual:" type="strong"/>
+                            <label text="${ec.l10n.format(costSummary?.averageCost ?: 0, '$ #,##0.0000')}"/>
+                        </row-col>
+                        <row-col lg="3">
+                            <label text="Existencia:" type="strong"/>
+                            <label text="${ec.l10n.format(costSummary?.quantityOnHand ?: 0, '#,##0.####')}"/>
+                        </row-col>
+                        <row-col lg="3">
+                            <label text="Valor Inventario:" type="strong"/>
+                            <label text="${ec.l10n.format(costSummary?.inventoryValue ?: 0, '$ #,##0.00')}"/>
+                        </row-col>
+                    </container-row>
+                </box-body>
+            </container-box>
+
+            <container-box>
+                <box-header title="Movimientos"/>
+                <box-body-nopad>
+                    <container style="table-responsive">
+                        <form-list name="KardexList" list="kardexRows" skip-form="true" paginate="false">
+                            <field name="effectiveDate"><default-field title="Fecha">
+                                <display format="dd/MM/yyyy HH:mm"/>
+                            </default-field></field>
+                            <field name="movementType"><default-field title="Tipo"><display/></default-field></field>
+                            <field name="reference"><default-field title="Referencia"><display/></default-field></field>
+                            <field name="movedBy"><default-field title="Usuario"><display/></default-field></field>
+                            <field name="qtyIn"><default-field title="Entra"><display format="#,##0.####"/></default-field></field>
+                            <field name="qtyOut"><default-field title="Sale"><display format="#,##0.####"/></default-field></field>
+                            <field name="balanceQty"><default-field title="Saldo"><display format="#,##0.####"/></default-field></field>
+                            <field name="unitCost"><default-field title="C.U."><display format="$ #,##0.0000"/></default-field></field>
+                            <field name="avgCost"><default-field title="Costo Prom."><display format="$ #,##0.0000"/></default-field></field>
+                            <field name="balanceValue"><default-field title="Valor Saldo"><display format="$ #,##0.00"/></default-field></field>
+                        </form-list>
+                    </container>
+                </box-body-nopad>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Contingencias" default-menu-index="3">
+    <transition name="openContingencia"><service-call name="sv.localization.DteContingencyServices.open#Contingencia"/><default-response url="."/></transition>
+    <transition name="closeContingencia"><service-call name="sv.localization.DteContingencyServices.close#Contingencia"/><default-response url="."/></transition>
+    <actions>
+        <entity-find entity-name="sv.localization.dte.DteContingencia" list="contList">
+            <order-by field-name="-fromDate"/>
+        </entity-find>
+    </actions>
+    <widgets>
+        <container-box>
+            <box-header title="Abrir contingencia"/>
+            <box-body>
+                <form-single name="OpenContingenciaForm" transition="openContingencia">
+                    <field name="tipoContingencia"><default-field title="Tipo"><drop-down no-current-selected-key="1">
+                        <option key="1" text="1 - No disponibilidad MH"/>
+                        <option key="2" text="2 - No disponibilidad emisor"/>
+                        <option key="3" text="3 - Falla internet"/>
+                        <option key="4" text="4 - Falla energía"/>
+                        <option key="5" text="5 - Otro"/>
+                    </drop-down></default-field></field>
+                    <field name="motivoTexto"><default-field title="Motivo"><text-line size="60"/></default-field></field>
+                    <field name="submitButton"><default-field title="Abrir"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+        <container-box>
+            <box-header title="Contingencias"/>
+            <box-body>
+                <form-list name="ContingenciaList" list="contList" skip-form="true">
+                    <field name="dteContingenciaId"><default-field title="ID"><display/></default-field></field>
+                    <field name="statusId"><default-field title="Estado"><display-entity entity-name="moqui.basic.StatusItem"/></default-field></field>
+                    <field name="tipoContingenciaEnumId"><default-field title="Tipo"><display-entity entity-name="moqui.basic.Enumeration"/></default-field></field>
+                    <field name="fromDate"><default-field title="Inicio"><display/></default-field></field>
+                    <field name="thruDate"><default-field title="Cierre"><display/></default-field></field>
+                    <field name="selloContingencia"><default-field title="Sello"><display/></default-field></field>
+                    <field name="closeLink"><default-field title="Cerrar"><link url="closeContingencia" text="Cerrar">
+                        <parameter name="dteContingenciaId"/><parameter name="reason" value="Cierre manual"/>
+                    </link></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

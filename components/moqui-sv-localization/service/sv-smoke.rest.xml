@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
+        name="sv-smoke" displayName="Smoke tests SV one-shot" version="1.0.0"
+        require-authentication="anonymous-all"
+        description="Endpoints internos para pruebas one-shot manuales. NO usar en producción.
+            URL base: http://localhost:8080/rest/s1/sv-smoke/. anonymous-all permite curl
+            sin sesión; el service internamente usa john.doe via authBasic header.">
+
+    <!-- POST /rest/s1/sv-smoke/fc/real-emission -->
+    <resource name="fc" require-authentication="anonymous-all">
+        <resource name="real-emission" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.SmokeRealEmissionServices.smoke#FcRealEmission"/>
+        </method></resource>
+    </resource>
+
+    <!-- POST /rest/s1/sv-smoke/ccf/real-emission -->
+    <resource name="ccf" require-authentication="anonymous-all">
+        <resource name="real-emission" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.SmokeRealEmissionServices.smoke#CcfRealEmission"/>
+        </method></resource>
+    </resource>
+
+    <!-- POST /rest/s1/sv-smoke/nc/real-emission -->
+    <resource name="nc" require-authentication="anonymous-all">
+        <resource name="real-emission" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.SmokeRealEmissionServices.smoke#NcRealEmission"/>
+        </method></resource>
+    </resource>
+
+    <!-- POST /rest/s1/sv-smoke/nd/real-emission -->
+    <resource name="nd" require-authentication="anonymous-all">
+        <resource name="real-emission" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.SmokeRealEmissionServices.smoke#NdRealEmission"/>
+        </method></resource>
+    </resource>
+
+    <!-- POST /rest/s1/sv-smoke/fse/real-emission -->
+    <resource name="fse" require-authentication="anonymous-all">
+        <resource name="real-emission" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.SmokeRealEmissionServices.smoke#FseRealEmission"/>
+        </method></resource>
+    </resource>
+
+    <!-- POST /rest/s1/sv-smoke/all/real-emission -->
+    <resource name="all" require-authentication="anonymous-all">
+        <resource name="real-emission" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.SmokeRealEmissionServices.smoke#AllTypesRealEmission"/>
+        </method></resource>
+    </resource>
+
+    <!-- GET /rest/s1/sv-smoke/dte/{dteEmisionId}/pdf -->
+    <resource name="dte" require-authentication="anonymous-all">
+        <id name="dteEmisionId">
+            <resource name="pdf" require-authentication="anonymous-all"><method type="get" require-authentication="anonymous-all">
+                <service name="sv.localization.DteServices.render#DtePdf"/>
+            </method></resource>
+        </id>
+    </resource>
+
+</resource>

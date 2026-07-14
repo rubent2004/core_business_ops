@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Home operativa por rol del ERP. Reemplaza el dashboard Mantle por
+    defecto (que mostraba un diagrama en inglés con enlaces a módulos ocultos)
+    por tarjetas en español que cada rol ve según su trabajo. Se registra como
+    subscreen "dashboard" del marble vía MoquiConf, sin tocar MarbleERP.
+
+    Mantiene el encabezado "Operación diaria" para no romper el QA navegador.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Inicio" default-menu-index="1" menu-image="fa fa-home" menu-image-type="icon">
+
+    <actions>
+        <set field="isAdmin" from="ec.user.isInGroup('SvAdmin') || ec.user.isInGroup('ADMIN')"/>
+        <set field="canComercial" from="isAdmin || ec.user.isInGroup('SvVentas') || ec.user.isInGroup('SvFacturacion') || ec.user.isInGroup('SvContador') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canFiscal" from="isAdmin || ec.user.isInGroup('SvFacturacion') || ec.user.isInGroup('SvVentas') || ec.user.isInGroup('SvContador') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canBooks" from="isAdmin || ec.user.isInGroup('SvContador') || ec.user.isInGroup('SvFacturacion') || ec.user.isInGroup('SvCompras') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canCompras" from="isAdmin || ec.user.isInGroup('SvCompras') || ec.user.isInGroup('SvContador') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canOrdenes" from="canComercial || ec.user.isInGroup('SvCompras')"/>
+        <set field="canCatalogo" from="isAdmin || ec.user.isInGroup('SvProduccion') || ec.user.isInGroup('SvCompras') || ec.user.isInGroup('SvBodega') || ec.user.isInGroup('SvVentas') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canContabilidad" from="isAdmin || ec.user.isInGroup('SvContador') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canBodega" from="isAdmin || ec.user.isInGroup('SvBodega') || ec.user.isInGroup('SvCompras') || ec.user.isInGroup('SvProduccion') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canBodegas" from="isAdmin || ec.user.isInGroup('SvBodega') || ec.user.isInGroup('SvCompras') || ec.user.isInGroup('SvProduccion') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canInventarioRead" from="canBodega || ec.user.isInGroup('SvContador')"/>
+        <set field="canProd" from="isAdmin || ec.user.isInGroup('SvProduccion') || ec.user.isInGroup('SvBodega') || ec.user.isInGroup('SvAuditor')"/>
+        <set field="canRRHH" from="isAdmin || ec.user.isInGroup('SvRRHH') || ec.user.isInGroup('SvAuditor')"/>
+    </actions>
+
+    <widgets>
+        <container style="q-mb-lg">
+            <label text="Operación diaria" type="h3" style="text-h3 q-mb-sm"/>
+            <container style="dashboard-grid">
+
+                <section name="CardClientes" condition="canComercial"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-user-plus" type="i"/></container>
+                        <link url="../Customer" text="Clientes" link-type="anchor" style="card-link"/>
+                        <label text="Busque, cree y complete los datos fiscales de clientes para facturar." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardOrdenes" condition="canOrdenes"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-shopping-cart" type="i"/></container>
+                        <link url="../Order" text="Órdenes" link-type="anchor" style="card-link"/>
+                        <label text="Revise pedidos, cotizaciones y órdenes listas para facturar o despachar." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardCatalogo" condition="canCatalogo"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-cubes" type="i"/></container>
+                        <link url="../Catalog" text="Catálogo" link-type="anchor" style="card-link"/>
+                        <label text="Productos, categorías, unidades de medida y datos fiscales del artículo." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardProveedores" condition="canCompras"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-truck" type="i"/></container>
+                        <link url="../Supplier" text="Proveedores" link-type="anchor" style="card-link"/>
+                        <label text="Administre proveedores, órdenes de compra y recepción de materiales." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardFacturas" condition="canFiscal"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-file-text-o" type="i"/></container>
+                        <link url="../Accounting/Invoice/FindInvoice" text="Facturas y DTE" link-type="anchor" style="card-link"/>
+                        <label text="Busque facturas, revise estado DTE y gestione emisión electrónica." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardPanelDte" condition="canFiscal"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-id-card-o" type="i"/></container>
+                        <link url="../SvLocalization/Dte/DteDashboard" text="Panel DTE" link-type="anchor" style="card-link"/>
+                        <label text="Monitoree aceptados, pendientes, rechazos, contingencias y certificado MH." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardLibros" condition="canBooks"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-book" type="i"/></container>
+                        <link url="../SvLocalization/Books" text="Libros IVA" link-type="anchor" style="card-link"/>
+                        <label text="Consulte Libro IVA ventas y compras sin buscar rutas fiscales." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardContabilidad" condition="canContabilidad"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-balance-scale" type="i"/></container>
+                        <link url="../Accounting" text="Contabilidad" link-type="anchor" style="card-link"/>
+                        <label text="Asientos, balance de comprobación, conciliación DTE y cierre fiscal." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardRecibir" condition="canBodega"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-plus-square" type="i"/></container>
+                        <link url="../Asset/ReceiveMaterialSv" text="Recibir Inventario" link-type="anchor" style="card-link"/>
+                        <label text="Agregue existencias con costo unitario, bodega, ubicación y propietario." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardBodegas" condition="canBodegas"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-archive" type="i"/></container>
+                        <link url="../Facility" text="Bodegas" link-type="anchor" style="card-link"/>
+                        <label text="Bodegas, ubicaciones y control físico donde vive el Kardex." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardKardex" condition="canInventarioRead"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-list-alt" type="i"/></container>
+                        <link url="../Asset/KardexSv" text="Kardex" link-type="anchor" style="card-link"/>
+                        <label text="Revise movimientos, saldo y costo promedio por producto y bodega." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardProduccion" condition="canProd"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-industry" type="i"/></container>
+                        <link url="../Manufacturing" text="Producción" link-type="anchor" style="card-link"/>
+                        <label text="Abra órdenes de producción, costeo y trazabilidad operativa." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardRRHH" condition="canRRHH"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-users" type="i"/></container>
+                        <link url="../HumanRes" text="Recursos Humanos" link-type="anchor" style="card-link"/>
+                        <label text="Empleados y nómina: ISSS, AFP, renta, boletas y prestaciones." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+                <section name="CardAdmin" condition="isAdmin"><widgets>
+                    <container style="dashboard-card">
+                        <container style="card-icon"><container style="fa fa-user-shield" type="i"/></container>
+                        <link url="../SvAdmin" text="Usuarios y Permisos" link-type="anchor" style="card-link"/>
+                        <label text="Cree usuarios, lígelos a empleados, asigne roles y restablezca contraseñas." type="p" style="card-desc"/>
+                    </container>
+                </widgets></section>
+
+            </container>
+        </container>
+    </widgets>
+</screen>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-include="false" standalone="true">
+    <parameter name="orderId" required="true"/>
+    <parameter name="orderPartSeqId"/>
+    <parameter name="documentType"/>
+
+    <transition name="download" read-only="true">
+        <parameter name="orderId" required="true"/>
+        <parameter name="orderPartSeqId"/>
+        <parameter name="documentType"/>
+        <actions>
+            <service-call name="sv.localization.OrderPdfServices.render#OrderPdf"
+                          in-map="[orderId:orderId, orderPartSeqId:orderPartSeqId, documentType:documentType]" out-map="rr"/>
+            <script><![CDATA[
+                if (!rr?.rendered || !rr?.pdfBytes) {
+                    ec.web.response.sendError(500, rr?.message ?: 'Error renderizando PDF de orden')
+                    return
+                }
+                ec.web.response.setContentType(rr.contentType ?: 'application/pdf')
+                ec.web.response.setHeader('Content-Disposition', "inline; filename=\"${rr.filename ?: "orden-${orderId}.pdf"}\"")
+                ec.web.response.setContentLength(((byte[]) rr.pdfBytes).length)
+                ec.web.response.outputStream.write((byte[]) rr.pdfBytes)
+            ]]></script>
+        </actions>
+        <default-response type="none"/>
+    </transition>
+
+    <actions>
+        <script><![CDATA[
+            String url = "download?orderId=${java.net.URLEncoder.encode(orderId.toString(), 'UTF-8')}"
+            if (orderPartSeqId) url += "&orderPartSeqId=${java.net.URLEncoder.encode(orderPartSeqId.toString(), 'UTF-8')}"
+            if (documentType) url += "&documentType=${java.net.URLEncoder.encode(documentType.toString(), 'UTF-8')}"
+            sri.sendRedirectAndStopRender(url)
+        ]]></script>
+    </actions>
+
+    <widgets>
+        <!-- La respuesta binaria se sirve desde la transición download. -->
+    </widgets>
+</screen>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="import" noun="DteRecibido" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteReceptionServices.groovy"
+             method="importDteRecibido">
+        <description>Importa el JSON de un DTE recibido de proveedor como DteRecepcion (registro
+            independiente). Valida contra el schema oficial y deduplica por codigoGeneracion. No crea
+            Invoice en Mantle; alimenta el libro de IVA compras como fuente propia.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true">
+                <description>Organización interna receptora del DTE.</description>
+            </parameter>
+            <parameter name="jsonText" required="true">
+                <description>JSON del DTE recibido tal cual lo entrega el proveedor.</description>
+            </parameter>
+            <parameter name="selloRecepcion">
+                <description>Sello MH si no viene dentro del JSON. Sin sello el DTE no entra al libro.</description>
+            </parameter>
+            <parameter name="allowUnvalidated" type="Boolean" default-value="false">
+                <description>Si es true, importa aunque falle la validación de schema (queda marcado
+                    validatedBySchema=N y no debe usarse como evidencia formal).</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="imported" type="Boolean"/>
+            <parameter name="updated" type="Boolean"/>
+            <parameter name="dteRecepcionId"/>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="schemaName"/>
+            <parameter name="errors" type="List"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="tipoDteCode"/>
+            <parameter name="emisorNombre"/>
+            <parameter name="total" type="BigDecimal"/>
+        </out-parameters>
+    </service>
+
+    <service verb="refresh" noun="DteRecibidoStatus" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteReceptionServices.groovy"
+             method="refreshDteRecibidoStatus">
+        <description>Consulta MH consultadte para un DTE recibido y actualiza estado observado,
+            sello, respuesta cruda, eventos relacionados y alerta de revisión.</description>
+        <in-parameters>
+            <parameter name="dteRecepcionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="useLocalSim" type="Boolean"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="updated" type="Boolean"/>
+            <parameter name="dteRecepcionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="status" type="Integer"/>
+            <parameter name="consultaEstado"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="requiresReview" type="Boolean"/>
+            <parameter name="reviewMessage"/>
+            <parameter name="mock" type="Boolean"/>
+        </out-parameters>
+    </service>
+
+    <service verb="refresh" noun="DteRecibidosStatus" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteReceptionServices.groovy"
+             method="refreshDteRecibidosStatus">
+        <description>Consulta masivamente DTE recibidos por organización y periodo opcional.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth"/>
+            <parameter name="useLocalSim" type="Boolean"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="updatedCount" type="Integer"/>
+            <parameter name="failedCount" type="Integer"/>
+            <parameter name="results" type="List"/>
+        </out-parameters>
+    </service>
+</services>

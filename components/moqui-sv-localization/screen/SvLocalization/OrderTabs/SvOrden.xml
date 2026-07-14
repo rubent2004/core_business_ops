@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Datos Fiscales" default-menu-index="9">
+    <parameter name="orderId" required="true"/>
+
+    <transition name="saveSvOrderPart">
+        <service-call name="store#mantle.order.OrderPart"/>
+        <default-response url="."/>
+    </transition>
+
+    <actions>
+        <entity-find entity-name="mantle.order.OrderPart" list="orderPartList">
+            <econdition field-name="orderId"/>
+            <order-by field-name="orderPartSeqId"/>
+        </entity-find>
+        <set field="firstPart" from="orderPartList?.first"/>
+        <if condition="firstPart == null"><return error="true" message="Order ${orderId} not found or has no parts"/></if>
+
+        <!-- Check receiver party readiness -->
+        <set field="customerPartyId" from="firstPart.customerPartyId"/>
+        <if condition="customerPartyId">
+            <service-call name="sv.localization.PartyFiscalServices.check#DteReadiness"
+                          in-map="[partyId:customerPartyId]" out-map="receptorCheck"/>
+        </if>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Datos Fiscales de la Orden"/>
+            <box-body>
+                <label text="Estos campos se trasladarán a la factura al momento de facturar la orden." type="p"/>
+                <form-single name="SvOrderPartForm" map="firstPart" transition="saveSvOrderPart">
+                    <field name="orderId"><default-field><hidden/></default-field></field>
+                    <field name="orderPartSeqId" from="firstPart.orderPartSeqId"><default-field><hidden/></default-field></field>
+
+                    <field name="svTipoDteCode"><default-field title="Tipo DTE sugerido">
+                        <drop-down allow-empty="true">
+                            <option key="01" text="01 - Factura"/>
+                            <option key="03" text="03 - Comprobante de Crédito Fiscal"/>
+                            <option key="14" text="14 - Factura Sujeto Excluido"/>
+                            <option key="11" text="11 - Factura de Exportación"/>
+                        </drop-down>
+                    </default-field></field>
+
+                    <field name="svCondicionOperacionEnumId"><default-field title="Condición de operación">
+                        <drop-down allow-empty="true"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvCondicionOperacion"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+
+                    <field name="svFormaPagoEnumId"><default-field title="Forma de pago">
+                        <drop-down allow-empty="true"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvFormaPago"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+
+                    <field name="submitButton"><default-field title="Guardar datos fiscales"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <!-- Receptor readiness -->
+        <section name="ReceptorReadinessSection" condition="receptorCheck"><widgets>
+            <container-box>
+                <box-header title="Cliente: Preparación DTE"/>
+                <box-body>
+                    <container-row><row-col lg="6">
+                        <label text="Factura (FC): " type="strong"/>
+                        <label text="${receptorCheck.readyForFc ? 'Listo' : 'Incompleto'}"
+                               style="${receptorCheck.readyForFc ? 'text-success' : 'text-danger'}"/>
+                    </row-col><row-col lg="6">
+                        <label text="CCF: " type="strong"/>
+                        <label text="${receptorCheck.readyForCcf ? 'Listo' : 'Incompleto'}"
+                               style="${receptorCheck.readyForCcf ? 'text-success' : 'text-danger'}"/>
+                    </row-col></container-row>
+                    <section name="ReceptorIssues" condition="receptorCheck.issues"><widgets>
+                        <section-iterate name="RcpIssueList" list="receptorCheck.issues" entry="issue"><widgets>
+                            <label text="- ${issue}" style="text-warning" type="div"/>
+                        </widgets></section-iterate>
+                    </widgets></section>
+                </box-body>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Fiscal" default-menu-index="8" menu-image="fa fa-map-marker" menu-image-type="icon">
+    <subscreens default-item="Overview"/>
+
+    <widgets>
+        <subscreens-panel id="SvLocalizationPanel" type="tab"/>
+    </widgets>
+</screen>

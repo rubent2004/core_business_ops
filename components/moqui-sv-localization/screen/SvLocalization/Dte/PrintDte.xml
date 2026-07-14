@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-include="false" standalone="true">
+    <parameter name="dteEmisionId" required="true"/>
+    <actions>
+        <service-call name="sv.localization.DteServices.render#DtePdf"
+                      in-map="[dteEmisionId:dteEmisionId]" out-map="rr"/>
+        <script><![CDATA[
+            if (!rr?.rendered || !rr?.pdfBytes) {
+                ec.web.response.sendError(500, rr?.message ?: 'Error renderizando DTE PDF')
+                return
+            }
+            ec.web.response.setContentType('application/pdf')
+            ec.web.response.setHeader('Content-Disposition', "inline; filename=\"DTE-${dteEmisionId}.pdf\"")
+            ec.web.response.setContentLength(((byte[]) rr.pdfBytes).length)
+            ec.web.response.outputStream.write((byte[]) rr.pdfBytes)
+        ]]></script>
+    </actions>
+    <widgets>
+        <!-- Sin widgets: la respuesta se sirve desde el script de actions -->
+    </widgets>
+</screen>

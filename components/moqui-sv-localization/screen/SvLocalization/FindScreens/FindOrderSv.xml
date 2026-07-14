@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Buscar" default-menu-index="2">
+
+    <transition name="orderDetail"><default-response url="../OrderDetail"/></transition>
+    <transition name="createSvOrder">
+        <service-call name="mantle.order.OrderServices.create#Order"/>
+        <default-response url="../OrderDetail"/>
+    </transition>
+
+    <transition-include name="searchPartyList" location="component://SimpleScreens/template/party/PartyForms.xml"/>
+
+    <actions>
+        <set field="searchTerm" from="searchTerm?.trim() ?: null"/>
+        <set field="filterTipoDte" from="filterTipoDte?.trim() ?: null"/>
+        <set field="filterPartStatus" from="filterPartStatus?.trim() ?: null"/>
+
+        <script><![CDATA[
+            import org.moqui.entity.EntityCondition.ComparisonOperator as CO
+            import org.moqui.entity.EntityCondition.JoinOperator as JO
+
+            def cf = ec.entity.conditionFactory
+            def ef = ec.entity.find('sv.localization.search.SvOrderFiscalSearch').limit(75)
+
+            if (searchTerm) {
+                ef.condition(cf.makeCondition([
+                        cf.makeCondition('orderId', CO.LIKE, "%${searchTerm}%"),
+                        cf.makeCondition('customerName', CO.LIKE, "%${searchTerm}%"),
+                        cf.makeCondition('customerPseudoId', CO.LIKE, "%${searchTerm}%"),
+                        cf.makeCondition('nit', CO.LIKE, "%${searchTerm}%"),
+                        cf.makeCondition('dui', CO.LIKE, "%${searchTerm}%"),
+                        cf.makeCondition('nrc', CO.LIKE, "%${searchTerm}%")
+                ], JO.OR))
+            }
+            if (filterTipoDte) ef.condition('svTipoDteCode', filterTipoDte)
+            if (filterPartStatus) ef.condition('partStatusId', filterPartStatus)
+            ef.orderBy('-entryDate,-orderId,-orderPartSeqId')
+
+            orderList = []
+            ef.list().each { row ->
+                def m = new HashMap(row.getMap())
+                String suggestedTipo = m.svTipoDteCode
+                if (!suggestedTipo && m.customerPartyId) {
+                    def suggestion = ec.service.sync().name('sv.localization.PartyFiscalServices.suggest#TipoDte')
+                            .parameters([partyId:m.customerPartyId]).call()
+                    suggestedTipo = suggestion.suggestedTipoDte
+                }
+                m.suggestedTipoDteCode = suggestedTipo
+
+                if (m.customerPartyId) {
+                    def readiness = ec.service.sync().name('sv.localization.PartyFiscalServices.check#DteReadiness')
+                            .parameters([partyId:m.customerPartyId]).call()
+                    if (suggestedTipo == '03') {
+                        m.dteReady = readiness.readyForCcf
+                        m.dteReadyLabel = readiness.readyForCcf ? 'CCF listo' : 'CCF incompleto'
+                    } else {
+                        m.dteReady = readiness.readyForFc
+                        m.dteReadyLabel = readiness.readyForFc ? 'FC listo' : 'FC incompleta'
+                    }
+                    m.dteReadyStyle = m.dteReady ? 'text-success' : 'text-warning'
+                } else {
+                    m.dteReadyLabel = 'Sin cliente'
+                    m.dteReadyStyle = 'text-danger'
+                }
+                orderList.add(m)
+            }
+        ]]></script>
+    </actions>
+
+    <widgets>
+        <container-dialog id="CreateSvOrderDialog" button-text="Nueva orden SV" type="success">
+            <form-single name="CreateSvOrderForm" transition="createSvOrder">
+                <field name="statusId"><default-field><hidden default-value="OrderOpen"/></default-field></field>
+                <field name="vendorPartyId"><default-field title="Empresa que factura">
+                    <drop-down no-current-selected-key="${ec.user.context?.activeOrgId ?: 'MP_ORG'}">
+                        <entity-options key="${partyId}" text="${pseudoId}: ${organizationName}">
+                            <entity-find entity-name="mantle.party.PartyDetailAndRole">
+                                <econdition field-name="roleTypeId" value="OrgInternal"/>
+                                <econdition field-name="disabled" value="N" or-null="true"/>
+                                <order-by field-name="organizationName"/>
+                            </entity-find>
+                        </entity-options>
+                    </drop-down>
+                </default-field></field>
+                <field name="customerPartyId"><default-field title="Cliente">
+                    <drop-down allow-empty="true">
+                        <dynamic-options transition="searchPartyList" server-search="true" min-length="2"
+                                         parameter-map="[roleTypeId:'Customer']"/>
+                    </drop-down>
+                </default-field></field>
+                <field name="svTipoDteCode"><default-field title="Tipo DTE">
+                    <drop-down allow-empty="true">
+                        <option key="01" text="01 - Factura"/>
+                        <option key="03" text="03 - Crédito Fiscal"/>
+                        <option key="14" text="14 - Sujeto Excluido"/>
+                        <option key="11" text="11 - Exportación"/>
+                    </drop-down>
+                </default-field></field>
+                <field name="svCondicionOperacionEnumId"><default-field title="Condición de operación">
+                    <drop-down no-current-selected-key="SvCondContado"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                        <entity-find entity-name="moqui.basic.Enumeration">
+                            <econdition field-name="enumTypeId" value="SvCondicionOperacion"/>
+                            <order-by field-name="sequenceNum"/>
+                        </entity-find>
+                    </entity-options></drop-down>
+                </default-field></field>
+                <field name="svFormaPagoEnumId"><default-field title="Forma de pago">
+                    <drop-down no-current-selected-key="SvPago01"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                        <entity-find entity-name="moqui.basic.Enumeration">
+                            <econdition field-name="enumTypeId" value="SvFormaPago"/>
+                            <order-by field-name="sequenceNum"/>
+                        </entity-find>
+                    </entity-options></drop-down>
+                </default-field></field>
+                <field name="submitButton"><default-field title="Crear orden"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+        <container-box>
+            <box-header title="Buscar Orden"/>
+            <box-body>
+                <form-single name="OrderSvSearchForm" transition="." pass-through-parameters="true">
+                    <field name="searchTerm"><default-field title="DUI, NIT, NRC, cliente u orden">
+                        <text-line size="40"/>
+                    </default-field></field>
+                    <field name="filterTipoDte"><default-field title="Tipo DTE">
+                        <drop-down allow-empty="true">
+                            <option key="01" text="01 - Factura"/>
+                            <option key="03" text="03 - Crédito Fiscal"/>
+                            <option key="14" text="14 - Sujeto Excluido"/>
+                            <option key="11" text="11 - Exportación"/>
+                        </drop-down>
+                    </default-field></field>
+                    <field name="filterPartStatus"><default-field title="Estado">
+                        <drop-down allow-empty="true"><entity-options key="${statusId}" text="${description}">
+                            <entity-find entity-name="moqui.basic.StatusItem">
+                                <econdition field-name="statusTypeId" value="OrderHeader"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Buscar"><submit/></default-field></field>
+                    <field-layout>
+                        <field-row><field-ref name="searchTerm"/><field-ref name="filterTipoDte"/><field-ref name="filterPartStatus"/></field-row>
+                        <field-ref name="submitButton"/>
+                    </field-layout>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <form-list name="OrderSvList" list="orderList" skip-form="true">
+            <field name="orderId"><default-field title="Orden">
+                <link url="orderDetail" text="${orderId}:${orderPartSeqId}" link-type="anchor"
+                      parameter-map="[orderId:orderId]"/>
+            </default-field></field>
+            <field name="entryDate"><default-field title="Fecha"><display/></default-field></field>
+            <field name="partStatusId"><default-field title="Estado">
+                <display-entity entity-name="moqui.basic.StatusItem" text="${description}"/>
+            </default-field></field>
+            <field name="customerName"><default-field title="Cliente"><display/></default-field></field>
+            <field name="nit"><default-field title="NIT"><display/></default-field></field>
+            <field name="dui"><default-field title="DUI"><display/></default-field></field>
+            <field name="nrc"><default-field title="NRC"><display/></default-field></field>
+            <field name="suggestedTipoDteCode"><default-field title="Tipo DTE"><display/></default-field></field>
+            <field name="dteReadyLabel"><default-field title="Preparación">
+                <display style="${dteReadyStyle}"/>
+            </default-field></field>
+            <field name="partTotal"><default-field title="Total" align="right">
+                <display currency-unit-field="currencyUomId"/>
+            </default-field></field>
+            <field name="actions"><default-field title="">
+                <link url="orderDetail" text="Ver" link-type="anchor" parameter-map="[orderId:orderId]"/>
+                <link url="/fop/apps/SvLocalization/PrintOrderPdf" text="PDF" link-type="anchor" target-window="_blank"
+                      parameter-map="[orderId:orderId, orderPartSeqId:orderPartSeqId]"/>
+            </default-field></field>
+        </form-list>
+    </widgets>
+</screen>

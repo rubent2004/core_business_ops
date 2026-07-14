@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Service ECA rules for the El Salvador DTE flow.
+
+    These rules wire the existing DteServices to upstream Mantle invoice
+    transitions in a controlled way. They are gated by the global flag
+    `sv.dte.seca.auto_emit.enabled` (default: false). To enable in an
+    environment, set the property to "true" via -D, env var or
+    `default-property` override.
+
+    Rationale: auto-emission must NOT fire silently in tests/dev where the
+    firmador or MH endpoints are not configured. Operators explicitly opt-in
+    per environment.
+-->
+<secas xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-eca-3.xsd">
+
+    <!--
+        SvDteAutoEmitOnInvoiceFinalized
+
+        When a customer (sales) invoice transitions to InvoiceFinalized, attempt
+        to emit a DTE for it. Failures are logged but do NOT rollback the
+        invoice transition (run-on-error="false" and ignore-error on the call).
+        Only sales DTE types are eligible: FC 01, CCF 03, NC 05, ND 06, FSE 14.
+        Purchases (InvoiceIncoming) are skipped — those receive DTE from the
+        supplier, they don't emit one.
+    -->
+    <seca id="SvDteAutoEmitOnInvoiceFinalized"
+          service="update#mantle.account.invoice.Invoice"
+          when="post-service" run-on-error="false" priority="9">
+        <description>Auto-emit DTE when an outgoing invoice is finalized, if enabled.</description>
+        <condition>
+            <expression>statusChanged &amp;&amp; statusId == 'InvoiceFinalized'</expression>
+            <expression>System.getProperty('sv.dte.seca.auto_emit.enabled') == 'true'</expression>
+        </condition>
+        <actions>
+            <entity-find-one entity-name="mantle.account.invoice.Invoice" value-field="autoEmitInv"/>
+            <!-- Skip if already linked to a DTE (idempotency) -->
+            <if condition="autoEmitInv?.dteEmisionId">
+                <return/>
+            </if>
+            <!-- Only outgoing/sales-style invoices. Purchases skip auto-emit. -->
+            <set field="autoEmitEligible" value="false" type="Boolean"/>
+            <if condition="autoEmitInv?.invoiceTypeEnumId in ['InvSvFc','InvSvCcf','InvSvNc','InvSvNd','InvSvFse']">
+                <set field="autoEmitEligible" value="true" type="Boolean"/>
+            </if>
+            <if condition="autoEmitEligible">
+                <service-call name="sv.localization.DteServices.emit#FromInvoice"
+                              in-map="[invoiceId: invoiceId]" ignore-error="true"
+                              out-map="autoEmitResult"/>
+                <if condition="autoEmitResult?.dteEmisionId">
+                    <log level="info" message="SECA auto-emit: DTE ${autoEmitResult.dteEmisionId} (status ${autoEmitResult.statusId}) emitido desde invoice ${invoiceId}"/>
+                <else>
+                    <log level="warn" message="SECA auto-emit: no se pudo emitir DTE para invoice ${invoiceId} (ver mensajes previos)"/>
+                </else>
+                </if>
+            </if>
+        </actions>
+    </seca>
+
+    <!--
+        SvAcctgPostOnDteAccepted
+
+        Cuando un DteEmision pasa a estado DteAccepted o DteMockAccepted,
+        intenta generar el asiento contable correspondiente via
+        post#DteAcctgTrans.
+
+        Gated por sv.dte.seca.auto_post.enabled (default: false).
+
+        Idempotente: post#DteAcctgTrans valida si ya existe AcctgTrans
+        para el invoiceId. ignore-error=true para no romper la transicion
+        del DTE si falla el posting (falla aislada).
+
+        Direction se infiere de invoiceTypeEnumId: InvSvFc/Ccf/Nc/Nd venta,
+        otros se posean como compra si los tipos lo permiten.
+    -->
+    <seca id="SvAcctgPostOnDteAccepted"
+          service="update#sv.localization.dte.DteEmision"
+          when="post-service" run-on-error="false" priority="9">
+        <description>Auto-post DTE to GL when it transitions to Accepted, if enabled.</description>
+        <condition>
+            <expression>statusChanged &amp;&amp; statusId in ['DteAccepted', 'DteMockAccepted']</expression>
+            <expression>System.getProperty('sv.dte.seca.auto_post.enabled') == 'true'</expression>
+        </condition>
+        <actions>
+            <entity-find-one entity-name="sv.localization.dte.DteEmision" value-field="postedDte"/>
+            <if condition="postedDte?.invoiceId == null"><return/></if>
+            <entity-find-one entity-name="mantle.account.invoice.Invoice" value-field="postedInv">
+                <field-map field-name="invoiceId" from="postedDte.invoiceId"/>
+            </entity-find-one>
+            <set field="postDirection" value="O"/>
+            <if condition="postedInv?.invoiceTypeEnumId in ['InvSvFse']">
+                <set field="postDirection" value="I"/>
+            </if>
+            <service-call name="sv.localization.AcctgPostingServices.post#DteAcctgTrans"
+                          in-map="[dteEmisionId: dteEmisionId, direction: postDirection]"
+                          ignore-error="true" out-map="autoPostResult"/>
+            <if condition="autoPostResult?.acctgTransId">
+                <log level="info" message="SECA auto-post: AcctgTrans ${autoPostResult.acctgTransId} generado desde DTE ${dteEmisionId} (alreadyPosted=${autoPostResult.alreadyPosted})"/>
+            <else>
+                <log level="warn" message="SECA auto-post: no se genero AcctgTrans para DTE ${dteEmisionId}"/>
+            </else>
+            </if>
+        </actions>
+    </seca>
+
+    <!--
+        SvBlockRetroactivePostingOnClosedPeriod
+
+        Bloquea la creación de AcctgTrans cuando transactionDate cae dentro
+        de un TimePeriod FiscalMonth cerrado (isClosed=Y) para esa
+        organizationPartyId.
+
+        Se ejecuta en pre-validate del create#AcctgTrans para abortar antes
+        de que se inserte la fila.
+
+        El bloqueo es INCONDICIONAL — no hay flag para deshabilitarlo. La
+        única forma de postear en un período cerrado es reabrirlo con
+        reopen#FiscalPeriod (auditado).
+    -->
+    <seca id="SvBlockRetroactivePostingOnClosedPeriod"
+          service="create#mantle.ledger.transaction.AcctgTrans"
+          when="pre-validate" run-on-error="false" priority="1">
+        <description>Block posting to a closed fiscal period.</description>
+        <condition>
+            <expression>organizationPartyId != null &amp;&amp; transactionDate != null</expression>
+        </condition>
+        <actions>
+            <service-call name="sv.localization.PeriodCloseServices.check#TransactionDateNotInClosedPeriod"
+                          in-map="[organizationPartyId: organizationPartyId, transactionDate: transactionDate]"
+                          out-map="closeCheck"/>
+            <if condition="closeCheck?.allowed == false">
+                <return error="true" message="No se puede registrar asiento con fecha ${transactionDate}: el periodo fiscal ${closeCheck.blockingTimePeriodId} esta cerrado. Para postear en ese periodo, primero reabralo con reopen#FiscalPeriod."/>
+            </if>
+        </actions>
+    </seca>
+
+</secas>

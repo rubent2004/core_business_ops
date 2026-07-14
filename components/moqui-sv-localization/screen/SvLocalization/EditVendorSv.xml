@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Empresa" default-menu-index="1">
+
+    <parameter name="partyId" required="true"/>
+
+    <!-- Standard vendor transitions -->
+    <transition name="updateParty"><service-call name="mantle.party.PartyServices.update#PartyDetail"/>
+        <default-response url="."/></transition>
+    <transition name="storeContactInfo"><service-call name="mantle.party.ContactServices.store#PartyContactInfo"/>
+        <default-response url="."/></transition>
+    <transition name="addPartyRole"><service-call name="create#mantle.party.PartyRole"/>
+        <default-response url="."/></transition>
+    <transition name="initPartyAccountingConfiguration">
+        <service-call name="mantle.ledger.LedgerServices.init#PartyAccountingConfiguration"
+                in-map="[sourcePartyId:'DefaultSettings', organizationPartyId:partyId]"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="acctgPreference"><default-response url="../Accounting/AcctgPreference"/></transition>
+
+    <!-- SV Fiscal transitions -->
+    <transition name="upsertFiscalProfile">
+        <service-call name="sv.localization.PartyFiscalServices.upsert#PartyFiscalProfile"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="storeSvAddress">
+        <service-call name="sv.localization.PartyFiscalServices.store#SvPostalAddress"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="storeSvContact">
+        <service-call name="sv.localization.PartyFiscalServices.store#SvDteContactInfo"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="getSvMunicipios">
+        <service-call name="sv.localization.PartyFiscalServices.get#SvMunicipiosForDepartamento"
+                      web-send-json-response="resultList"/>
+        <default-response type="none"/>
+    </transition>
+
+    <actions>
+        <entity-find-one entity-name="mantle.party.PartyDetail" value-field="partyDetail"/>
+        <if condition="partyDetail == null"><return error="true" message="Empresa no encontrada"/></if>
+
+        <!-- Roles and accounting -->
+        <entity-find entity-name="mantle.party.PartyRole" list="partyRoleList">
+            <econdition field-name="partyId"/><order-by field-name="roleTypeId"/></entity-find>
+        <entity-find-one entity-name="mantle.party.PartyRole" value-field="internalRoleType">
+            <field-map field-name="partyId"/><field-map field-name="roleTypeId" value="OrgInternal"/></entity-find-one>
+        <entity-find-one entity-name="mantle.ledger.config.PartyAcctgPreference" value-field="partyAcctgPreference">
+            <field-map field-name="organizationPartyId" from="partyId"/></entity-find-one>
+
+        <!-- SV Fiscal data -->
+        <entity-find-one entity-name="sv.localization.party.SvFiscalProfile" value-field="svFiscalProfile">
+            <field-map field-name="partyId"/></entity-find-one>
+        <entity-find-one entity-name="mantle.party.PartyIdentification" value-field="nitIdent">
+            <field-map field-name="partyId"/><field-map field-name="partyIdTypeEnumId" value="PitNit"/></entity-find-one>
+        <entity-find-one entity-name="mantle.party.PartyIdentification" value-field="nrcIdent">
+            <field-map field-name="partyId"/><field-map field-name="partyIdTypeEnumId" value="PitNrc"/></entity-find-one>
+        <set field="nitValue" from="nitIdent?.idValue"/>
+        <set field="nrcValue" from="nrcIdent?.idValue ?: svFiscalProfile?.nrc"/>
+
+        <!-- Address, phone, email -->
+        <entity-find entity-name="mantle.party.contact.PartyContactMechPostalAddress" list="postalList">
+            <date-filter/><econdition field-name="partyId"/><order-by field-name="-fromDate"/></entity-find>
+        <set field="primaryAddress" from="postalList?.first"/>
+        <entity-find entity-name="mantle.party.contact.PartyContactMechTelecomNumber" list="phoneList">
+            <date-filter/><econdition field-name="partyId"/><order-by field-name="-fromDate"/></entity-find>
+        <set field="primaryPhone" from="phoneList?.first"/>
+        <entity-find entity-name="mantle.party.contact.PartyContactMechInfo" list="emailList">
+            <date-filter/><econdition field-name="partyId"/>
+            <econdition field-name="contactMechTypeEnumId" value="CmtEmailAddress"/>
+            <order-by field-name="-fromDate"/></entity-find>
+        <set field="primaryEmail" from="emailList?.first"/>
+
+        <service-call name="sv.localization.PartyFiscalServices.check#DteReadiness"
+                      in-map="[partyId:partyId]" out-map="emisorCheck"/>
+    </actions>
+
+    <widgets>
+        <!-- Estado emisor DTE -->
+        <container-box>
+            <box-header title="Estado Emisor"/>
+            <box-body>
+                <container-row><row-col lg="3">
+                    <label text="NIT: " type="strong"/>
+                    <label text="${nitValue ?: 'No asignado'}" style="${nitValue ? 'text-success' : 'text-danger'}"/>
+                </row-col><row-col lg="3">
+                    <label text="NRC: " type="strong"/>
+                    <label text="${nrcValue ?: 'No asignado'}" style="${nrcValue ? 'text-success' : 'text-danger'}"/>
+                </row-col><row-col lg="3">
+                    <label text="Actividad: " type="strong"/>
+                    <label text="${svFiscalProfile?.actividadEconomicaId ? 'Asignada' : 'Falta'}"
+                           style="${svFiscalProfile?.actividadEconomicaId ? 'text-success' : 'text-danger'}"/>
+                </row-col><row-col lg="3">
+                    <section name="InitAcctgSection" condition="internalRoleType &amp;&amp; !partyAcctgPreference"><widgets>
+                        <link url="initPartyAccountingConfiguration" link-type="hidden-form" text="Inicializar Contabilidad"
+                              confirmation="Inicializar configuración contable con valores por defecto?">
+                            <parameter name="partyId"/></link>
+                    </widgets></section>
+                    <section name="EditAcctgSection" condition="partyAcctgPreference"><widgets>
+                        <link url="acctgPreference" link-type="anchor-button" text="Config. Contable">
+                            <parameter name="partyId"/></link>
+                    </widgets></section>
+                </row-col></container-row>
+                <section name="EmisorIssues" condition="emisorCheck?.issues"><widgets>
+                    <section-iterate name="EmisorIssueList" list="emisorCheck.issues" entry="issue"><widgets>
+                        <label text="- ${issue}" style="text-warning" type="div"/>
+                    </widgets></section-iterate>
+                </widgets></section>
+            </box-body>
+        </container-box>
+
+        <container-row><row-col lg="6">
+            <!-- Organización -->
+            <container-box>
+                <box-header title="Organización"/>
+                <box-body>
+                    <form-single name="EditVendorForm" transition="updateParty" map="partyDetail">
+                        <field name="partyId"><default-field><hidden/></default-field></field>
+                        <field name="organizationName"><default-field title="Razón Social"><text-line size="50"/></default-field></field>
+                        <field name="disabled"><default-field title="Estado"><drop-down no-current-selected-key="N">
+                            <option key="N" text="Activo"/><option key="Y" text="Inactivo"/></drop-down></default-field></field>
+                        <field name="submitButton"><default-field title="Guardar"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+
+            <!-- Identificación fiscal -->
+            <container-box>
+                <box-header title="Identificación Fiscal"/>
+                <box-body>
+                    <form-single name="SvFiscalForm" transition="upsertFiscalProfile" map="svFiscalProfile">
+                        <field name="partyId" from="partyId"><default-field><hidden/></default-field></field>
+                        <field name="nit" from="nitValue"><default-field title="NIT">
+                            <text-line size="22" maxlength="17"/></default-field></field>
+                        <field name="nrc" from="nrcValue"><default-field title="NRC">
+                            <text-line size="16" maxlength="8"/></default-field></field>
+                        <field name="actividadEconomicaId"><default-field title="Actividad económica">
+                            <drop-down allow-empty="true"><entity-options key="${actividadEconomicaId}" text="${mhCode} - ${description}">
+                                <entity-find entity-name="sv.localization.party.SvEconomicActivity">
+                                    <order-by field-name="mhCode"/></entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+                        <field name="tipoEstablecimientoMhCode"><default-field title="Tipo establecimiento">
+                            <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                <entity-find entity-name="moqui.basic.Enumeration">
+                                    <econdition field-name="enumTypeId" value="SvTipoEstablecimiento"/>
+                                    <order-by field-name="sequenceNum"/></entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+                        <field name="codEstableMhCode"><default-field title="Establecimiento MH">
+                            <text-line size="6" maxlength="4"/></default-field></field>
+                        <field name="codPuntoVentaMhCode"><default-field title="Punto venta MH">
+                            <text-line size="6" maxlength="4"/></default-field></field>
+                        <field name="nombreComercial"><default-field title="Nombre comercial">
+                            <text-line size="40"/></default-field></field>
+                        <field name="submitButton"><default-field title="Guardar identificación"><submit/></default-field></field>
+                        <field-layout>
+                            <field-row><field-ref name="nit"/><field-ref name="nrc"/></field-row>
+                            <field-ref name="actividadEconomicaId"/>
+                            <field-row><field-ref name="tipoEstablecimientoMhCode"/><field-ref name="codEstableMhCode"/></field-row>
+                            <field-row><field-ref name="codPuntoVentaMhCode"/><field-ref name="nombreComercial"/></field-row>
+                            <field-ref name="submitButton"/>
+                        </field-layout>
+                    </form-single>
+                </box-body>
+            </container-box>
+
+            <!-- Roles -->
+            <container-box>
+                <box-header title="Roles"/>
+                <box-body>
+                    <form-list name="RoleList" skip-form="true" list="partyRoleList">
+                        <field name="roleTypeId"><default-field title="Rol">
+                            <display-entity entity-name="mantle.party.RoleType" text="${description}"/></default-field></field>
+                    </form-list>
+                </box-body>
+            </container-box>
+
+        </row-col><row-col lg="6">
+            <!-- Dirección -->
+            <container-box>
+                <box-header title="Dirección Fiscal"/>
+                <box-body>
+                    <form-single name="SvAddressForm" transition="storeSvAddress">
+                        <field name="partyId" from="partyId"><default-field><hidden/></default-field></field>
+                        <field name="contactMechId" from="primaryAddress?.contactMechId"><default-field><hidden/></default-field></field>
+                        <field name="departamentoGeoId" from="primaryAddress?.departamentoGeoId ?: primaryAddress?.stateProvinceGeoId">
+                            <default-field title="Departamento">
+                                <drop-down><entity-options key="${geoId}" text="${geoCodeAlpha2} - ${geoName}">
+                                    <entity-find entity-name="moqui.basic.Geo">
+                                        <econdition field-name="geoTypeEnumId" value="GEOT_STATE"/>
+                                        <econdition field-name="geoId" operator="like" value="SV%"/>
+                                        <order-by field-name="geoCodeAlpha2"/></entity-find>
+                                </entity-options></drop-down>
+                            </default-field>
+                        </field>
+                        <field name="municipioGeoId" from="primaryAddress?.municipioGeoId">
+                            <default-field title="Municipio">
+                                <drop-down><dynamic-options transition="getSvMunicipios" value-field="value" label-field="label">
+                                    <depends-on field="departamentoGeoId"/></dynamic-options></drop-down>
+                            </default-field>
+                        </field>
+                        <field name="complemento" from="primaryAddress?.complemento ?: primaryAddress?.address1">
+                            <default-field title="Dirección completa">
+                                <text-area rows="2" cols="50" maxlength="200"/></default-field></field>
+                        <field name="submitAddress"><default-field title="Guardar dirección"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+
+            <!-- Contacto -->
+            <container-box>
+                <box-header title="Contacto"/>
+                <box-body>
+                    <form-single name="SvContactForm" transition="storeSvContact">
+                        <field name="partyId" from="partyId"><default-field><hidden/></default-field></field>
+                        <field name="telefono" from="primaryPhone?.contactNumber"><default-field title="Teléfono">
+                            <text-line size="20" maxlength="30"/></default-field></field>
+                        <field name="correo" from="primaryEmail?.infoString"><default-field title="Correo electrónico">
+                            <text-line size="40" maxlength="100"/></default-field></field>
+                        <field name="submitContact"><default-field title="Guardar contacto"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </row-col></container-row>
+    </widgets>
+</screen>

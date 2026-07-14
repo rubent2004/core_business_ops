@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Configuración Emisor" default-menu-index="15">
+    <parameter name="partyId" required="true"/>
+
+    <transition name="upsertEmisorFiscal">
+        <service-call name="sv.localization.PartyFiscalServices.upsert#PartyFiscalProfile"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="storeSvAddress">
+        <service-call name="sv.localization.PartyFiscalServices.store#SvPostalAddress"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="storeSvContact">
+        <service-call name="sv.localization.PartyFiscalServices.store#SvDteContactInfo"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="uploadLogo">
+        <service-call name="sv.localization.PartyFiscalServices.upload#OrganizationLogo"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="removeLogo">
+        <service-call name="sv.localization.PartyFiscalServices.remove#OrganizationLogo"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="previewLogo" read-only="true">
+        <actions>
+            <entity-find-one entity-name="sv.localization.party.SvFiscalProfile" value-field="fpPrev">
+                <field-map field-name="partyId"/>
+            </entity-find-one>
+            <script><![CDATA[
+                String loc = fpPrev?.logoContentLocation as String
+                if (!loc) { ec.web.response.sendError(404, 'No logo'); return }
+                if (loc.startsWith('file://')) {
+                    java.io.File f = new java.io.File(loc.substring('file://'.length()))
+                    if (!f.exists()) { ec.web.response.sendError(404, 'Missing'); return }
+                    String name = f.name.toLowerCase()
+                    String ctype = name.endsWith('.png') ? 'image/png' :
+                                   (name.endsWith('.jpg') || name.endsWith('.jpeg')) ? 'image/jpeg' :
+                                   name.endsWith('.gif') ? 'image/gif' : 'application/octet-stream'
+                    ec.web.response.setContentType(ctype)
+                    ec.web.response.outputStream.write(f.bytes)
+                } else {
+                    ec.web.response.sendRedirect(loc)
+                }
+            ]]></script>
+        </actions>
+        <default-response type="none"/>
+    </transition>
+    <transition name="getSvMunicipios">
+        <service-call name="sv.localization.PartyFiscalServices.get#SvMunicipiosForDepartamento"
+                      web-send-json-response="resultList"/>
+        <default-response type="none"/>
+    </transition>
+    <transition name="getSvDistritos">
+        <service-call name="sv.localization.PartyFiscalServices.get#SvDistritosForMunicipio"
+                      web-send-json-response="resultList"/>
+        <default-response type="none"/>
+    </transition>
+
+    <actions>
+        <entity-find-one entity-name="mantle.party.PartyDetail" value-field="party"/>
+        <if condition="party == null"><return error="true" message="Organization not found"/></if>
+
+        <entity-find-one entity-name="sv.localization.party.SvFiscalProfile" value-field="svFiscalProfile">
+            <field-map field-name="partyId"/>
+        </entity-find-one>
+
+        <entity-find-one entity-name="mantle.party.PartyIdentification" value-field="nitIdent">
+            <field-map field-name="partyId"/><field-map field-name="partyIdTypeEnumId" value="PitNit"/>
+        </entity-find-one>
+        <entity-find-one entity-name="mantle.party.PartyIdentification" value-field="nrcIdent">
+            <field-map field-name="partyId"/><field-map field-name="partyIdTypeEnumId" value="PitNrc"/>
+        </entity-find-one>
+        <set field="nitValue" from="nitIdent?.idValue"/>
+        <set field="nrcValue" from="nrcIdent?.idValue ?: svFiscalProfile?.nrc"/>
+
+        <!-- DTE Config -->
+        <entity-find-one entity-name="sv.localization.tax.SvTaxAuthorityConfig" value-field="dteConfig">
+            <field-map field-name="taxAuthorityId" value="TA_SV_DGI"/>
+        </entity-find-one>
+
+        <!-- Postal address -->
+        <entity-find entity-name="mantle.party.contact.PartyContactMechPostalAddress" list="postalList">
+            <date-filter/><econdition field-name="partyId"/>
+            <order-by field-name="-fromDate"/>
+        </entity-find>
+        <set field="primaryAddress" from="postalList?.first"/>
+
+        <!-- Phone & email -->
+        <entity-find entity-name="mantle.party.contact.PartyContactMechTelecomNumber" list="phoneList">
+            <date-filter/><econdition field-name="partyId"/>
+        </entity-find>
+        <set field="primaryPhone" from="phoneList?.first"/>
+        <entity-find entity-name="mantle.party.contact.PartyContactMechInfo" list="emailList">
+            <date-filter/><econdition field-name="partyId"/>
+            <econdition field-name="contactMechTypeEnumId" value="CmtEmailAddress"/>
+        </entity-find>
+        <set field="primaryEmail" from="emailList?.first"/>
+
+        <!-- DTE readiness check for emisor -->
+        <service-call name="sv.localization.PartyFiscalServices.check#DteReadiness"
+                      in-map="[partyId:partyId]" out-map="emisorCheck"/>
+    </actions>
+
+    <widgets>
+        <label text="Configuración del emisor DTE — datos fiscales de la organización que emite documentos tributarios electrónicos." type="p"/>
+
+        <!-- Emisor readiness -->
+        <container-box>
+            <box-header title="Estado Emisor DTE"/>
+            <box-body>
+                <container-row><row-col lg="4">
+                    <label text="NIT: " type="strong"/>
+                    <label text="${nitValue ?: 'No asignado'}" style="${nitValue ? 'text-success' : 'text-danger'}"/>
+                </row-col><row-col lg="4">
+                    <label text="NRC: " type="strong"/>
+                    <label text="${nrcValue ?: 'No asignado'}" style="${nrcValue ? 'text-success' : 'text-danger'}"/>
+                </row-col><row-col lg="4">
+                    <label text="Actividad: " type="strong"/>
+                    <label text="${svFiscalProfile?.actividadEconomicaId ? 'Asignada' : 'Falta'}"
+                           style="${svFiscalProfile?.actividadEconomicaId ? 'text-success' : 'text-danger'}"/>
+                </row-col></container-row>
+                <section name="EmisorIssues" condition="emisorCheck?.issues"><widgets>
+                    <section-iterate name="EmisorIssueList" list="emisorCheck.issues" entry="issue"><widgets>
+                        <label text="- ${issue}" style="text-warning" type="div"/>
+                    </widgets></section-iterate>
+                </widgets></section>
+            </box-body>
+        </container-box>
+
+        <container-row><row-col lg="6">
+            <!-- Fiscal profile for emisor -->
+            <container-box>
+                <box-header title="Datos Fiscales del Emisor"/>
+                <box-body>
+                    <form-single name="EmisorFiscalForm" transition="upsertEmisorFiscal" map="svFiscalProfile">
+                        <field name="partyId" from="partyId"><default-field><hidden/></default-field></field>
+                        <field name="nit" from="nitValue"><default-field title="NIT">
+                            <text-line size="22" maxlength="17"/>
+                        </default-field></field>
+                        <field name="nrc" from="nrcValue"><default-field title="NRC">
+                            <text-line size="16" maxlength="8"/>
+                        </default-field></field>
+                        <field name="actividadEconomicaId"><default-field title="Actividad económica">
+                            <drop-down allow-empty="true"><entity-options key="${actividadEconomicaId}" text="${mhCode} - ${description}">
+                                <entity-find entity-name="sv.localization.party.SvEconomicActivity">
+                                    <order-by field-name="mhCode"/>
+                                </entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+                        <field name="tipoEstablecimientoMhCode"><default-field title="Tipo establecimiento">
+                            <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                <entity-find entity-name="moqui.basic.Enumeration">
+                                    <econdition field-name="enumTypeId" value="SvTipoEstablecimiento"/>
+                                    <order-by field-name="sequenceNum"/>
+                                </entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+                        <field name="codEstableMhCode"><default-field title="Establecimiento MH">
+                            <text-line size="6" maxlength="4"/>
+                        </default-field></field>
+                        <field name="codPuntoVentaMhCode"><default-field title="Punto venta MH">
+                            <text-line size="6" maxlength="4"/>
+                        </default-field></field>
+                        <field name="codEstableCode"><default-field title="Establecimiento propio">
+                            <text-line size="8" maxlength="10"/>
+                        </default-field></field>
+                        <field name="codPuntoVentaCode"><default-field title="Punto venta propio">
+                            <text-line size="10" maxlength="15"/>
+                        </default-field></field>
+                        <field name="nombreComercial"><default-field title="Nombre comercial">
+                            <text-line size="40"/>
+                        </default-field></field>
+                        <field name="submitButton"><default-field title="Guardar"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </row-col><row-col lg="6">
+            <!-- Emisor address -->
+            <container-box>
+                <box-header title="Dirección Fiscal del Emisor"/>
+                <box-body>
+                    <form-single name="EmisorAddressForm" transition="storeSvAddress">
+                        <field name="partyId" from="partyId"><default-field><hidden/></default-field></field>
+                        <field name="contactMechId" from="primaryAddress?.contactMechId"><default-field><hidden/></default-field></field>
+                        <field name="departamentoGeoId" from="primaryAddress?.departamentoGeoId ?: primaryAddress?.stateProvinceGeoId">
+                            <default-field title="Departamento">
+                                <drop-down><entity-options key="${geoId}" text="${geoCodeAlpha2} - ${geoName}">
+                                    <entity-find entity-name="moqui.basic.Geo">
+                                        <econdition field-name="geoTypeEnumId" value="GEOT_STATE"/>
+                                        <econdition field-name="geoId" operator="like" value="SV%"/>
+                                        <order-by field-name="geoCodeAlpha2"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field>
+                        </field>
+                        <field name="municipioGeoId" from="primaryAddress?.municipioGeoId">
+                            <default-field title="Municipio">
+                                <drop-down><dynamic-options transition="getSvMunicipios" value-field="value" label-field="label">
+                                    <depends-on field="departamentoGeoId"/>
+                                </dynamic-options></drop-down>
+                            </default-field>
+                        </field>
+                        <field name="complemento" from="primaryAddress?.complemento ?: primaryAddress?.address1">
+                            <default-field title="Complemento">
+                                <text-area rows="2" cols="50" maxlength="200"/>
+                            </default-field>
+                        </field>
+                        <field name="submitAddress"><default-field title="Guardar dirección"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+
+            <!-- Emisor contact -->
+            <container-box>
+                <box-header title="Contacto del Emisor"/>
+                <box-body>
+                    <form-single name="EmisorContactForm" transition="storeSvContact">
+                        <field name="partyId" from="partyId"><default-field><hidden/></default-field></field>
+                        <field name="telefono" from="primaryPhone?.contactNumber"><default-field title="Teléfono">
+                            <text-line size="20" maxlength="30"/>
+                        </default-field></field>
+                        <field name="correo" from="primaryEmail?.infoString"><default-field title="Correo electrónico">
+                            <text-line size="40" maxlength="100"/>
+                        </default-field></field>
+                        <field name="submitContact"><default-field title="Guardar contacto"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </row-col></container-row>
+
+        <!-- ====================================================== -->
+        <!-- Logo del emisor (se embebe en PDFs DTE)                -->
+        <!-- ====================================================== -->
+        <container-box>
+            <box-header title="Logo del Emisor — PDF DTE"/>
+            <box-body>
+                <label text="El logo se embebe en el encabezado de cada PDF de DTE (factura, CCF, etc.).
+                       Recomendado: PNG o JPG, ~600x350 px, &lt;200 KB. Máximo 1 MB." type="p"/>
+
+                <section name="HasLogoSection" condition="svFiscalProfile?.logoContentLocation"><widgets>
+                    <container-row>
+                        <row-col lg="3">
+                            <image url="previewLogo" url-type="plain" style="max-width:200px; max-height:120px; border:1px solid #ccc; padding:4px"
+                                    parameter-map="[partyId:partyId]" alt-text="Logo actual"/>
+                        </row-col>
+                        <row-col lg="9">
+                            <label text="Logo configurado actualmente:" type="strong" style="text-success"/>
+                            <label text="${svFiscalProfile.logoContentLocation}" style="text-muted" type="div"/>
+                            <link url="removeLogo" text="Eliminar logo" link-type="hidden-form" btn-type="danger"
+                                  parameter-map="[partyId:partyId]"
+                                  confirmation="¿Eliminar logo? Los próximos PDFs no lo incluirán."/>
+                        </row-col>
+                    </container-row>
+                </widgets><fail-widgets>
+                    <label text="Sin logo configurado — los PDFs muestran el nombre fiscal del emisor en su lugar." style="text-warning" type="p"/>
+                </fail-widgets></section>
+
+                <container space-before="10pt">
+                    <form-single name="UploadLogoForm" transition="uploadLogo">
+                        <field name="partyId" from="partyId"><default-field><hidden/></default-field></field>
+                        <field name="logoFile"><default-field title="Subir nuevo logo">
+                            <file accept="image/png,image/jpeg,image/gif"/>
+                        </default-field></field>
+                        <field name="submitLogo"><default-field title="Subir logo"><submit/></default-field></field>
+                    </form-single>
+                </container>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

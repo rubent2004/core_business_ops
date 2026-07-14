@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="get" noun="SvDashboardData" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SvDashboardServices.groovy"
+             method="getSvDashboardData">
+        <description>Agrega los datos del Dashboard SV operativo:
+            - KPIs DTE del período (total, aceptados, pendientes, rechazados, monto total)
+            - Estado MH (último health check, fallos consecutivos, contingencia activa)
+            - Estado del certificado (vigencia, días hasta expiración)
+            - Alertas operativas (DTEs sin sello &gt;24h, cert por vencer, contingencias abiertas)
+            - Últimas 10 emisiones del período con detalle
+            - Contadores operativos (clientes, proveedores, corridas en producción, libros IVA pendientes)
+
+            Si `organizationPartyId` se omite, agrega para TODAS las organizaciones internas.
+            Si `periodYearMonth` se omite, usa el mes actual en TZ El Salvador.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId"/>
+            <parameter name="periodYearMonth"/>
+            <parameter name="includeMockAccepted" type="Boolean" default-value="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="periodYearMonth"/>
+            <parameter name="periodLabel"/>
+            <parameter name="organizationPartyId"/>
+            <parameter name="dteKpis" type="Map">
+                <description>total, accepted, pending, rejected, error, byTipo (Map tipo→count),
+                    totalAcceptedAmount, currencyUomId</description>
+            </parameter>
+            <parameter name="mhHealth" type="Map">
+                <description>statusEnumId, statusLabel, consecutiveFailures, lastCheckAt,
+                    lastSuccessAt, lastFailureAt, contingencyActive (Boolean), contingenciaId</description>
+            </parameter>
+            <parameter name="certificate" type="Map">
+                <description>nit, commonName, fromDate, thruDate, daysUntilExpiry (Integer),
+                    status (Vigente / PorVencer / Vencido / NoConfigurado)</description>
+            </parameter>
+            <parameter name="alerts" type="List">
+                <description>Lista de alerts {level: warning|danger, key, message, count?}</description>
+            </parameter>
+            <parameter name="recentDtes" type="List"/>
+            <parameter name="counters" type="Map">
+                <description>customers, suppliers, runsInProgress, payrollRunsPending, ivaBookEntries</description>
+            </parameter>
+        </out-parameters>
+    </service>
+
+</services>

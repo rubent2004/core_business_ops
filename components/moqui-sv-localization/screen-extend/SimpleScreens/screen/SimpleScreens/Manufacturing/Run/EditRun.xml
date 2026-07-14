@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen-extend xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd">
+
+    <transition name="runCostSheet">
+        <default-response url="../../SvLocalization/ManufacturingScreens/RunCostSheet">
+            <parameter name="workEffortId"/>
+        </default-response>
+    </transition>
+
+    <actions>
+        <entity-find entity-name="mantle.work.effort.WorkEffortProductDetail" list="svConsumeList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <econdition field-name="typeEnumId" value="WeptConsume"/>
+        </entity-find>
+        <entity-find entity-name="mantle.work.effort.WorkEffortProductDetail" list="svProduceList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <econdition field-name="typeEnumId" value="WeptProduce"/>
+        </entity-find>
+        <set field="svTotalEstimatedCost" from="0"/>
+        <iterate list="svConsumeList" entry="svItem">
+            <set field="svTotalEstimatedCost" from="svTotalEstimatedCost + (svItem.estimatedCost ?: 0)"/>
+        </iterate>
+    </actions>
+
+    <widgets>
+        <section name="SvManufacturingSection"><widgets>
+            <container-box>
+                <box-header title="Resumen de Producción"/>
+                <box-body>
+                    <container-row>
+                        <row-col lg="4">
+                            <label text="Producto a fabricar:" type="strong"/>
+                            <section-iterate name="SvProdIter" list="svProduceList" entry="svProd"><widgets>
+                                <label text="${svProd.productName} (${svProd.pseudoId})" type="div"/>
+                                <label text="Cantidad: ${ec.l10n.format(svProd.estimatedQuantity, '#.##')}" type="div"/>
+                            </widgets></section-iterate>
+                        </row-col>
+                        <row-col lg="4">
+                            <label text="Materiales (BOM):" type="strong"/>
+                            <label text="${svConsumeList?.size() ?: 0} líneas" type="div"/>
+                        </row-col>
+                        <row-col lg="4">
+                            <label text="Costo estimado:" type="strong"/>
+                            <label text="${ec.l10n.format(svTotalEstimatedCost, '$ #,##0.00')}" type="div"/>
+                            <link url="runCostSheet" text="Ver Hoja de Costeo" link-type="anchor-button"
+                                  parameter-map="[workEffortId:workEffortId]"/>
+                        </row-col>
+                    </container-row>
+                </box-body>
+            </container-box>
+        </widgets></section>
+    </widgets>
+
+</screen-extend>

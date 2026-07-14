@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    UserAdminServices — alta y administración de usuarios del sistema ligados a
+    empleados (Party con rol Employee) y asignación de roles SV.
+
+    Estos servicios son el ÚNICO punto autorizado para crear/editar cuentas y
+    membresías de grupo. Se restringen al UserGroup SvAdmin mediante el
+    ArtifactGroup "SvUserAdminServices" (ver SvASecurityRolesData.xml).
+    Internamente deshabilitan authz para poder escribir sobre las entidades de
+    seguridad (UserAccount / UserGroupMember), que SvAdmin sólo puede leer.
+
+    El seteo de contraseña usa org.moqui.impl.UserServices.update#Password, que
+    ignora oldPassword cuando el usuario tiene el permiso ADMIN_PASSWORD
+    (otorgado a SvAdmin en SvASecurityRolesData.xml).
+-->
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="create" noun="SvUserForEmployee" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="createSvUserForEmployee">
+        <in-parameters>
+            <parameter name="username" required="true"/>
+            <parameter name="userFullName"/>
+            <parameter name="emailAddress"><text-email/></parameter>
+            <parameter name="newPassword" required="true"/>
+            <parameter name="newPasswordVerify" required="true"/>
+            <parameter name="requirePasswordChange" default-value="Y"/>
+            <parameter name="partyId"><description>Empleado (Party) a ligar a la cuenta, opcional.</description></parameter>
+            <parameter name="roleIds"><description>Uno o varios userGroupId SV (List o coma-separado).</description></parameter>
+            <parameter name="roleId"><description>Conveniencia: un único rol.</description></parameter>
+        </in-parameters>
+        <out-parameters><parameter name="userId"/></out-parameters>
+    </service>
+
+    <service verb="update" noun="SvUserAccount" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="updateSvUserAccount">
+        <in-parameters>
+            <parameter name="userId" required="true"/>
+            <parameter name="userFullName"/>
+            <parameter name="emailAddress"><text-email/></parameter>
+            <parameter name="partyId"/>
+            <parameter name="disabled" default-value="N"/>
+        </in-parameters>
+        <out-parameters><parameter name="userId"/></out-parameters>
+    </service>
+
+    <service verb="set" noun="SvUserRoles" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="setSvUserRoles">
+        <in-parameters>
+            <parameter name="userId" required="true"/>
+            <parameter name="roleIds"><description>userGroupId SV activos deseados (List o coma-separado).</description></parameter>
+        </in-parameters>
+        <out-parameters><parameter name="userId"/></out-parameters>
+    </service>
+
+    <service verb="set" noun="SvUserPassword" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="setSvUserPassword">
+        <in-parameters>
+            <parameter name="userId" required="true"/>
+            <parameter name="newPassword" required="true"/>
+            <parameter name="newPasswordVerify" required="true"/>
+            <parameter name="requirePasswordChange" default-value="Y"/>
+        </in-parameters>
+        <out-parameters><parameter name="userId"/></out-parameters>
+    </service>
+
+    <service verb="create" noun="SvRole" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="createSvRole">
+        <in-parameters>
+            <parameter name="roleCode"><description>Codigo corto; se normaliza con prefijo Sv si falta.</description></parameter>
+            <parameter name="userGroupId"><description>UserGroup Moqui destino; debe iniciar con Sv.</description></parameter>
+            <parameter name="description" required="true"/>
+        </in-parameters>
+        <out-parameters><parameter name="userGroupId"/></out-parameters>
+    </service>
+
+    <service verb="update" noun="SvRole" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="updateSvRole">
+        <in-parameters>
+            <parameter name="userGroupId" required="true"/>
+            <parameter name="description" required="true"/>
+            <parameter name="ipAllowed"/>
+            <parameter name="requireAuthcFactor" default-value="N"/>
+        </in-parameters>
+        <out-parameters><parameter name="userGroupId"/></out-parameters>
+    </service>
+
+    <service verb="get" noun="SvRolePermissionCatalog" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="getSvRolePermissionCatalog">
+        <in-parameters>
+            <parameter name="userGroupId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="permissionList" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="set" noun="SvRolePermissions" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/UserAdminServices.groovy"
+             method="setSvRolePermissions">
+        <in-parameters>
+            <parameter name="userGroupId" required="true"/>
+            <parameter name="artifactGroupIds" type="List"><description>Opcional: lista/coma-separado. Si falta, se leen filas del formulario multi.</description></parameter>
+        </in-parameters>
+        <out-parameters><parameter name="userGroupId"/></out-parameters>
+    </service>
+
+</services>

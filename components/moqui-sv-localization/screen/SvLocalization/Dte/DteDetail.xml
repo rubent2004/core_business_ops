@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Detalle" default-menu-index="2">
+    <parameter name="dteEmisionId" required="true"/>
+    <transition name="viewJson" read-only="true"><actions>
+        <entity-find-one entity-name="sv.localization.dte.DteEmision" value-field="dteEmision"/>
+        <script>ec.web.sendTextResponse(dteEmision?.jsonOriginal ?: '{}', 'application/json', null)</script>
+    </actions><default-response type="none"/></transition>
+    <transition name="viewJws" read-only="true"><actions>
+        <entity-find-one entity-name="sv.localization.dte.DteEmision" value-field="dteEmision"/>
+        <script>ec.web.sendTextResponse(dteEmision?.jwsCompactSerialization ?: '', 'text/plain', null)</script>
+    </actions><default-response type="none"/></transition>
+    <actions>
+        <entity-find-one entity-name="sv.localization.dte.DteEmision" value-field="dteEmision"/>
+        <if condition="dteEmision == null"><return error="true" message="DTE ${dteEmisionId} not found"/></if>
+        <entity-find entity-name="sv.localization.dte.DteEmisionEvent" list="eventList">
+            <econdition field-name="dteEmisionId"/>
+            <order-by field-name="-eventDate"/>
+        </entity-find>
+        <entity-find entity-name="sv.localization.dte.DteAnulacion" list="anulacionList">
+            <econdition field-name="dteEmisionId"/>
+            <order-by field-name="-fechaSolicitud"/>
+        </entity-find>
+    </actions>
+    <widgets>
+        <container>
+            <link url="viewJson" text="Ver JSON" link-type="anchor-button" target-window="_blank"><parameter name="dteEmisionId"/></link>
+            <link url="viewJws" text="Ver JWS" link-type="anchor-button" target-window="_blank"><parameter name="dteEmisionId"/></link>
+            <link url="/fop/apps/SvLocalization/Dte/PrintDte" text="Descargar PDF" link-type="anchor-button" target-window="_blank">
+                <parameter name="dteEmisionId"/><parameter name="filename" value="dte-${dteEmision.codigoGeneracion}.pdf"/>
+            </link>
+        </container>
+        <container-box>
+            <box-header title="DTE"/>
+            <box-body>
+                <form-single name="DteDetail" map="dteEmision" skip-form="true">
+                    <field name="statusId"><default-field title="Estado"><display-entity entity-name="moqui.basic.StatusItem"/></default-field></field>
+                    <field name="tipoDteCode"><default-field title="Tipo"><display/></default-field></field>
+                    <field name="invoiceId"><default-field title="Factura"><display/></default-field></field>
+                    <field name="numeroControl"><default-field title="Número control"><display/></default-field></field>
+                    <field name="codigoGeneracion"><default-field title="Código generación"><display/></default-field></field>
+                    <field name="selloRecepcion"><default-field title="Sello"><display/></default-field></field>
+                    <field name="errorMessage"><default-field title="Error"><display/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+        <container-box>
+            <box-header title="Eventos"/>
+            <box-body>
+                <container style="table-responsive">
+                    <form-list name="DteEventList" list="eventList" skip-form="true">
+                        <field name="eventDate"><default-field title="Fecha"><display/></default-field></field>
+                        <field name="eventTypeEnumId"><default-field title="Evento"><display-entity entity-name="moqui.basic.Enumeration"/></default-field></field>
+                        <field name="httpStatus"><default-field title="HTTP"><display/></default-field></field>
+                        <field name="comments"><default-field title="Comentario"><display/></default-field></field>
+                    </form-list>
+                </container>
+            </box-body>
+        </container-box>
+        <container-box>
+            <box-header title="Anulaciones"/>
+            <box-body>
+                <container style="table-responsive">
+                    <form-list name="AnulacionList" list="anulacionList" skip-form="true">
+                        <field name="fechaSolicitud"><default-field title="Fecha"><display/></default-field></field>
+                        <field name="statusId"><default-field title="Estado"><display-entity entity-name="moqui.basic.StatusItem"/></default-field></field>
+                        <field name="tipoAnulacionEnumId"><default-field title="Tipo"><display-entity entity-name="moqui.basic.Enumeration"/></default-field></field>
+                        <field name="selloAnulacion"><default-field title="Sello"><display/></default-field></field>
+                        <field name="dteAnulacionId"><default-field title="PDF">
+                            <link url="/fop/apps/SvLocalization/Dte/PrintEventPdf" text="PDF" target-window="_blank">
+                                <parameter name="eventoTipo" value="INVALIDACION"/>
+                                <parameter name="dteAnulacionId"/>
+                            </link>
+                        </default-field></field>
+                    </form-list>
+                </container>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

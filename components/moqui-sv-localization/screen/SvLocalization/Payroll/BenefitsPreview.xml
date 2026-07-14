@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Vacación y aguinaldo" default-menu-index="5">
+    <transition name="calculateVacation" read-only="true">
+        <actions><service-call name="sv.localization.PayrollSvServices.calculate#VacationPay" in-map="context" out-map="vacationResult"/></actions>
+        <default-response url="."/>
+    </transition>
+    <transition name="calculateAguinaldo" read-only="true">
+        <actions><service-call name="sv.localization.PayrollSvServices.calculate#Aguinaldo" in-map="context" out-map="aguinaldoResult"/></actions>
+        <default-response url="."/>
+    </transition>
+
+    <widgets>
+        <container-row>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Vacación anual"/>
+                    <box-body>
+                        <form-single name="VacationInput" transition="calculateVacation">
+                            <field name="monthlySalary"><default-field title="Salario mensual"><text-line size="12" default-value="700.00"/></default-field></field>
+                            <field name="asOfDate"><default-field title="Fecha de cálculo"><date-time/></default-field></field>
+                            <field name="currencyUomId"><default-field title="Moneda"><text-line size="6" default-value="USD"/></default-field></field>
+                            <field name="submitButton"><default-field title="Calcular"><submit/></default-field></field>
+                        </form-single>
+                        <form-single name="VacationResult" map="vacationResult" skip-form="true">
+                            <field name="dailySalary"><default-field title="Salario diario"><display/></default-field></field>
+                            <field name="vacationDays"><default-field title="Días"><display/></default-field></field>
+                            <field name="baseVacationPay"><default-field title="Base 15 días"><display/></default-field></field>
+                            <field name="vacationBonus"><default-field title="Bono 30%"><display/></default-field></field>
+                            <field name="totalVacationPay"><default-field title="Total vacación"><display/></default-field></field>
+                        </form-single>
+                    </box-body>
+                </container-box>
+            </row-col>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Aguinaldo"/>
+                    <box-body>
+                        <form-single name="AguinaldoInput" transition="calculateAguinaldo">
+                            <field name="monthlySalary"><default-field title="Salario mensual"><text-line size="12" default-value="700.00"/></default-field></field>
+                            <field name="hireDate"><default-field title="Fecha de ingreso"><date-time/></default-field></field>
+                            <field name="asOfDate"><default-field title="Fecha de cálculo"><date-time/></default-field></field>
+                            <field name="currencyUomId"><default-field title="Moneda"><text-line size="6" default-value="USD"/></default-field></field>
+                            <field name="submitButton"><default-field title="Calcular"><submit/></default-field></field>
+                        </form-single>
+                        <form-single name="AguinaldoResult" map="aguinaldoResult" skip-form="true">
+                            <field name="dailySalary"><default-field title="Salario diario"><display/></default-field></field>
+                            <field name="yearsOfService"><default-field title="Años de servicio"><display/></default-field></field>
+                            <field name="aguinaldoDays"><default-field title="Días"><display/></default-field></field>
+                            <field name="aguinaldoAmount"><default-field title="Total aguinaldo"><display/></default-field></field>
+                        </form-single>
+                    </box-body>
+                </container-box>
+            </row-col>
+        </container-row>
+    </widgets>
+</screen>

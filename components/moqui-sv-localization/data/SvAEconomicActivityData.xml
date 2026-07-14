@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01111" mhCode="01111" description="Cultivo de cereales excepto arroz y para forrajes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01112" mhCode="01112" description="Cultivo de legumbres"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01113" mhCode="01113" description="Cultivo de semillas oleaginosas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01114" mhCode="01114" description="Cultivo de plantas para la preparación de semillas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01119" mhCode="01119" description="Cultivo de otros cereales excepto arroz y forrajeros n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01120" mhCode="01120" description="Cultivo de arroz"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01131" mhCode="01131" description="Cultivo de raíces y tubérculos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01132" mhCode="01132" description="Cultivo de brotes, bulbos, vegetales tubérculos y cultivos similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01133" mhCode="01133" description="Cultivo hortícola de fruto"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01134" mhCode="01134" description="Cultivo de hortalizas de hoja y otras hortalizas ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01140" mhCode="01140" description="Cultivo de caña de azúcar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01150" mhCode="01150" description="Cultivo de tabaco"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01161" mhCode="01161" description="Cultivo de algodón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01162" mhCode="01162" description="Cultivo de fibras vegetales excepto algodón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01191" mhCode="01191" description="Cultivo de plantas no perennes para la producción de semillas y flores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01192" mhCode="01192" description="Cultivo de cereales y pastos para la alimentación animal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01199" mhCode="01199" description="Producción de cultivos no estacionales ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01220" mhCode="01220" description="Cultivo de frutas tropicales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01230" mhCode="01230" description="Cultivo de cítricos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01240" mhCode="01240" description="Cultivo de frutas de pepita y hueso"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01251" mhCode="01251" description="Cultivo de frutas ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01252" mhCode="01252" description="Cultivo de otros frutos y nueces de árboles y arbustos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01260" mhCode="01260" description="Cultivo de frutos oleaginosos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01271" mhCode="01271" description="Cultivo de café"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01272" mhCode="01272" description="Cultivo de plantas para la elaboración de bebidas excepto café"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01281" mhCode="01281" description="Cultivo de especias y aromáticas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01282" mhCode="01282" description="Cultivo de plantas para la obtención de productos medicinales y farmacéuticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01291" mhCode="01291" description="Cultivo de árboles de hule (caucho) para la obtención de látex"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01292" mhCode="01292" description="Cultivo de plantas para la obtención de productos químicos y colorantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01299" mhCode="01299" description="Producción de cultivos perennes ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01300" mhCode="01300" description="Propagación de plantas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01301" mhCode="01301" description="Cultivo de plantas y flores ornamentales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01410" mhCode="01410" description="Cría y engorde de ganado bovino"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01420" mhCode="01420" description="Cría de caballos y otros equinos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01440" mhCode="01440" description="Cría de ovejas y cabras"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01450" mhCode="01450" description="Cría de cerdos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01460" mhCode="01460" description="Cría de aves de corral y producción de huevos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01491" mhCode="01491" description="Cría de abejas apicultura para la obtención de miel y otros productos apícolas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01492" mhCode="01492" description="Cría de conejos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01493" mhCode="01493" description="Cría de iguanas y garrobos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01494" mhCode="01494" description="Cría de mariposas y otros insectos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01499" mhCode="01499" description="Cría y obtención de productos animales n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01500" mhCode="01500" description="Cultivo de productos agrícolas en combinación con la cría de animales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01611" mhCode="01611" description="Servicios de maquinaria agrícola"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01612" mhCode="01612" description="Control de plagas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01613" mhCode="01613" description="Servicios de riego"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01614" mhCode="01614" description="Servicios de contratación de mano de obra para la agricultura"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01619" mhCode="01619" description="Servicios agrícolas ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01621" mhCode="01621" description="Actividades para mejorar la reproducción, el crecimiento y el rendimiento de los animales y sus productos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01622" mhCode="01622" description="Servicios de mano de obra pecuaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01629" mhCode="01629" description="Servicios pecuarios ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01631" mhCode="01631" description="Labores post cosecha de preparación de los productos agrícolas para su comercialización o para la industria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01632" mhCode="01632" description="Servicio de beneficio de café"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01633" mhCode="01633" description="Servicio de beneficiado de plantas textiles (incluye el beneficiado cuando este es realizado en la misma explotación agropecuaria)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01640" mhCode="01640" description="Tratamiento de semillas para la propagación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_01700" mhCode="01700" description="Caza ordinaria y mediante trampas, repoblación de animales de caza y servicios conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_02100" mhCode="02100" description="Silvicultura y otras actividades forestales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_02200" mhCode="02200" description="Extracción de madera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_02300" mhCode="02300" description="Recolección de productos diferentes a la madera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_02400" mhCode="02400" description="Servicios de apoyo a la silvicultura"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_03110" mhCode="03110" description="Pesca marítima de altura y costera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_03120" mhCode="03120" description="Pesca de agua dulce"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_03210" mhCode="03210" description="Acuicultura marítima"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_03220" mhCode="03220" description="Acuicultura de agua dulce"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_03300" mhCode="03300" description="Servicios de apoyo a la pesca y acuicultura"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_05100" mhCode="05100" description="Extracción de hulla"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_05200" mhCode="05200" description="Extracción y aglomeración de lignito"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_06100" mhCode="06100" description="Extracción de petróleo crudo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_06200" mhCode="06200" description="Extracción de gas natural"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_07100" mhCode="07100" description="Extracción de minerales de hierro"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_07210" mhCode="07210" description="Extracción de minerales de uranio y torio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_07290" mhCode="07290" description="Extracción de minerales metalíferos no ferrosos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_08100" mhCode="08100" description="Extracción de piedra, arena y arcilla"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_08910" mhCode="08910" description="Extracción de minerales para la fabricación de abonos y productos químicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_08920" mhCode="08920" description="Extracción y aglomeración de turba"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_08930" mhCode="08930" description="Extracción de sal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_08990" mhCode="08990" description="Explotación de otras minas y canteras ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_09100" mhCode="09100" description="Actividades de apoyo a la extracción de petróleo y gas natural"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_09900" mhCode="09900" description="Actividades de apoyo a la explotación de minas y canteras"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10101" mhCode="10101" description="Servicio de rastros y mataderos de bovinos y porcinos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10102" mhCode="10102" description="Matanza y procesamiento de bovinos y porcinos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10103" mhCode="10103" description="Matanza y procesamientos de aves de corral"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10104" mhCode="10104" description="Elaboración y conservación de embutidos y tripas naturales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10105" mhCode="10105" description="Servicios de conservación y empaque de carnes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10106" mhCode="10106" description="Elaboración y conservación de grasas y aceites animales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10107" mhCode="10107" description="Servicios de molienda de carne"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10108" mhCode="10108" description="Elaboración de productos de carne ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10201" mhCode="10201" description="Procesamiento y conservación de pescado, crustáceos y moluscos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10209" mhCode="10209" description="Fabricación de productos de pescado ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10301" mhCode="10301" description="Elaboración de jugos de frutas y hortalizas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10302" mhCode="10302" description="Elaboración y envase de jaleas, mermeladas y frutas deshidratadas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10309" mhCode="10309" description="Elaboración de productos de frutas y hortalizas n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10401" mhCode="10401" description="Fabricación de aceites y grasas vegetales y animales comestibles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10402" mhCode="10402" description="Fabricación de aceites y grasas vegetales y animales no comestibles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10409" mhCode="10409" description="Servicio de maquilado de aceites"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10501" mhCode="10501" description="Fabricación de productos lácteos excepto sorbetes y quesos sustitutos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10502" mhCode="10502" description="Fabricación de sorbetes y helados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10503" mhCode="10503" description="Fabricación de quesos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10611" mhCode="10611" description="Molienda de cereales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10612" mhCode="10612" description="Elaboración de cereales para el desayuno y similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10613" mhCode="10613" description="Servicios de beneficiado de productos agrícolas ncp (excluye Beneficio de azúcar rama 1072 y beneficio de café rama 0163)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10621" mhCode="10621" description="Fabricación de almidón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10628" mhCode="10628" description="Servicio de molienda de maíz húmedo molino para nixtamal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10711" mhCode="10711" description="Elaboración de tortillas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10712" mhCode="10712" description="Fabricación de pan, galletas y barquillos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10713" mhCode="10713" description="Fabricación de repostería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10721" mhCode="10721" description="Ingenios azucareros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10722" mhCode="10722" description="Molienda de caña de azúcar para la elaboración de dulces"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10723" mhCode="10723" description="Elaboración de jarabes de azúcar y otros similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10724" mhCode="10724" description="Maquilado de azúcar de caña"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10730" mhCode="10730" description="Fabricación de cacao, chocolates y productos de confitería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10740" mhCode="10740" description="Elaboración de macarrones, fideos, y productos farináceos similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10750" mhCode="10750" description="Elaboración de comidas y platos preparados para la reventa en locales y/o para exportación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10791" mhCode="10791" description="Elaboración de productos de café"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10792" mhCode="10792" description="Elaboración de especies, sazonadores y condimentos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10793" mhCode="10793" description="Elaboración de sopas, cremas y consomé"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10794" mhCode="10794" description="Fabricación de bocadillos tostados y/o fritos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10799" mhCode="10799" description="Elaboración de productos alimenticios ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10800" mhCode="10800" description="Elaboración de alimentos preparados para animales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11012" mhCode="11012" description="Fabricación de aguardiente y licores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11020" mhCode="11020" description="Elaboración de vinos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11030" mhCode="11030" description="Fabricación de cerveza"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11041" mhCode="11041" description="Fabricación de aguas gaseosas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11042" mhCode="11042" description="Fabricación y envasado de agua"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11043" mhCode="11043" description="Elaboración de refrescos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11048" mhCode="11048" description="Maquilado de aguas gaseosas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_11049" mhCode="11049" description="Elaboración de bebidas no alcohólicas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_12000" mhCode="12000" description="Elaboración de productos de tabaco"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13111" mhCode="13111" description="Preparación de fibras textiles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13112" mhCode="13112" description="Fabricación de hilados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13120" mhCode="13120" description="Fabricación de telas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13130" mhCode="13130" description="Acabado de productos textiles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13910" mhCode="13910" description="Fabricación de tejidos de punto y ganchillo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13921" mhCode="13921" description="Fabricación de productos textiles para el hogar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13922" mhCode="13922" description="Sacos, bolsas y otros artículos textiles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13929" mhCode="13929" description="Fabricación de artículos confeccionados con materiales textiles, excepto prendas de vestir n.c.p"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13930" mhCode="13930" description="Fabricación de tapices y alfombras"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13941" mhCode="13941" description="Fabricación de cuerdas de henequén y otras fibras naturales (lazos, pitas)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13942" mhCode="13942" description="Fabricación de redes de diversos materiales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13948" mhCode="13948" description="Maquilado de productos trenzables de cualquier material (petates, sillas, etc.)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13991" mhCode="13991" description="Fabricación de adornos, etiquetas y otros artículos para prendas de vestir"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13992" mhCode="13992" description="Servicio de bordados en artículos y prendas de tela"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_13999" mhCode="13999" description="Fabricación de productos textiles ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14101" mhCode="14101" description="Fabricación de ropa interior, para dormir y similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14102" mhCode="14102" description="Fabricación de ropa para niños"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14103" mhCode="14103" description="Fabricación de prendas de vestir para ambos sexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14104" mhCode="14104" description="Confección de prendas a medida"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14105" mhCode="14105" description="Fabricación de prendas de vestir para deportes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14106" mhCode="14106" description="Elaboración de artesanías de uso personal confeccionadas especialmente de materiales textiles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14108" mhCode="14108" description="Maquilado de prendas de vestir, accesorios y otros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14109" mhCode="14109" description="Fabricación de prendas y accesorios de vestir n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14200" mhCode="14200" description="Fabricación de artículos de piel"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14301" mhCode="14301" description="Fabricación de calcetines, calcetas, medias (panty house) y otros similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14302" mhCode="14302" description="Fabricación de ropa interior de tejido de punto"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_14309" mhCode="14309" description="Fabricación de prendas de vestir de tejido de punto ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15110" mhCode="15110" description="Curtido y adobo de cueros; adobo y teñido de pieles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15121" mhCode="15121" description="Fabricación de maletas, bolsos de mano y otros artículos de marroquinería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15122" mhCode="15122" description="Fabricación de monturas, accesorios y vainas talabartería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15123" mhCode="15123" description="Fabricación de artesanías principalmente de cuero natural y sintético"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15128" mhCode="15128" description="Maquilado de artículos de cuero natural, sintético y de otros materiales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15201" mhCode="15201" description="Fabricación de calzado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15202" mhCode="15202" description="Fabricación de partes y accesorios de calzado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_15208" mhCode="15208" description="Maquilado de partes y accesorios de calzado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_16100" mhCode="16100" description="Aserradero y acepilladura de madera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_16210" mhCode="16210" description="Fabricación de madera laminada, terciada, enchapada y contrachapada, paneles para la construcción"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_16220" mhCode="16220" description="Fabricación de partes y piezas de carpintería para edificios y construcciones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_16230" mhCode="16230" description="Fabricación de envases y recipientes de madera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_16292" mhCode="16292" description="Fabricación de artesanías de madera, semillas, materiales trenzables"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_16299" mhCode="16299" description="Fabricación de productos de madera, corcho, paja y materiales trenzables ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_17010" mhCode="17010" description="Fabricación de pasta de madera, papel y cartón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_17020" mhCode="17020" description="Fabricación de papel y cartón ondulado y envases de papel y cartón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_17091" mhCode="17091" description="Fabricación de artículos de papel y cartón de uso personal y doméstico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_17092" mhCode="17092" description="Fabricación de productos de papel ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_18110" mhCode="18110" description="Impresión"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_18120" mhCode="18120" description="Servicios relacionados con la impresión"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_18200" mhCode="18200" description="Reproducción de grabaciones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_19100" mhCode="19100" description="Fabricación de productos de hornos de coque"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_19201" mhCode="19201" description="Fabricación de combustible"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_19202" mhCode="19202" description="Fabricación de aceites y lubricantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20111" mhCode="20111" description="Fabricación de materias primas para la fabricación de colorantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20112" mhCode="20112" description="Fabricación de materiales curtientes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20113" mhCode="20113" description="Fabricación de gases industriales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20114" mhCode="20114" description="Fabricación de alcohol etílico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20119" mhCode="20119" description="Fabricación de sustancias químicas básicas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20120" mhCode="20120" description="Fabricación de abonos y fertilizantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20130" mhCode="20130" description="Fabricación de plástico y caucho en formas primarias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20210" mhCode="20210" description="Fabricación de plaguicidas y otros productos químicos de uso agropecuario"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20220" mhCode="20220" description="Fabricación de pinturas, barnices y productos de revestimiento similares; tintas de imprenta y masillas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20231" mhCode="20231" description="Fabricación de jabones, detergentes y similares para limpieza"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20232" mhCode="20232" description="Fabricación de perfumes, cosméticos y productos de higiene y cuidado personal, incluyendo tintes, champú, etc."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20291" mhCode="20291" description="Fabricación de tintas y colores para escribir y pintar; fabricación de cintas para impresoras"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20292" mhCode="20292" description="Fabricación de productos pirotécnicos, explosivos y municiones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20299" mhCode="20299" description="Fabricación de productos químicos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_20300" mhCode="20300" description="Fabricación de fibras artificiales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_21001" mhCode="21001" description="Manufactura de productos farmacéuticos, sustancias químicas y productos botánicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_21008" mhCode="21008" description="Maquilado de medicamentos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_22110" mhCode="22110" description="Fabricación de cubiertas y cámaras; renovación y recauchutado de cubiertas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_22190" mhCode="22190" description="Fabricación de otros productos de caucho"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_22201" mhCode="22201" description="Fabricación de envases plásticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_22202" mhCode="22202" description="Fabricación de productos plásticos para uso personal o doméstico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_22208" mhCode="22208" description="Maquila de plásticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_22209" mhCode="22209" description="Fabricación de productos plásticos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23101" mhCode="23101" description="Fabricación de vidrio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23102" mhCode="23102" description="Fabricación de recipientes y envases de vidrio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23108" mhCode="23108" description="Servicio de maquilado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23109" mhCode="23109" description="Fabricación de productos de vidrio ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23910" mhCode="23910" description="Fabricación de productos refractarios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23920" mhCode="23920" description="Fabricación de productos de arcilla para la construcción"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23931" mhCode="23931" description="Fabricación de productos de cerámica y porcelana no refractaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23932" mhCode="23932" description="Fabricación de productos de cerámica y porcelana ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23940" mhCode="23940" description="Fabricación de cemento, cal y yeso"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23950" mhCode="23950" description="Fabricación de artículos de hormigón, cemento y yeso"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23960" mhCode="23960" description="Corte, tallado y acabado de la piedra"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_23990" mhCode="23990" description="Fabricación de productos minerales no metálicos ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_24100" mhCode="24100" description="Industrias básicas de hierro y acero"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_24200" mhCode="24200" description="Fabricación de productos primarios de metales preciosos y metales no ferrosos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_24310" mhCode="24310" description="Fundición de hierro y acero"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_24320" mhCode="24320" description="Fundición de metales no ferrosos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25111" mhCode="25111" description="Fabricación de productos metálicos para uso estructural"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25118" mhCode="25118" description="Servicio de maquila para la fabricación de estructuras metálicas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25120" mhCode="25120" description="Fabricación de tanques, depósitos y recipientes de metal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25130" mhCode="25130" description="Fabricación de generadores de vapor, excepto calderas de agua caliente para calefacción central"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25200" mhCode="25200" description="Fabricación de armas y municiones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25910" mhCode="25910" description="Forjado, prensado, estampado y laminado de metales; pulvimetalurgia"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25920" mhCode="25920" description="Tratamiento y revestimiento de metales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25930" mhCode="25930" description="Fabricación de artículos de cuchillería, herramientas de mano y artículos de ferretería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25991" mhCode="25991" description="Fabricación de envases y artículos conexos de metal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25992" mhCode="25992" description="Fabricación de artículos metálicos de uso personal y/o doméstico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_25999" mhCode="25999" description="Fabricación de productos elaborados de metal ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26100" mhCode="26100" description="Fabricación de componentes electrónicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26200" mhCode="26200" description="Fabricación de computadoras y equipo conexo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26300" mhCode="26300" description="Fabricación de equipo de comunicaciones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26400" mhCode="26400" description="Fabricación de aparatos electrónicos de consumo para audio, video radio y televisión"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26510" mhCode="26510" description="Fabricación de instrumentos y aparatos para medir, verificar, ensayar, navegar y de control de procesos industriales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26520" mhCode="26520" description="Fabricación de relojes y piezas de relojes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26600" mhCode="26600" description="Fabricación de equipo médico de irradiación y equipo electrónico de uso médico y terapéutico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26700" mhCode="26700" description="Fabricación de instrumentos de óptica y equipo fotográfico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_26800" mhCode="26800" description="Fabricación de medios magnéticos y ópticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27100" mhCode="27100" description="Fabricación de motores, generadores, transformadores eléctricos, aparatos de distribución y control de electricidad"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27200" mhCode="27200" description="Fabricación de pilas, baterías y acumuladores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27310" mhCode="27310" description="Fabricación de cables de fibra óptica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27320" mhCode="27320" description="Fabricación de otros hilos y cables eléctricos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27330" mhCode="27330" description="Fabricación de dispositivos de cableados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27400" mhCode="27400" description="Fabricación de equipo eléctrico de iluminación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27500" mhCode="27500" description="Fabricación de aparatos de uso doméstico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_27900" mhCode="27900" description="Fabricación de otros tipos de equipo eléctrico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28110" mhCode="28110" description="Fabricación de motores y turbinas, excepto motores para aeronaves, vehículos automotores y motocicletas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28120" mhCode="28120" description="Fabricación de equipo hidráulico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28130" mhCode="28130" description="Fabricación de otras bombas, compresores, grifos y válvulas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28140" mhCode="28140" description="Fabricación de cojinetes, engranajes, trenes de engranajes y piezas de transmisión"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28150" mhCode="28150" description="Fabricación de hornos y quemadores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28160" mhCode="28160" description="Fabricación de equipo de elevación y manipulación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28170" mhCode="28170" description="Fabricación de maquinaria y equipo de oficina"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28180" mhCode="28180" description="Fabricación de herramientas manuales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28190" mhCode="28190" description="Fabricación de otros tipos de maquinaria de uso general"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28210" mhCode="28210" description="Fabricación de maquinaria agropecuaria y forestal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28220" mhCode="28220" description="Fabricación de máquinas para conformar metales y maquinaria herramienta"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28230" mhCode="28230" description="Fabricación de maquinaria metalúrgica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28240" mhCode="28240" description="Fabricación de maquinaria para la explotación de minas y canteras y para obras de construcción"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28250" mhCode="28250" description="Fabricación de maquinaria para la elaboración de alimentos, bebidas y tabaco"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28260" mhCode="28260" description="Fabricación de maquinaria para la elaboración de productos textiles, prendas de vestir y cueros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28291" mhCode="28291" description="Fabricación de máquinas para imprenta"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_28299" mhCode="28299" description="Fabricación de maquinaria de uso especial ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_29100" mhCode="29100" description="Fabricación vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_29200" mhCode="29200" description="Fabricación de carrocerías para vehículos automotores; fabricación de remolques y semiremolques"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_29300" mhCode="29300" description="Fabricación de partes, piezas y accesorios para vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30110" mhCode="30110" description="Fabricación de buques"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30120" mhCode="30120" description="Construcción y reparación de embarcaciones de recreo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30200" mhCode="30200" description="Fabricación de locomotoras y de material rodante"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30300" mhCode="30300" description="Fabricación de aeronaves y naves espaciales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30400" mhCode="30400" description="Fabricación de vehículos militares de combate"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30910" mhCode="30910" description="Fabricación de motocicletas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30920" mhCode="30920" description="Fabricación de bicicletas y sillones de ruedas para inválidos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_30990" mhCode="30990" description="Fabricación de equipo de transporte ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_31001" mhCode="31001" description="Fabricación de colchones y somier"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_31002" mhCode="31002" description="Fabricación de muebles y otros productos de madera a medida"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_31008" mhCode="31008" description="Servicios de maquilado de muebles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_31009" mhCode="31009" description="Fabricación de muebles ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32110" mhCode="32110" description="Fabricación de joyas platerías y joyerías"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32120" mhCode="32120" description="Fabricación de joyas de imitación (fantasía) y artículos conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32200" mhCode="32200" description="Fabricación de instrumentos musicales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32301" mhCode="32301" description="Fabricación de artículos de deporte"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32308" mhCode="32308" description="Servicio de maquila de productos deportivos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32401" mhCode="32401" description="Fabricación de juegos de mesa y de salón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32402" mhCode="32402" description="Servicio de maquilado de juguetes y juegos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32409" mhCode="32409" description="Fabricación de juegos y juguetes n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32500" mhCode="32500" description="Fabricación de instrumentos y materiales médicos y odontológicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32901" mhCode="32901" description="Fabricación de lápices, bolígrafos, sellos y artículos de librería en general"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32902" mhCode="32902" description="Fabricación de escobas, cepillos, pinceles y similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32903" mhCode="32903" description="Fabricación de artesanías de materiales diversos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32904" mhCode="32904" description="Fabricación de artículos de uso personal y domésticos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32905" mhCode="32905" description="Fabricación de accesorios para las confecciones y la marroquinería n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32908" mhCode="32908" description="Servicios de maquila ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_32909" mhCode="32909" description="Fabricación de productos manufacturados n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_33110" mhCode="33110" description="Reparación y mantenimiento de productos elaborados de metal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_33120" mhCode="33120" description="Reparación y mantenimiento de maquinaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_33130" mhCode="33130" description="Reparación y mantenimiento de equipo electrónico y óptico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_33140" mhCode="33140" description="Reparación y mantenimiento de equipo eléctrico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_33150" mhCode="33150" description="Reparación y mantenimiento de equipo de transporte, excepto vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_33190" mhCode="33190" description="Reparación y mantenimiento de equipos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_33200" mhCode="33200" description="Instalación de maquinaria y equipo industrial"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_35101" mhCode="35101" description="Generación de energía eléctrica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_35102" mhCode="35102" description="Transmisión de energía eléctrica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_35103" mhCode="35103" description="Distribución de energía eléctrica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_35200" mhCode="35200" description="Fabricación de gas, distribución de combustibles gaseosos por tuberías"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_35300" mhCode="35300" description="Suministro de vapor y agua caliente"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_36000" mhCode="36000" description="Captación, tratamiento y suministro de agua"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_37000" mhCode="37000" description="Evacuación de aguas residuales (alcantarillado)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38110" mhCode="38110" description="Recolección y transporte de desechos sólidos proveniente de hogares y sector urbano"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38120" mhCode="38120" description="Recolección de desechos peligrosos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38210" mhCode="38210" description="Tratamiento y eliminación de desechos inicuos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38220" mhCode="38220" description="Tratamiento y eliminación de desechos peligrosos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38301" mhCode="38301" description="Reciclaje de desperdicios y desechos textiles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38302" mhCode="38302" description="Reciclaje de desperdicios y desechos de plástico y caucho"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38303" mhCode="38303" description="Reciclaje de desperdicios y desechos de vidrio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38304" mhCode="38304" description="Reciclaje de desperdicios y desechos de papel y cartón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38305" mhCode="38305" description="Reciclaje de desperdicios y desechos metálicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_38309" mhCode="38309" description="Reciclaje de desperdicios y desechos no metálicos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_39000" mhCode="39000" description="Actividades de Saneamiento y otros Servicios de Gestión de Desechos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_41001" mhCode="41001" description="Construcción de edificios residenciales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_41002" mhCode="41002" description="Construcción de edificios no residenciales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_42100" mhCode="42100" description="Construcción de carreteras, calles y caminos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_42200" mhCode="42200" description="Construcción de proyectos de servicio público"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_42900" mhCode="42900" description="Construcción de obras de ingeniería civil n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43110" mhCode="43110" description="Demolición"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43120" mhCode="43120" description="Preparación de terreno"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43210" mhCode="43210" description="Instalaciones eléctricas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43220" mhCode="43220" description="Instalación de fontanería, calefacción y aire acondicionado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43290" mhCode="43290" description="Otras instalaciones para obras de construcción"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43300" mhCode="43300" description="Terminación y acabado de edificios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43900" mhCode="43900" description="Otras actividades especializadas de construcción"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_43901" mhCode="43901" description="Fabricación de techos y materiales diversos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45100" mhCode="45100" description="Venta de vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45201" mhCode="45201" description="Reparación mecánica de vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45202" mhCode="45202" description="Reparaciones eléctricas del automotor y recarga de baterías"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45203" mhCode="45203" description="Enderezado y pintura de vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45204" mhCode="45204" description="Reparaciones de radiadores, escapes y silenciadores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45205" mhCode="45205" description="Reparación y reconstrucción de vías, stop y otros artículos de fibra de vidrio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45206" mhCode="45206" description="Reparación de llantas de vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45207" mhCode="45207" description="Polarizado de vehículos (mediante la adhesión de papel especial a los vidrios)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45208" mhCode="45208" description="Lavado y pasteado de vehículos (carwash)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45209" mhCode="45209" description="Reparaciones de vehículos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45211" mhCode="45211" description="Remolque de vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45301" mhCode="45301" description="Venta de partes, piezas y accesorios nuevos para vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45302" mhCode="45302" description="Venta de partes, piezas y accesorios usados para vehículos automotores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45401" mhCode="45401" description="Venta de motocicletas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45402" mhCode="45402" description="Venta de repuestos, piezas y accesorios de motocicletas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_45403" mhCode="45403" description="Mantenimiento y reparación de motocicletas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46100" mhCode="46100" description="Venta al por mayor a cambio de retribución o por contrata"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46201" mhCode="46201" description="Venta al por mayor de materias primas agrícolas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46202" mhCode="46202" description="Venta al por mayor de productos de la silvicultura"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46203" mhCode="46203" description="Venta al por mayor de productos pecuarios y de granja"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46211" mhCode="46211" description="Venta de productos para uso agropecuario"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46291" mhCode="46291" description="Venta al por mayor de granos básicos (cereales, leguminosas)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46292" mhCode="46292" description="Venta al por mayor de semillas mejoradas para cultivo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46293" mhCode="46293" description="Venta al por mayor de café oro y uva"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46294" mhCode="46294" description="Venta al por mayor de caña de azúcar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46295" mhCode="46295" description="Venta al por mayor de flores, plantas y otros productos naturales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46296" mhCode="46296" description="Venta al por mayor de productos agrícolas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46297" mhCode="46297" description="Venta al por mayor de ganado bovino (vivo)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46298" mhCode="46298" description="Venta al por mayor de animales porcinos, ovinos, caprino, canículas, apícolas, avícolas vivos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46299" mhCode="46299" description="Venta de otras especies vivas del reino animal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46301" mhCode="46301" description="Venta al por mayor de alimentos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46302" mhCode="46302" description="Venta al por mayor de bebidas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46303" mhCode="46303" description="Venta al por mayor de tabaco"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46371" mhCode="46371" description="Venta al por mayor de frutas, hortalizas (verduras), legumbres y tubérculos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46372" mhCode="46372" description="Venta al por mayor de pollos, gallinas destazadas, pavos y otras aves"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46373" mhCode="46373" description="Venta al por mayor de carne bovina y porcina, productos de carne y embutidos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46374" mhCode="46374" description="Venta al por mayor de huevos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46375" mhCode="46375" description="Venta al por mayor de productos lácteos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46376" mhCode="46376" description="Venta al por mayor de productos farináceos de panadería (pan dulce, cakes, respostería, etc.)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46377" mhCode="46377" description="Venta al por mayor de pastas alimenticias, aceites y grasas comestibles vegetal y animal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46378" mhCode="46378" description="Venta al por mayor de sal comestible"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46379" mhCode="46379" description="Venta al por mayor de azúcar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46391" mhCode="46391" description="Venta al por mayor de abarrotes (vinos, licores, productos alimenticios envasados, etc.)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46392" mhCode="46392" description="Venta al por mayor de aguas gaseosas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46393" mhCode="46393" description="Venta al por mayor de agua purificada"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46394" mhCode="46394" description="Venta al por mayor de refrescos y otras bebidas, líquidas o en polvo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46395" mhCode="46395" description="Venta al por mayor de cerveza y licores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46396" mhCode="46396" description="Venta al por mayor de hielo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46411" mhCode="46411" description="Venta al por mayor de hilados, tejidos y productos textiles de mercería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46412" mhCode="46412" description="Venta al por mayor de artículos textiles excepto confecciones para el hogar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46413" mhCode="46413" description="Venta al por mayor de confecciones textiles para el hogar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46414" mhCode="46414" description="Venta al por mayor de prendas de vestir y accesorios de vestir"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46415" mhCode="46415" description="Venta al por mayor de ropa usada"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46416" mhCode="46416" description="Venta al por mayor de calzado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46417" mhCode="46417" description="Venta al por mayor de artículos de marroquinería y talabartería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46418" mhCode="46418" description="Venta al por mayor de artículos de peletería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46419" mhCode="46419" description="Venta al por mayor de otros artículos textiles n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46471" mhCode="46471" description="Venta al por mayor de instrumentos musicales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46472" mhCode="46472" description="Venta al por mayor de colchones, almohadas, cojines, etc."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46473" mhCode="46473" description="Venta al por mayor de artículos de aluminio para el hogar y para otros usos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46474" mhCode="46474" description="Venta al por mayor de depósitos y otros artículos plásticos para el hogar y otros usos, incluyendo los desechables de durapax y no desechables"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46475" mhCode="46475" description="Venta al por mayor de cámaras fotográficas, accesorios y materiales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46482" mhCode="46482" description="Venta al por mayor de medicamentos, artículos y otros productos de uso veterinario"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46483" mhCode="46483" description="Venta al por mayor de productos y artículos de belleza y de uso personal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46484" mhCode="46484" description="Venta de productos farmacéuticos y medicinales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46491" mhCode="46491" description="Venta al por mayor de productos medicinales, cosméticos, perfumería y productos de limpieza"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46492" mhCode="46492" description="Venta al por mayor de relojes y artículos de joyería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46493" mhCode="46493" description="Venta al por mayor de electrodomésticos y artículos del hogar excepto bazar; artículos de iluminación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46494" mhCode="46494" description="Venta al por mayor de artículos de bazar y similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46495" mhCode="46495" description="Venta al por mayor de artículos de óptica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46496" mhCode="46496" description="Venta al por mayor de revistas, periódicos, libros, artículos de librería y artículos de papel y cartón en general"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46497" mhCode="46497" description="Venta de artículos deportivos, juguetes y rodados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46498" mhCode="46498" description="Venta al por mayor de productos usados para el hogar o el uso personal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46499" mhCode="46499" description="Venta al por mayor de enseres domésticos y de uso personal n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46500" mhCode="46500" description="Venta al por mayor de bicicletas, partes, accesorios y otros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46510" mhCode="46510" description="Venta al por mayor de computadoras, equipo periférico y programas informáticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46520" mhCode="46520" description="Venta al por mayor de equipos de comunicación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46530" mhCode="46530" description="Venta al por mayor de maquinaria y equipo agropecuario, accesorios, partes y suministros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46590" mhCode="46590" description="Venta de equipos e instrumentos de uso profesional y científico y aparatos de medida y control"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46591" mhCode="46591" description="Venta al por mayor de maquinaria equipo, accesorios y materiales para la industria de la madera y sus productos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46592" mhCode="46592" description="Venta al por mayor de maquinaria, equipo, accesorios y materiales para la industria gráfica y del papel, cartón y productos de papel y cartón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46593" mhCode="46593" description="Venta al por mayor de maquinaria, equipo, accesorios y materiales para la industria de productos químicos, plástico y caucho"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46594" mhCode="46594" description="Venta al por mayor de maquinaria, equipo, accesorios y materiales para la industria metálica y de sus productos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46595" mhCode="46595" description="Venta al por mayor de equipamiento para uso médico, odontológico, veterinario y servicios conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46596" mhCode="46596" description="Venta al por mayor de maquinaria, equipo, accesorios y partes para la industria de la alimentación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46597" mhCode="46597" description="Venta al por mayor de maquinaria, equipo, accesorios y partes para la industria textil, confecciones y cuero"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46598" mhCode="46598" description="Venta al por mayor de maquinaria, equipo y accesorios para la construcción y explotación de minas y canteras"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46599" mhCode="46599" description="Venta al por mayor de otro tipo de maquinaria y equipo con sus accesorios y partes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46610" mhCode="46610" description="Venta al por mayor de otros combustibles sólidos, líquidos, gaseosos y de productos conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46612" mhCode="46612" description="Venta al por mayor de combustibles para automotores, aviones, barcos, maquinaria y otros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46613" mhCode="46613" description="Venta al por mayor de lubricantes, grasas y otros aceites para automotores, maquinaria industrial, etc."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46614" mhCode="46614" description="Venta al por mayor de gas propano"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46615" mhCode="46615" description="Venta al por mayor de leña y carbón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46620" mhCode="46620" description="Venta al por mayor de metales y minerales metalíferos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46631" mhCode="46631" description="Venta al por mayor de puertas, ventanas, vitrinas y similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46632" mhCode="46632" description="Venta al por mayor de artículos de ferretería y pinturerías"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46633" mhCode="46633" description="Vidrierías"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46634" mhCode="46634" description="Venta al por mayor de maderas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46639" mhCode="46639" description="Venta al por mayor de materiales para la construcción n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46691" mhCode="46691" description="Venta al por mayor de sal industrial sin yodar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46692" mhCode="46692" description="Venta al por mayor de productos intermedios y desechos de origen textil"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46693" mhCode="46693" description="Venta al por mayor de productos intermedios y desechos de origen metálico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46694" mhCode="46694" description="Venta al por mayor de productos intermedios y desechos de papel y cartón"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46695" mhCode="46695" description="Venta al por mayor fertilizantes, abonos, agroquímicos y productos similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46696" mhCode="46696" description="Venta al por mayor de productos intermedios y desechos de origen plástico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46697" mhCode="46697" description="Venta al por mayor de tintas para imprenta, productos curtientes y materias y productos colorantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46698" mhCode="46698" description="Venta de productos intermedios y desechos de origen químico y de caucho"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46699" mhCode="46699" description="Venta al por mayor de productos intermedios y desechos ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46701" mhCode="46701" description="Venta de algodón en oro"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46900" mhCode="46900" description="Venta al por mayor de otros productos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46901" mhCode="46901" description="Venta al por mayor de cohetes y otros productos pirotécnicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46902" mhCode="46902" description="Venta al por mayor de artículos diversos para consumo humano"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46903" mhCode="46903" description="Venta al por mayor de armas de fuego, municiones y accesorios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46904" mhCode="46904" description="Venta al por mayor de toldos y tiendas de campaña de cualquier material"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46905" mhCode="46905" description="Venta al por mayor de exhibidores publicitarios y rótulos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_46906" mhCode="46906" description="Venta al por mayor de artículos promocionales diversos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47111" mhCode="47111" description="Venta en supermercados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47112" mhCode="47112" description="Venta en tiendas de artículos de primera necesidad"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47119" mhCode="47119" description="Almacenes (venta de diversos artículos)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47120" mhCode="47120" description="Almacenes (venta de diversos artículos), y venta de vehículos automotores y motocicletas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47190" mhCode="47190" description="Venta al por menor de otros productos en comercios no especializados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47199" mhCode="47199" description="Venta de establecimientos no especializados con surtido compuesto principalmente de alimentos, bebidas y tabaco"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47211" mhCode="47211" description="Venta al por menor de frutas y hortalizas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47212" mhCode="47212" description="Venta al por menor de carnes, embutidos y productos de granja"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47213" mhCode="47213" description="Venta al por menor de pescado y mariscos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47214" mhCode="47214" description="Venta al por menor de productos lácteos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47215" mhCode="47215" description="Venta al por menor de productos de panadería, repostería y galletas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47216" mhCode="47216" description="Venta al por menor de huevos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47217" mhCode="47217" description="Venta al por menor de carnes y productos cárnicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47218" mhCode="47218" description="Venta al por menor de granos básicos y otros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47219" mhCode="47219" description="Venta al por menor de alimentos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47221" mhCode="47221" description="Venta al por menor de hielo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47223" mhCode="47223" description="Venta de bebidas no alcohólicas, para su consumo fuera del establecimiento"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47224" mhCode="47224" description="Venta de bebidas alcohólicas, para su consumo fuera del establecimiento"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47225" mhCode="47225" description="Venta de bebidas alcohólicas para su consumo dentro del establecimiento"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47230" mhCode="47230" description="Venta al por menor de tabaco"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47300" mhCode="47300" description="Venta de combustibles, lubricantes y otros (gasolineras)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47411" mhCode="47411" description="Venta al por menor de computadoras y equipo periférico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47412" mhCode="47412" description="Venta de equipo y accesorios de telecomunicación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47420" mhCode="47420" description="Venta al por menor de equipo de audio y video"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47510" mhCode="47510" description="Venta al por menor de hilados, tejidos y productos textiles de mercería; confecciones para el hogar y textiles n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47521" mhCode="47521" description="Venta al por menor de productos de madera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47522" mhCode="47522" description="Venta al por menor de artículos de ferretería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47523" mhCode="47523" description="Venta al por menor de productos de pinturerías"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47524" mhCode="47524" description="Venta al por menor en vidrierías"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47529" mhCode="47529" description="Venta al por menor de materiales de construcción y artículos conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47530" mhCode="47530" description="Venta al por menor de tapices, alfombras y revestimientos de paredes y pisos en comercios especializados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47591" mhCode="47591" description="Venta al por menor de muebles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47592" mhCode="47592" description="Venta al por menor de artículos de bazar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47593" mhCode="47593" description="Venta al por menor de aparatos electrodomésticos, repuestos y accesorios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47594" mhCode="47594" description="Venta al por menor de artículos eléctricos y de iluminación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47598" mhCode="47598" description="Venta al por menor de instrumentos musicales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47610" mhCode="47610" description="Venta al por menor de libros, periódicos y artículos de papelería en comercios especializados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47620" mhCode="47620" description="Venta al por menor de discos láser, cassettes, cintas de video y otros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47630" mhCode="47630" description="Venta al por menor de productos y equipos de deporte"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47631" mhCode="47631" description="Venta al por menor de bicicletas, accesorios y repuestos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47640" mhCode="47640" description="Venta al por menor de juegos y juguetes en comercios especializados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47711" mhCode="47711" description="Venta al por menor de prendas de vestir y accesorios de vestir"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47712" mhCode="47712" description="Venta al por menor de calzado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47713" mhCode="47713" description="Venta al por menor de artículos de peletería, marroquinería y talabartería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47721" mhCode="47721" description="Venta al por menor de medicamentos farmacéuticos y otros materiales y artículos de uso médico, odontológico y veterinario"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47722" mhCode="47722" description="Venta al por menor de productos cosméticos y de tocador"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47731" mhCode="47731" description="Venta al por menor de productos de joyería, bisutería, óptica, relojería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47732" mhCode="47732" description="Venta al por menor de plantas, semillas, animales y artículos conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47733" mhCode="47733" description="Venta al por menor de combustibles de uso doméstico (gas propano y gas licuado)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47734" mhCode="47734" description="Venta al por menor de artesanías, artículos cerámicos y recuerdos en general"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47735" mhCode="47735" description="Venta al por menor de ataúdes, lápidas y cruces, trofeos, artículos religiosos en general"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47736" mhCode="47736" description="Venta al por menor de armas de fuego, municiones y accesorios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47737" mhCode="47737" description="Venta al por menor de artículos de cohetería y pirotécnicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47738" mhCode="47738" description="Venta al por menor de artículos desechables de uso personal y doméstico (servilletas, papel higiénico, pañales, toallas sanitarias, etc.)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47739" mhCode="47739" description="Venta al por menor de otros productos n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47741" mhCode="47741" description="Venta al por menor de artículos usados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47742" mhCode="47742" description="Venta al por menor de textiles y confecciones usados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47743" mhCode="47743" description="Venta al por menor de libros, revistas, papel y cartón usados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47749" mhCode="47749" description="Venta al por menor de productos usados n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47811" mhCode="47811" description="Venta al por menor de frutas, verduras y hortalizas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47814" mhCode="47814" description="Venta al por menor de productos lácteos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47815" mhCode="47815" description="Venta al por menor de productos de panadería, galletas y similares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47816" mhCode="47816" description="Venta al por menor de bebidas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47818" mhCode="47818" description="Venta al por menor en tiendas de mercado y puestos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47821" mhCode="47821" description="Venta al por menor de hilados, tejidos y productos textiles de mercería en puestos de mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47822" mhCode="47822" description="Venta al por menor de artículos textiles excepto confecciones para el hogar en puestos de mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47823" mhCode="47823" description="Venta al por menor de confecciones textiles para el hogar en puestos de mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47824" mhCode="47824" description="Venta al por menor de prendas de vestir, accesorios de vestir y similares en puestos de mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47825" mhCode="47825" description="Venta al por menor de ropa usada"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47826" mhCode="47826" description="Venta al por menor de calzado, artículos de marroquinería y talabartería en puestos de mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47827" mhCode="47827" description="Venta al por menor de artículos de marroquinería y talabartería en puestos de mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47829" mhCode="47829" description="Venta al por menor de artículos textiles ncp en puestos de mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47891" mhCode="47891" description="Venta al por menor de animales, flores y productos conexos en puestos de feria y mercados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47892" mhCode="47892" description="Venta al por menor de productos medicinales, cosméticos, de tocador y de limpieza en puestos de ferias y mercados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47893" mhCode="47893" description="Venta al por menor de artículos de bazar en puestos de ferias y mercados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47894" mhCode="47894" description="Venta al por menor de artículos de papel, envases, libros, revistas y conexos en puestos de feria y mercados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47895" mhCode="47895" description="Venta al por menor de materiales de construcción, electrodomésticos, accesorios para autos y similares en puestos de feria y mercados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47896" mhCode="47896" description="Venta al por menor de equipos accesorios para las comunicaciones en puestos de feria y mercados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47899" mhCode="47899" description="Venta al por menor en puestos de ferias y mercados n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47910" mhCode="47910" description="Venta al por menor por correo o Internet"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_47990" mhCode="47990" description="Otros tipos de venta al por menor no realizada, en almacenes, puestos de venta o mercado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49110" mhCode="49110" description="Transporte interurbano de pasajeros por ferrocarril"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49120" mhCode="49120" description="Transporte de carga por ferrocarril"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49211" mhCode="49211" description="Transporte de pasajeros urbanos e interurbano mediante buses"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49212" mhCode="49212" description="Transporte de pasajeros interdepartamental mediante microbuses"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49213" mhCode="49213" description="Transporte de pasajeros urbanos e interurbano mediante microbuses"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49214" mhCode="49214" description="Transporte de pasajeros interdepartamental mediante buses"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49221" mhCode="49221" description="Transporte internacional de pasajeros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49222" mhCode="49222" description="Transporte de pasajeros mediante taxis y autos con chofer"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49223" mhCode="49223" description="Transporte escolar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49225" mhCode="49225" description="Transporte de pasajeros para excursiones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49226" mhCode="49226" description="Servicios de transporte de personal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49229" mhCode="49229" description="Transporte de pasajeros por vía terrestre ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49231" mhCode="49231" description="Transporte de carga urbano"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49232" mhCode="49232" description="Transporte nacional de carga"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49233" mhCode="49233" description="Transporte de carga internacional"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49234" mhCode="49234" description="Servicios de mudanza"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49235" mhCode="49235" description="Alquiler de vehículos de carga con conductor"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_49300" mhCode="49300" description="Transporte por oleoducto o gasoducto"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_50110" mhCode="50110" description="Transporte de pasajeros marítimo y de cabotaje"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_50120" mhCode="50120" description="Transporte de carga marítimo y de cabotaje"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_50211" mhCode="50211" description="Transporte de pasajeros por vías de navegación interiores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_50212" mhCode="50212" description="Alquiler de equipo de transporte de pasajeros por vías de navegación interior con conductor"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_50220" mhCode="50220" description="Transporte de carga por vías de navegación interiores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_51100" mhCode="51100" description="Transporte aéreo de pasajeros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_51201" mhCode="51201" description="Transporte de carga por vía aérea"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_51202" mhCode="51202" description="Alquiler de equipo de aerotransporte con operadores para el propósito de transportar carga"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52101" mhCode="52101" description="Alquiler de instalaciones de almacenamiento en zonas francas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52102" mhCode="52102" description="Alquiler de silos para conservación y almacenamiento de granos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52103" mhCode="52103" description="Alquiler de instalaciones con refrigeración para almacenamiento y conservación de alimentos y otros productos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52109" mhCode="52109" description="Alquiler de bodegas para almacenamiento y depósito n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52211" mhCode="52211" description="Servicio de garaje y estacionamiento"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52212" mhCode="52212" description="Servicios de terminales para el transporte por vía terrestre"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52219" mhCode="52219" description="Servicios para el transporte por vía terrestre n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52220" mhCode="52220" description="Servicios para el transporte acuático"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52230" mhCode="52230" description="Servicios para el transporte aéreo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52240" mhCode="52240" description="Manipulación de carga"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52290" mhCode="52290" description="Servicios para el transporte ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_52291" mhCode="52291" description="Agencias de tramitaciones aduanales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_53100" mhCode="53100" description="Servicios de correo nacional"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_53200" mhCode="53200" description="Actividades de correo distintas a las actividades postales nacionales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_53201" mhCode="53201" description="Agencia privada de correo y encomiendas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_55101" mhCode="55101" description="Actividades de alojamiento para estancias cortas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_55102" mhCode="55102" description="Hoteles"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_55200" mhCode="55200" description="Actividades de campamentos, parques de vehículos de recreo y parques de caravanas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_55900" mhCode="55900" description="Alojamiento n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56101" mhCode="56101" description="Restaurantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56106" mhCode="56106" description="Pupusería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56107" mhCode="56107" description="Actividades varias de restaurantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56108" mhCode="56108" description="Comedores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56109" mhCode="56109" description="Merenderos ambulantes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56210" mhCode="56210" description="Preparación de comida para eventos especiales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56291" mhCode="56291" description="Servicios de provisión de comidas por contrato"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56292" mhCode="56292" description="Servicios de concesión de cafetines y chalet en empresas e instituciones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56299" mhCode="56299" description="Servicios de preparación de comidas ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56301" mhCode="56301" description="Servicio de expendio de bebidas en salones y bares"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_56302" mhCode="56302" description="Servicio de expendio de bebidas en puestos callejeros, mercados y ferias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_58110" mhCode="58110" description="Edición de libros, folletos, partituras y otras ediciones distintas a estas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_58120" mhCode="58120" description="Edición de directorios y listas de correos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_58130" mhCode="58130" description="Edición de periódicos, revistas y otras publicaciones periódicas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_58190" mhCode="58190" description="Otras actividades de edición"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_58200" mhCode="58200" description="Edición de programas informáticos (software)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_59110" mhCode="59110" description="Actividades de producción cinematográfica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_59120" mhCode="59120" description="Actividades de post producción de películas, videos y programas de televisión"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_59130" mhCode="59130" description="Actividades de distribución de películas cinematográficas, videos y programas de televisión"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_59140" mhCode="59140" description="Actividades de exhibición de películas cinematográficas y cintas de vídeo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_59200" mhCode="59200" description="Actividades de edición y grabación de música"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_60100" mhCode="60100" description="Servicios de difusiones de radio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_60201" mhCode="60201" description="Actividades de programación y difusión de televisión abierta"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_60202" mhCode="60202" description="Actividades de suscripción y difusión de televisión por cable y/o suscripción"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_60299" mhCode="60299" description="Servicios de televisión, incluye televisión por cable"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_60900" mhCode="60900" description="Programación y transmisión de radio y televisión"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61101" mhCode="61101" description="Servicio de telefonía"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61102" mhCode="61102" description="Servicio de Internet"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61103" mhCode="61103" description="Servicio de telefonía fija"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61109" mhCode="61109" description="Servicio de Internet n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61201" mhCode="61201" description="Servicios de telefonía celular"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61202" mhCode="61202" description="Servicios de Internet inalámbrico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61209" mhCode="61209" description="Servicios de telecomunicaciones inalámbrico n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61301" mhCode="61301" description="Telecomunicaciones satelitales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61309" mhCode="61309" description="Comunicación vía satélite n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_61900" mhCode="61900" description="Actividades de telecomunicación n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_62010" mhCode="62010" description="Programación Informática"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_62020" mhCode="62020" description="Consultorías y gestión de servicios informáticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_62090" mhCode="62090" description="Otras actividades de tecnología de información y servicios de computadora"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_63110" mhCode="63110" description="Procesamiento de datos y Actividades relacionadas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_63120" mhCode="63120" description="Portales WEB"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_63910" mhCode="63910" description="Servicios de Agencias de Noticias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_63990" mhCode="63990" description="Otros servicios de información n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64110" mhCode="64110" description="Servicios provistos por el Banco Central de El salvador"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64190" mhCode="64190" description="Bancos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64192" mhCode="64192" description="Entidades dedicadas al envío de remesas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64199" mhCode="64199" description="Otras entidades financieras"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64200" mhCode="64200" description="Actividades de sociedades de cartera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64300" mhCode="64300" description="Fideicomisos, fondos y otras fuentes de financiamiento"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64910" mhCode="64910" description="Arrendamientos financieros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64920" mhCode="64920" description="Asociaciones cooperativas de ahorro y crédito dedicadas a la intermediación financiera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64921" mhCode="64921" description="Instituciones emisoras de tarjetas de crédito y otros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64922" mhCode="64922" description="Tipos de crédito ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64928" mhCode="64928" description="Prestamistas y casas de empeño"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_64990" mhCode="64990" description="Actividades de servicios financieros, excepto la financiación de planes de seguros y de pensiones n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_65110" mhCode="65110" description="Planes de seguros de vida"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_65120" mhCode="65120" description="Planes de seguro excepto de vida"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_65199" mhCode="65199" description="Seguros generales de todo tipo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_65200" mhCode="65200" description="Planes se seguro"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_65300" mhCode="65300" description="Planes de pensiones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_66110" mhCode="66110" description="Administración de mercados financieros (Bolsa de Valores)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_66120" mhCode="66120" description="Actividades bursátiles (Corredores de Bolsa)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_66190" mhCode="66190" description="Actividades auxiliares de la intermediación financiera ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_66210" mhCode="66210" description="Evaluación de riesgos y daños"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_66220" mhCode="66220" description="Actividades de agentes y corredores de seguros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_66290" mhCode="66290" description="Otras actividades auxiliares de seguros y fondos de pensiones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_66300" mhCode="66300" description="Actividades de administración de fondos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_68101" mhCode="68101" description="Servicio de alquiler y venta de lotes en cementerios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_68109" mhCode="68109" description="Actividades inmobiliarias realizadas con bienes propios o arrendados n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_68200" mhCode="68200" description="Actividades Inmobiliarias Realizadas a Cambio de una Retribución o por Contrata"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_69100" mhCode="69100" description="Actividades jurídicas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_69200" mhCode="69200" description="Actividades de contabilidad, teneduría de libros y auditoría; asesoramiento en materia de impuestos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_70100" mhCode="70100" description="Actividades de oficinas centrales de sociedades de cartera"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_70200" mhCode="70200" description="Actividades de consultoría en gestión empresarial"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_71101" mhCode="71101" description="Servicios de arquitectura y planificación urbana y servicios conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_71102" mhCode="71102" description="Servicios de ingeniería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_71103" mhCode="71103" description="Servicios de agrimensura, topografía, cartografía, prospección y geofísica y servicios conexos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_71200" mhCode="71200" description="Ensayos y análisis técnicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_72100" mhCode="72100" description="Investigaciones y desarrollo experimental en el campo de las ciencias naturales y la ingeniería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_72199" mhCode="72199" description="Investigaciones científicas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_72200" mhCode="72200" description="Investigaciones y desarrollo experimental en el campo de las ciencias sociales y las humanidades científica y desarrollo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_73100" mhCode="73100" description="Publicidad"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_73200" mhCode="73200" description="Investigación de mercados y realización de encuestas de opinión pública"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_74100" mhCode="74100" description="Actividades de diseño especializado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_74200" mhCode="74200" description="Actividades de fotografía"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_74900" mhCode="74900" description="Servicios profesionales y científicos ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_75000" mhCode="75000" description="Actividades veterinarias"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77101" mhCode="77101" description="Alquiler de equipo de transporte terrestre"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77102" mhCode="77102" description="Alquiler de equipo de transporte acuático"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77103" mhCode="77103" description="Alquiler de equipo de transporte por vía aérea"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77210" mhCode="77210" description="Alquiler y arrendamiento de equipo de recreo y deportivo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77220" mhCode="77220" description="Alquiler de cintas de video y discos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77290" mhCode="77290" description="Alquiler de otros efectos personales y enseres domésticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77300" mhCode="77300" description="Alquiler de maquinaria y equipo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_77400" mhCode="77400" description="Arrendamiento de productos de propiedad intelectual"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_78100" mhCode="78100" description="Obtención y dotación de personal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_78200" mhCode="78200" description="Actividades de las agencias de trabajo temporal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_78300" mhCode="78300" description="Dotación de recursos humanos y gestión; gestión de las funciones de recursos humanos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_79110" mhCode="79110" description="Actividades de agencias de viajes y organizadores de viajes; actividades de asistencia a turistas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_79120" mhCode="79120" description="Actividades de los operadores turísticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_79900" mhCode="79900" description="Otros servicios de reservas y actividades relacionadas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_80100" mhCode="80100" description="Servicios de seguridad privados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_80201" mhCode="80201" description="Actividades de servicios de sistemas de seguridad"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_80202" mhCode="80202" description="Actividades para la prestación de sistemas de seguridad"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_80300" mhCode="80300" description="Actividades de investigación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_81100" mhCode="81100" description="Actividades combinadas de mantenimiento de edificios e instalaciones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_81210" mhCode="81210" description="Limpieza general de edificios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_81290" mhCode="81290" description="Otras actividades combinadas de mantenimiento de edificios e instalaciones ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_81300" mhCode="81300" description="Servicio de jardinería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82110" mhCode="82110" description="Servicios administrativos de oficinas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82190" mhCode="82190" description="Servicio de fotocopiado y similares, excepto en imprentas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82200" mhCode="82200" description="Actividades de las centrales de llamadas (call center)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82300" mhCode="82300" description="Organización de convenciones y ferias de negocios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82910" mhCode="82910" description="Actividades de agencias de cobro y oficinas de crédito"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82921" mhCode="82921" description="Servicios de envase y empaque de productos alimenticios"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82922" mhCode="82922" description="Servicios de envase y empaque de productos medicinales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82929" mhCode="82929" description="Servicio de envase y empaque ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_82990" mhCode="82990" description="Actividades de apoyo empresariales ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84110" mhCode="84110" description="Actividades de la Administración Pública en general"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84111" mhCode="84111" description="Alcaldías Municipales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84120" mhCode="84120" description="Regulación de las actividades de prestación de servicios sanitarios, educativos, culturales y otros servicios sociales, excepto seguridad social"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84130" mhCode="84130" description="Regulación y facilitación de la actividad económica"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84210" mhCode="84210" description="Actividades de administración y funcionamiento del Ministerio de Relaciones Exteriores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84220" mhCode="84220" description="Actividades de defensa"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84230" mhCode="84230" description="Actividades de mantenimiento del orden público y de seguridad"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_84300" mhCode="84300" description="Actividades de planes de seguridad social de afiliación obligatoria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85101" mhCode="85101" description="Guardería educativa"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85102" mhCode="85102" description="Enseñanza preescolar o parvularia"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85103" mhCode="85103" description="Enseñanza primaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85104" mhCode="85104" description="Servicio de educación preescolar y primaria integrada"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85211" mhCode="85211" description="Enseñanza secundaria tercer ciclo (7°, 8° y 9°)"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85212" mhCode="85212" description="Enseñanza secundaria de formación general bachillerato"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85221" mhCode="85221" description="Enseñanza secundaria de formación técnica y profesional"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85222" mhCode="85222" description="Enseñanza secundaria de formación técnica y profesional integrada con enseñanza primaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85301" mhCode="85301" description="Enseñanza superior universitaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85302" mhCode="85302" description="Enseñanza superior no universitaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85303" mhCode="85303" description="Enseñanza superior integrada a educación secundaria y/o primaria"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85410" mhCode="85410" description="Educación deportiva y recreativa"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85420" mhCode="85420" description="Educación cultural"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85490" mhCode="85490" description="Otros tipos de enseñanza n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85499" mhCode="85499" description="Enseñanza formal"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_85500" mhCode="85500" description="Servicios de apoyo a la enseñanza"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_86100" mhCode="86100" description="Actividades de hospitales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_86201" mhCode="86201" description="Clínicas médicas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_86202" mhCode="86202" description="Servicios de Odontología"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_86203" mhCode="86203" description="Servicios médicos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_86901" mhCode="86901" description="Servicios de análisis y estudios de diagnóstico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_86902" mhCode="86902" description="Actividades de atención de la salud humana"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_86909" mhCode="86909" description="Otros Servicio relacionados con la salud ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_87100" mhCode="87100" description="Residencias de ancianos con atención de enfermería"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_87200" mhCode="87200" description="Instituciones dedicadas al tratamiento del retraso mental, problemas de salud mental y el uso indebido de sustancias nocivas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_87300" mhCode="87300" description="Instituciones dedicadas al cuidado de ancianos y discapacitados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_87900" mhCode="87900" description="Actividades de asistencia a niños y jóvenes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_87901" mhCode="87901" description="Otras actividades de atención en instituciones"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_88100" mhCode="88100" description="Actividades de asistencia sociales sin alojamiento para ancianos y discapacitados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_88900" mhCode="88900" description="servicios sociales sin alojamiento ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_90000" mhCode="90000" description="Actividades creativas artísticas y de esparcimiento"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_91010" mhCode="91010" description="Actividades de bibliotecas y archivos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_91020" mhCode="91020" description="Actividades de museos y preservación de lugares y edificios históricos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_91030" mhCode="91030" description="Actividades de jardines botánicos, zoológicos y de reservas naturales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_92000" mhCode="92000" description="Actividades de juegos y apuestas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_93110" mhCode="93110" description="Gestión de instalaciones deportivas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_93120" mhCode="93120" description="Actividades de clubes deportivos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_93190" mhCode="93190" description="Otras actividades deportivas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_93210" mhCode="93210" description="Actividades de parques de atracciones y parques temáticos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_93291" mhCode="93291" description="Discotecas y salas de baile"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_93298" mhCode="93298" description="Centros vacacionales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_93299" mhCode="93299" description="Actividades de esparcimiento ncp"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_94110" mhCode="94110" description="Actividades de organizaciones empresariales y de empleadores"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_94120" mhCode="94120" description="Actividades de organizaciones profesionales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_94200" mhCode="94200" description="Actividades de sindicatos"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_94910" mhCode="94910" description="Actividades de organizaciones religiosas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_94920" mhCode="94920" description="Actividades de organizaciones políticas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_94990" mhCode="94990" description="Actividades de asociaciones n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95110" mhCode="95110" description="Reparación de computadoras y equipo periférico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95120" mhCode="95120" description="Reparación de equipo de comunicación"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95210" mhCode="95210" description="Reparación de aparatos electrónicos de consumo"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95220" mhCode="95220" description="Reparación de aparatos doméstico y equipo de hogar y jardín"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95230" mhCode="95230" description="Reparación de calzado y artículos de cuero"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95240" mhCode="95240" description="Reparación de muebles y accesorios para el hogar"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95291" mhCode="95291" description="Reparación de Instrumentos musicales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95292" mhCode="95292" description="Servicios de cerrajería y copiado de llaves"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95293" mhCode="95293" description="Reparación de joyas y relojes"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95294" mhCode="95294" description="Reparación de bicicletas, sillas de ruedas y rodados n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_95299" mhCode="95299" description="Reparaciones de enseres personales n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_96010" mhCode="96010" description="Lavado y limpieza de prendas de tela y de piel, incluso la limpieza en seco"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_96020" mhCode="96020" description="Peluquería y otros tratamientos de belleza"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_96030" mhCode="96030" description="Pompas fúnebres y actividades conexas"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_96091" mhCode="96091" description="Servicios de sauna y otros servicios para la estética corporal n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_96092" mhCode="96092" description="Servicios n.c.p."/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_97000" mhCode="97000" description="Actividad de los hogares en calidad de empleadores de personal doméstico"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_98100" mhCode="98100" description="Actividades indiferenciadas de producción de bienes de los hogares privados para uso propio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_98200" mhCode="98200" description="Actividades indiferenciadas de producción de servicios de los hogares privados para uso propio"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_99000" mhCode="99000" description="Actividades de organizaciones y órganos extraterritoriales"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10001" mhCode="10001" description="Empleados"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10002" mhCode="10002" description="Pensionado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10003" mhCode="10003" description="Estudiante"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10004" mhCode="10004" description="Desempleado"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10005" mhCode="10005" description="Otros"/>
+    <sv.localization.party.SvEconomicActivity actividadEconomicaId="SVEA_10006" mhCode="10006" description="Comerciante"/>
+</entity-facade-xml>

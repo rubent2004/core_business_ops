@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+
+    <!-- ========================================================= -->
+    <!-- Extensiones a entidades upstream para localización SV     -->
+    <!-- ========================================================= -->
+
+    <extend-entity entity-name="Party" package="mantle.party">
+        <field name="svFiscalProfileId" type="id"/>
+        <relationship type="one" related="sv.localization.party.SvFiscalProfile" short-alias="svFiscalProfile"/>
+    </extend-entity>
+
+    <extend-entity entity-name="Organization" package="mantle.party">
+        <field name="nombreComercial" type="text-medium"/>
+        <field name="actividadEconomicaId" type="id"/>
+        <field name="tipoEstablecimientoMhCode" type="text-short"/>
+        <relationship type="one" related="sv.localization.party.SvEconomicActivity"/>
+    </extend-entity>
+
+    <extend-entity entity-name="Person" package="mantle.party">
+        <field name="dui" type="text-short">
+            <description>Cache del DUI para búsquedas rápidas. El valor canónico vive en PartyIdentification (PitDui).</description>
+        </field>
+        <index name="PersonDuiIdx"><index-field name="dui"/></index>
+    </extend-entity>
+
+    <extend-entity entity-name="PostalAddress" package="mantle.party.contact">
+        <field name="departamentoGeoId" type="id">
+            <description>Departamento SV (Geo geoTypeEnumId=GEOT_STATE, código MH CAT-012)</description>
+        </field>
+        <field name="municipioGeoId" type="id">
+            <description>Municipio SV consolidado 2024 (Geo geoTypeEnumId=GEOT_MUNICIPALITY, código MH CAT-013)</description>
+        </field>
+        <field name="distritoGeoId" type="id">
+            <description>Distrito SV (antiguo municipio pre-2024, Geo geoTypeEnumId=GEOT_DISTRICT)</description>
+        </field>
+        <field name="complemento" type="text-medium">
+            <description>Punto de referencia o dirección complementaria</description>
+        </field>
+        <relationship type="one" title="Departamento" related="moqui.basic.Geo">
+            <key-map field-name="departamentoGeoId" related="geoId"/>
+        </relationship>
+        <relationship type="one" title="Municipio" related="moqui.basic.Geo">
+            <key-map field-name="municipioGeoId" related="geoId"/>
+        </relationship>
+        <relationship type="one" title="Distrito" related="moqui.basic.Geo">
+            <key-map field-name="distritoGeoId" related="geoId"/>
+        </relationship>
+    </extend-entity>
+
+    <!-- ========================================================= -->
+    <!-- Extensiones de producto para defaults fiscales SV         -->
+    <!-- ========================================================= -->
+
+    <extend-entity entity-name="Product" package="mantle.product">
+        <field name="svUnidadMedidaCode" type="text-short">
+            <description>Código CAT-014 unidad de medida MH (59=Unidad, 34=Kilogramo, etc.)</description>
+        </field>
+        <field name="svTipoItemCode" type="text-short">
+            <description>Código CAT-011 tipo de ítem MH: 1=Bienes, 2=Servicios, 3=Ambos, 4=Otros tributos.</description>
+        </field>
+        <field name="svTributoCode" type="text-short">
+            <description>Código CAT-015 tributo por defecto para líneas DTE (20=IVA 13%, C3=IVA exportación 0%).</description>
+        </field>
+        <field name="svTaxTreatmentEnumId" type="id">
+            <description>Tratamiento fiscal operativo del producto: gravado, exento, no sujeto o no gravado.</description>
+        </field>
+        <field name="svIvaRetencionAplica" type="text-indicator">
+            <description>Indica si el producto normalmente participa en retención IVA.</description>
+        </field>
+        <field name="svIvaPercepcionAplica" type="text-indicator">
+            <description>Indica si el producto normalmente participa en percepción IVA.</description>
+        </field>
+        <field name="svRetencionIvaMhCode" type="text-short">
+            <description>Código CAT-006 para retenciones IVA cuando aplique.</description>
+        </field>
+        <field name="svTipoItemExportCode" type="text-short">
+            <description>Tipo de item de exportación por defecto para FEX/ERET cuando aplique.</description>
+        </field>
+        <field name="svRecintoFiscalCode" type="text-short">
+            <description>CAT-027 recinto fiscal por defecto para exportaciones o retornos.</description>
+        </field>
+        <field name="svRegimenCode" type="text-short">
+            <description>CAT-028 régimen aduanero por defecto para exportaciones o retornos.</description>
+        </field>
+        <field name="svTipoRegimenCode" type="text-short">
+            <description>CAT-033 tipo de régimen por defecto para exportaciones o retornos.</description>
+        </field>
+        <relationship type="one" title="SvTaxTreatment" related="moqui.basic.Enumeration">
+            <key-map field-name="svTaxTreatmentEnumId"/>
+        </relationship>
+    </extend-entity>
+
+    <!-- ========================================================= -->
+    <!-- Entidades nuevas: perfil fiscal y actividad económica     -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvFiscalProfile" package="sv.localization.party" short-alias="svFiscalProfiles">
+        <description>Perfil fiscal salvadoreño asociado a un Party (persona o empresa).
+            DUI/NIT/NRC se persisten en mantle.party.PartyIdentification (con PartyIdentificationType
+            PitDui/PitNit/PitNrc). Este perfil agrupa atributos fiscales adicionales.</description>
+        <field name="svFiscalProfileId" type="id" is-pk="true"/>
+        <field name="partyId" type="id"/>
+        <field name="tipoContribuyenteEnumId" type="id">
+            <description>TcGrande, TcMediano, TcOtros, TcExcluido (enumTypeId=SvTipoContribuyente)</description>
+        </field>
+        <field name="actividadEconomicaId" type="id"/>
+        <field name="nrc" type="text-short">
+            <description>Número de Registro de Contribuyente (NRC). Cache para búsqueda; canónico en PartyIdentification.</description>
+        </field>
+        <field name="tipoEstablecimientoMhCode" type="text-short">
+            <description>Código MH CAT-009: 01=Sucursal, 02=Casa Matriz, 04=Bodega, 07=Patio</description>
+        </field>
+        <field name="codEstableMhCode" type="text-short">
+            <description>Código de establecimiento asignado por MH, requerido por invalidación/contingencia.</description>
+        </field>
+        <field name="codPuntoVentaMhCode" type="text-short">
+            <description>Código de punto de venta asignado por MH, requerido por invalidación/contingencia.</description>
+        </field>
+        <field name="codEstableCode" type="text-short">
+            <description>Código de establecimiento asignado por el contribuyente para DTE principales.</description>
+        </field>
+        <field name="codPuntoVentaCode" type="text-short">
+            <description>Código de punto de venta asignado por el contribuyente para DTE principales.</description>
+        </field>
+        <field name="modeloFacturacionDefault" type="number-integer">
+            <description>MH CAT-001 Modelo de Facturación por defecto del emisor: 1=Previo
+                (se transmite antes de entregar al cliente), 2=Diferido (se entrega al cliente y se
+                transmite después, dentro del plazo). Si es null se asume 1. Override por documento
+                con el parámetro tipoModelo de generate#DteJson.</description>
+        </field>
+        <field name="nombreComercial" type="text-medium"/>
+        <field name="responsableNombre" type="text-medium"/>
+        <field name="responsableDui" type="text-short"/>
+        <field name="fechaInicioOperaciones" type="date"/>
+        <field name="nupIsss" type="text-short">
+            <description>Número patronal o NUP del ISSS (empleado o empresa)</description>
+        </field>
+        <field name="nupAfp" type="text-short">
+            <description>Número Único Previsional AFP</description>
+        </field>
+        <field name="afpProviderEnumId" type="id">
+            <description>Administradora AFP: SvAfpCrecer o SvAfpConfia</description>
+        </field>
+        <field name="fechaIngreso" type="date">
+            <description>Fecha de ingreso laboral (para cálculo de aguinaldo y vacaciones)</description>
+        </field>
+        <field name="logoContentLocation" type="text-long">
+            <description>Ubicación del logo de la organización para embeber en encabezado
+                de PDFs DTE. Acepta component:// , file:// , http(s):// o data: URI.
+                Tamaño recomendado: ~600x350 px (relación 1.7:1), PNG o JPG &lt;200KB.</description>
+        </field>
+
+        <relationship type="one" related="mantle.party.Party"/>
+        <relationship type="one" title="SvTipoContribuyente" related="moqui.basic.Enumeration">
+            <key-map field-name="tipoContribuyenteEnumId"/>
+        </relationship>
+        <relationship type="one" related="sv.localization.party.SvEconomicActivity"/>
+
+        <index name="SvFiscalProfilePartyIdx" unique="true"><index-field name="partyId"/></index>
+        <index name="SvFiscalProfileNrcIdx"><index-field name="nrc"/></index>
+    </entity>
+
+    <entity entity-name="SvEconomicActivity" package="sv.localization.party" cache="true">
+        <description>Catálogo de actividad económica SV (CAT-019 MH).</description>
+        <field name="actividadEconomicaId" type="id" is-pk="true"/>
+        <field name="mhCode" type="text-short">
+            <description>Código oficial CAT-019 del Ministerio de Hacienda</description>
+        </field>
+        <field name="description" type="text-medium"/>
+        <field name="parentActivityId" type="id"/>
+
+        <relationship type="one" title="Parent" related="sv.localization.party.SvEconomicActivity">
+            <key-map field-name="parentActivityId" related="actividadEconomicaId"/>
+        </relationship>
+        <index name="SvEconActMhCodeIdx" unique="true"><index-field name="mhCode"/></index>
+    </entity>
+
+</entities>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Plan de cuentas El Salvador (catálogo base mínimo para nómina, DTE y cierre).
+
+    Estructura por dígito:
+      1xxx Activo (DEBIT)
+      2xxx Pasivo (CREDIT)
+      3xxx Patrimonio (CREDIT)
+      4xxx Ingresos (CREDIT - REVENUE)
+      5xxx Costos (DEBIT - COST_OF_SALES)
+      6xxx Gastos (DEBIT - EXPENSE)
+
+    Los IDs siguen el patrón SV_<código> para facilitar la lectura.
+    accountCode contiene el código SV (4-7 dígitos) tal como se mostrara en
+    reportes y libros oficiales.
+
+    Esta seed es independiente de organización (las cuentas son globales).
+    Cada organización emisora (OrgInternal) debe asociarse vía
+    GlAccountOrganization tras cargar este seed — ver post-instalación en
+    docs/CONTABILIDAD_SV.md.
+-->
+<entity-facade-xml type="seed">
+
+    <!-- ============================================================== -->
+    <!-- ACTIVO (1xxx)                                                  -->
+    <!-- ============================================================== -->
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1000"
+            accountCode="1000" accountName="ACTIVO"
+            glAccountClassEnumId="ASSET" disallowPosting="Y"/>
+
+    <!-- 1100 Activo Corriente -->
+    <mantle.ledger.account.GlAccount glAccountId="SV_1100" parentGlAccountId="SV_1000"
+            accountCode="1100" accountName="Activo Corriente"
+            glAccountClassEnumId="CURRENT_ASSET" disallowPosting="Y"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1101" parentGlAccountId="SV_1100"
+            accountCode="1101" accountName="Caja y bancos"
+            description="Efectivo y equivalentes — bancos, caja chica"
+            glAccountClassEnumId="CASH_EQUIVALENT"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1102" parentGlAccountId="SV_1100"
+            accountCode="1102" accountName="Cuentas por cobrar comerciales"
+            description="Saldo deudor de clientes por DTE emitidos al crédito"
+            glAccountClassEnumId="ACCOUNTS_RECEIVABLE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1103" parentGlAccountId="SV_1100"
+            accountCode="1103" accountName="IVA crédito fiscal"
+            description="IVA pagado en compras pendiente de aplicar contra débito fiscal"
+            glAccountClassEnumId="CURRENT_ASSET"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1104" parentGlAccountId="SV_1100"
+            accountCode="1104" accountName="Inventario de materia prima"
+            description="Materias primas para producción (entradas por compra CCF/FSE)"
+            glAccountClassEnumId="INVENTORY_ASSET"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1105" parentGlAccountId="SV_1100"
+            accountCode="1105" accountName="Inventario de producto terminado"
+            description="Producto terminado disponible para venta"
+            glAccountClassEnumId="INVENTORY_ASSET"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1106" parentGlAccountId="SV_1100"
+            accountCode="1106" accountName="Inventario en proceso"
+            description="Producción no terminada (WorkEffort abierto)"
+            glAccountClassEnumId="INVENTORY_ASSET"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1107" parentGlAccountId="SV_1100"
+            accountCode="1107" accountName="Anticipos a proveedores"
+            description="Pagos a cuenta antes de recibir bien o servicio"
+            glAccountClassEnumId="CURRENT_ASSET"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1108" parentGlAccountId="SV_1100"
+            accountCode="1108" accountName="IVA percibido pagado"
+            description="Percepción IVA 1% pagada a proveedores agentes de percepción"
+            glAccountClassEnumId="CURRENT_ASSET"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1109" parentGlAccountId="SV_1100"
+            accountCode="1109" accountName="Retenciones IVA acreditables"
+            description="Retenciones IVA 1% efectuadas por nuestros clientes"
+            glAccountClassEnumId="CURRENT_ASSET"/>
+
+    <!-- 1200 Activo No Corriente -->
+    <mantle.ledger.account.GlAccount glAccountId="SV_1200" parentGlAccountId="SV_1000"
+            accountCode="1200" accountName="Activo No Corriente"
+            glAccountClassEnumId="ASSET" disallowPosting="Y"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1201" parentGlAccountId="SV_1200"
+            accountCode="1201" accountName="Propiedad, planta y equipo"
+            glAccountClassEnumId="ASSET"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_1202" parentGlAccountId="SV_1200"
+            accountCode="1202" accountName="Depreciación acumulada"
+            description="Depreciación acumulada PP&amp;E (contra-cuenta)"
+            glAccountClassEnumId="ASSET"/>
+
+    <!-- ============================================================== -->
+    <!-- PASIVO (2xxx)                                                  -->
+    <!-- ============================================================== -->
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2000"
+            accountCode="2000" accountName="PASIVO"
+            glAccountClassEnumId="LIABILITY" disallowPosting="Y"/>
+
+    <!-- 2100 Pasivo Corriente -->
+    <mantle.ledger.account.GlAccount glAccountId="SV_2100" parentGlAccountId="SV_2000"
+            accountCode="2100" accountName="Pasivo Corriente"
+            glAccountClassEnumId="LIABILITY" disallowPosting="Y"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2101" parentGlAccountId="SV_2100"
+            accountCode="2101" accountName="Cuentas por pagar comerciales"
+            description="Saldo acreedor con proveedores por compras al crédito"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2102" parentGlAccountId="SV_2100"
+            accountCode="2102" accountName="IVA débito fiscal"
+            description="IVA cobrado en ventas pendiente de declarar"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2103" parentGlAccountId="SV_2100"
+            accountCode="2103" accountName="Retención IVA 1% por pagar"
+            description="IVA 1% retenido a proveedores pendiente de enterar"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2104" parentGlAccountId="SV_2100"
+            accountCode="2104" accountName="Retención renta por pagar"
+            description="Retención 10% renta a sujetos excluidos (FSE) pendiente de enterar"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2105" parentGlAccountId="SV_2100"
+            accountCode="2105" accountName="ISSS por pagar"
+            description="Aportes ISSS empleado + patronal pendientes de pago"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2106" parentGlAccountId="SV_2100"
+            accountCode="2106" accountName="AFP por pagar"
+            description="Aportes AFP empleado + patronal pendientes de pago"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2107" parentGlAccountId="SV_2100"
+            accountCode="2107" accountName="Anticipo de clientes"
+            description="Anticipos recibidos de clientes antes de la venta"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2108" parentGlAccountId="SV_2100"
+            accountCode="2108" accountName="Sueldos por pagar"
+            description="Sueldo neto pendiente de pago al empleado"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_2109" parentGlAccountId="SV_2100"
+            accountCode="2109" accountName="Impuesto sobre la renta retenido"
+            description="ISR retenido a empleados según tabla mensual"
+            glAccountClassEnumId="LIABILITY"/>
+
+    <!-- ============================================================== -->
+    <!-- PATRIMONIO (3xxx)                                              -->
+    <!-- ============================================================== -->
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_3000"
+            accountCode="3000" accountName="PATRIMONIO"
+            glAccountClassEnumId="EQUITY" disallowPosting="Y"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_3100" parentGlAccountId="SV_3000"
+            accountCode="3100" accountName="Capital social"
+            glAccountClassEnumId="EQUITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_3200" parentGlAccountId="SV_3000"
+            accountCode="3200" accountName="Reserva legal"
+            description="Reserva legal 7% utilidad anual (art. 124 Código Comercio)"
+            glAccountClassEnumId="EQUITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_3300" parentGlAccountId="SV_3000"
+            accountCode="3300" accountName="Utilidades acumuladas"
+            glAccountClassEnumId="EQUITY"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_3400" parentGlAccountId="SV_3000"
+            accountCode="3400" accountName="Utilidad del ejercicio"
+            description="Resultado del período actual (cierre temporal)"
+            glAccountClassEnumId="EQUITY"/>
+
+    <!-- ============================================================== -->
+    <!-- INGRESOS (4xxx)                                                -->
+    <!-- ============================================================== -->
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_4000"
+            accountCode="4000" accountName="INGRESOS"
+            glAccountClassEnumId="REVENUE" disallowPosting="Y"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_4100" parentGlAccountId="SV_4000"
+            accountCode="4100" accountName="Ventas gravadas"
+            description="Ventas afectas a IVA 13%"
+            glAccountClassEnumId="REVENUE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_4200" parentGlAccountId="SV_4000"
+            accountCode="4200" accountName="Ventas exentas"
+            description="Ventas exentas de IVA (medicamentos, etc.)"
+            glAccountClassEnumId="REVENUE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_4300" parentGlAccountId="SV_4000"
+            accountCode="4300" accountName="Ventas no sujetas"
+            description="Ventas no sujetas a IVA"
+            glAccountClassEnumId="REVENUE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_4400" parentGlAccountId="SV_4000"
+            accountCode="4400" accountName="Ventas de exportación"
+            description="Ventas FEX 11 (tasa 0%)"
+            glAccountClassEnumId="REVENUE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_4500" parentGlAccountId="SV_4000"
+            accountCode="4500" accountName="Devoluciones y descuentos sobre ventas"
+            description="NC sobre CCF (contra-cuenta de ventas)"
+            glAccountClassEnumId="REVENUE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_4900" parentGlAccountId="SV_4000"
+            accountCode="4900" accountName="Otros ingresos"
+            glAccountClassEnumId="INCOME"/>
+
+    <!-- ============================================================== -->
+    <!-- COSTOS (5xxx)                                                  -->
+    <!-- ============================================================== -->
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_5000"
+            accountCode="5000" accountName="COSTOS"
+            glAccountClassEnumId="COST_OF_SALES" disallowPosting="Y"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_5100" parentGlAccountId="SV_5000"
+            accountCode="5100" accountName="Costo de ventas"
+            description="Costo de producto vendido"
+            glAccountClassEnumId="COST_OF_SALES"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_5200" parentGlAccountId="SV_5000"
+            accountCode="5200" accountName="Materia prima consumida"
+            description="Consumo de materia prima en producción"
+            glAccountClassEnumId="COST_OF_SALES"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_5300" parentGlAccountId="SV_5000"
+            accountCode="5300" accountName="Mano de obra directa"
+            description="Sueldos de operarios de producción (cargo desde nómina)"
+            glAccountClassEnumId="COST_OF_SALES"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_5400" parentGlAccountId="SV_5000"
+            accountCode="5400" accountName="Gastos indirectos de fabricación"
+            description="GIF: energía, depreciación maquinaria, supervisión"
+            glAccountClassEnumId="COST_OF_SALES"/>
+
+    <!-- ============================================================== -->
+    <!-- GASTOS DE OPERACION (6xxx)                                     -->
+    <!-- ============================================================== -->
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_6000"
+            accountCode="6000" accountName="GASTOS DE OPERACION"
+            glAccountClassEnumId="EXPENSE" disallowPosting="Y"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_6100" parentGlAccountId="SV_6000"
+            accountCode="6100" accountName="Gastos de administración"
+            glAccountClassEnumId="EXPENSE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_6101" parentGlAccountId="SV_6100"
+            accountCode="6101" accountName="Sueldos administrativos"
+            description="Sueldos de personal administrativo (cargo desde nómina)"
+            glAccountClassEnumId="EXPENSE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_6102" parentGlAccountId="SV_6100"
+            accountCode="6102" accountName="ISSS patronal administración"
+            description="Aporte patronal ISSS personal admin"
+            glAccountClassEnumId="EXPENSE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_6103" parentGlAccountId="SV_6100"
+            accountCode="6103" accountName="AFP patronal administración"
+            description="Aporte patronal AFP personal admin"
+            glAccountClassEnumId="EXPENSE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_6200" parentGlAccountId="SV_6000"
+            accountCode="6200" accountName="Gastos de venta"
+            glAccountClassEnumId="EXPENSE"/>
+
+    <mantle.ledger.account.GlAccount glAccountId="SV_6300" parentGlAccountId="SV_6000"
+            accountCode="6300" accountName="Gastos financieros"
+            glAccountClassEnumId="EXPENSE"/>
+
+</entity-facade-xml>

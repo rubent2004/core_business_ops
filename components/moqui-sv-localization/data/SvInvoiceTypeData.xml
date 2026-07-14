@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+    <moqui.basic.Enumeration enumId="InvSvFc" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte01" relatedEnumTypeId="SvTipoDte" optionValue="01"
+            description="SV Factura electrónica" sequenceNum="101"/>
+    <moqui.basic.Enumeration enumId="InvSvCcf" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte03" relatedEnumTypeId="SvTipoDte" optionValue="03"
+            description="SV Comprobante de Crédito Fiscal" sequenceNum="102"/>
+    <moqui.basic.Enumeration enumId="InvSvNc" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte05" relatedEnumTypeId="SvTipoDte" optionValue="05"
+            description="SV Nota de Crédito" sequenceNum="103"/>
+    <moqui.basic.Enumeration enumId="InvSvNd" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte06" relatedEnumTypeId="SvTipoDte" optionValue="06"
+            description="SV Nota de Débito" sequenceNum="104"/>
+    <moqui.basic.Enumeration enumId="InvSvNr" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte04" relatedEnumTypeId="SvTipoDte" optionValue="04"
+            description="SV Nota de Remisión" sequenceNum="105"/>
+    <moqui.basic.Enumeration enumId="InvSvCr" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte07" relatedEnumTypeId="SvTipoDte" optionValue="07"
+            description="SV Comprobante de Retención" sequenceNum="106"/>
+    <moqui.basic.Enumeration enumId="InvSvCl" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte08" relatedEnumTypeId="SvTipoDte" optionValue="08"
+            description="SV Comprobante de Liquidación" sequenceNum="107"/>
+    <moqui.basic.Enumeration enumId="InvSvDcl" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte09" relatedEnumTypeId="SvTipoDte" optionValue="09"
+            description="SV Documento Contable de Liquidación" sequenceNum="108"/>
+    <moqui.basic.Enumeration enumId="InvSvFex" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte11" relatedEnumTypeId="SvTipoDte" optionValue="11"
+            description="SV Factura de Exportación" sequenceNum="109"/>
+    <moqui.basic.Enumeration enumId="InvSvFse" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte14" relatedEnumTypeId="SvTipoDte" optionValue="14"
+            description="SV Factura de Sujeto Excluido" sequenceNum="110"/>
+    <moqui.basic.Enumeration enumId="InvSvCd" enumTypeId="InvoiceType" parentEnumId="InvoiceSales"
+            relatedEnumId="SvDte15" relatedEnumTypeId="SvTipoDte" optionValue="15"
+            description="SV Comprobante de Donación" sequenceNum="111"/>
+
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvFc" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvFc" organizationPartyId="DefaultSettings"
+            isPayable="Y" acctgTransTypeEnumId="AttPurchaseInvoice" glAccountId="212000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvCcf" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvNc" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvNd" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvNr" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvCr" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvCl" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvDcl" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvFex" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvFse" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+    <mantle.ledger.config.InvoiceTypeTransType invoiceTypeEnumId="InvSvCd" organizationPartyId="DefaultSettings"
+            isPayable="N" acctgTransTypeEnumId="AttSalesInvoice" glAccountId="121000000"/>
+</entity-facade-xml>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<moqui-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/moqui-conf-3.xsd">
+
+    <!-- Defaults regionales del ERP SV. Un MOQUI/system env explícito puede sobreescribirlos. -->
+    <default-property name="default_locale" value="es_SV"/>
+    <default-property name="default_time_zone" value="America/El_Salvador"/>
+
+    <default-property name="sv.dte.firmador.url" value="http://localhost:8113"/>
+    <default-property name="sv.dte.mh.ambiente.default" value="00"/>
+    <default-property name="sv.dte.mh.mock.enabled" value="true"/>
+    <default-property name="sv.dte.sign.mock.enabled" value="false"/>
+    <default-property name="sv.dte.verification.public.url" value="https://admin.factura.gob.sv/consultaPublica"/>
+    <!-- Switch maestro: true=apunta al simulador local /rest/s1/sv-dte-sim;
+         false=apunta a apitest.dtes.mh.gob.sv. Override por env DTE_TEST_LOCAL. -->
+    <default-property name="sv.dte.test.local" value="true"/>
+    <!-- URLs del simulador local (cuando sv.dte.test.local=true) -->
+    <default-property name="sv.dte.local.auth.url" value="http://localhost:8080/rest/s1/sv-dte-sim/seguridad/auth"/>
+    <default-property name="sv.dte.local.recepcion.url" value="http://localhost:8080/rest/s1/sv-dte-sim/fesv/recepciondte"/>
+    <default-property name="sv.dte.local.anulacion.url" value="http://localhost:8080/rest/s1/sv-dte-sim/fesv/anulardte"/>
+    <default-property name="sv.dte.local.contingencia.url" value="http://localhost:8080/rest/s1/sv-dte-sim/fesv/contingencia"/>
+    <default-property name="sv.dte.local.consulta.url" value="http://localhost:8080/rest/s1/sv-dte-sim/fesv/recepcion/consultadte"/>
+    <default-property name="sv.dte.local.demo.user" value="demo"/>
+    <default-property name="sv.dte.local.demo.password" value="hacienda"/>
+    <!-- URLs reales apitest (cuando sv.dte.test.local=false) -->
+    <default-property name="sv.dte.mh.test.auth.url" value="https://apitest.dtes.mh.gob.sv/seguridad/auth"/>
+    <default-property name="sv.dte.mh.test.recepcion.url" value="https://apitest.dtes.mh.gob.sv/fesv/recepciondte"/>
+    <default-property name="sv.dte.mh.test.anulacion.url" value="https://apitest.dtes.mh.gob.sv/fesv/anulardte"/>
+    <default-property name="sv.dte.mh.test.contingencia.url" value="https://apitest.dtes.mh.gob.sv/fesv/contingencia"/>
+    <default-property name="sv.dte.mh.test.consulta.url" value="https://apitest.dtes.mh.gob.sv/fesv/recepcion/consultadte"/>
+    <default-property name="sv.dte.demo.cert.password" value="hacienda"/>
+    <default-property name="sv.dte.demo.mh.password" value="hacienda"/>
+    <default-property name="sv.dte.numero_control.establishment" value="M001P001"/>
+
+    <!-- Resiliencia / circuit breaker frente a caídas del MH -->
+    <default-property name="sv.dte.resilience.enabled" value="true"/>
+    <default-property name="sv.dte.resilience.failure.threshold" value="3"/>
+    <default-property name="sv.dte.resilience.degraded.threshold" value="1"/>
+    <default-property name="sv.dte.resilience.health.cooldown.seconds" value="60"/>
+    <default-property name="sv.dte.resilience.retry.max.attempts" value="3"/>
+    <default-property name="sv.dte.resilience.retry.base.minutes" value="1"/>
+    <default-property name="sv.dte.resilience.connect.timeout.ms" value="5000"/>
+    <default-property name="sv.dte.resilience.read.timeout.ms" value="8000"/>
+    <default-property name="sv.dte.contingency.legal.hours" value="24"/>
+    <!-- SECA opcional: deshabilitado hasta tener un punto upstream estable de finalizacion/posteo de factura. -->
+    <default-property name="sv.dte.seca.auto_emit.enabled" value="false"/>
+    <!-- SECA opcional: auto-posting contable cuando un DTE pasa a Accepted/MockAccepted. -->
+    <default-property name="sv.dte.seca.auto_post.enabled" value="false"/>
+
+    <screen-facade>
+        <!-- Usar la shell Vue/Bootstrap por defecto: es donde se aplican los estilos del menu personalizado. -->
+        <screen location="component://webroot/screen/webroot.xml" default-subscreen="vapps"/>
+
+        <screen location="component://MarbleERP/screen/marble.xml">
+            <!-- Fase 2 UI nativa: nombres operativos SV en el menú principal.
+                 Se sobreescriben aquí para evitar editar MarbleERP/SimpleScreens. -->
+            <subscreens-item name="QuickSearch" menu-title="Búsqueda Rápida" menu-index="2"
+                    location="component://SimpleScreens/screen/SimpleScreens/QuickSearch.xml"/>
+            <subscreens-item name="Accounting" menu-title="Contabilidad" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Accounting.xml"/>
+            <subscreens-item name="Asset" menu-title="Inventario" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Asset.xml"/>
+            <subscreens-item name="Catalog" menu-title="Catálogo" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Catalog.xml"/>
+            <subscreens-item name="Customer" menu-title="Clientes" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Customer.xml"/>
+            <subscreens-item name="Facility" menu-title="Bodegas" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Facility.xml"/>
+            <subscreens-item name="HumanRes" menu-title="Recursos Humanos" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/HumanRes.xml"/>
+            <subscreens-item name="Manufacturing" menu-title="Producción" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Manufacturing.xml"/>
+            <subscreens-item name="Order" menu-title="Órdenes" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Order.xml"/>
+            <subscreens-item name="Party" menu-title="Contactos" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Party.xml"/>
+            <!-- Módulos sin uso operativo: ocultos del menú (siguen accesibles por URL para SvAdmin). -->
+            <subscreens-item name="Project" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/Project.xml"/>
+            <subscreens-item name="ProductStore" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/ProductStore.xml"/>
+            <subscreens-item name="Request" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/Request.xml"/>
+            <subscreens-item name="Return" menu-title="Devoluciones" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Return.xml"/>
+            <subscreens-item name="Shipment" menu-title="Remisiones" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Shipment.xml"/>
+            <subscreens-item name="Shipping" menu-title="Despachos" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Shipping.xml"/>
+            <subscreens-item name="Supplier" menu-title="Proveedores" menu-index="10"
+                    location="component://SimpleScreens/screen/SimpleScreens/Supplier.xml"/>
+            <subscreens-item name="Survey" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/Survey.xml"/>
+            <subscreens-item name="Task" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/Task.xml"/>
+            <subscreens-item name="Wiki" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/Wiki.xml"/>
+            <subscreens-item name="SvLocalization" menu-title="Fiscal" menu-index="8"
+                    location="component://moqui-sv-localization/screen/SvLocalization.xml"/>
+            <!-- Administración SV (Usuarios y Permisos). Visible sólo para SvAdmin vía SvScreenAdmin authz. -->
+            <subscreens-item name="SvAdmin" menu-title="Administración" menu-index="9"
+                    location="component://moqui-sv-localization/screen/SvAdmin.xml"/>
+            <!-- Home por rol: reemplaza el dashboard Mantle (diagrama en inglés) por tarjetas en español. -->
+            <subscreens-item name="dashboard" menu-title="Inicio" menu-index="1"
+                    location="component://moqui-sv-localization/screen/SvDashboard.xml"/>
+            <!-- Constructor de reportes: herramienta técnica, fuera del menú operativo (Avanzado / SvAdmin por URL). -->
+            <subscreens-item name="QuickViewReport" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/SimpleReport/QuickViewReport.xml"/>
+            <subscreens-item name="SimpleReport" menu-include="false"
+                    location="component://SimpleScreens/screen/SimpleScreens/SimpleReport.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Party.xml">
+            <subscreens-item name="SvFiscal" menu-title="Datos Fiscales" menu-index="2"
+                    location="component://moqui-sv-localization/screen/SvLocalization/PartyTabs/SvFiscal.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Customer.xml">
+            <subscreens-item name="FindCustomer" menu-title="Buscar" menu-index="1"
+                    location="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindCustomerSv.xml"/>
+            <subscreens-item name="EditCustomer" menu-title="Cliente" menu-index="2"
+                    location="component://moqui-sv-localization/screen/SvLocalization/EditCustomerSv.xml"/>
+            <subscreens-item name="FindCustomerSv" menu-include="false"
+                    location="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindCustomerSv.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Supplier.xml">
+            <subscreens-item name="FindSupplier" menu-title="Buscar" menu-index="1"
+                    location="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindSupplierSv.xml"/>
+            <subscreens-item name="EditSupplier" menu-title="Proveedor" menu-index="2"
+                    location="component://moqui-sv-localization/screen/SvLocalization/EditSupplierSv.xml"/>
+            <subscreens-item name="FindSupplierSv" menu-include="false"
+                    location="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindSupplierSv.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Vendor.xml">
+            <subscreens-item name="EditVendor" menu-title="Empresa" menu-index="1"
+                    location="component://moqui-sv-localization/screen/SvLocalization/EditVendorSv.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Accounting/Invoice.xml">
+            <subscreens-item name="FindInvoice" menu-title="Buscar por DTE" menu-index="1"
+                    location="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindInvoiceSv.xml"/>
+            <subscreens-item name="Dte" menu-title="Factura Electrónica" menu-index="2"
+                    location="component://moqui-sv-localization/screen/SvLocalization/InvoiceTabs/Dte.xml"/>
+            <subscreens-item name="FindInvoiceSv" menu-include="false"
+                    location="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindInvoiceSv.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Order.xml">
+            <subscreens-item name="FindOrder" menu-title="Buscar" menu-index="1"
+                    location="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindOrderSv.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Asset.xml">
+            <subscreens-item name="ReceiveMaterialSv" menu-title="Recepción" menu-index="2"
+                    location="component://moqui-sv-localization/screen/SvLocalization/Inventory/ReceiveMaterialSv.xml"/>
+            <subscreens-item name="MoveInventorySv" menu-title="Traslado" menu-index="3"
+                    location="component://moqui-sv-localization/screen/SvLocalization/Inventory/MoveInventorySv.xml"/>
+            <subscreens-item name="KardexSv" menu-title="Kardex" menu-index="4"
+                    location="component://moqui-sv-localization/screen/SvLocalization/Inventory/KardexSv.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Catalog/Product.xml">
+            <subscreens-item name="SvProducto" menu-title="Fiscal" menu-index="5"
+                    location="component://moqui-sv-localization/screen/SvLocalization/ProductTabs/SvProducto.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Accounting/OrgSettings.xml">
+            <subscreens-item name="SvEmisor" menu-title="Configuración Emisor" menu-index="2"
+                    location="component://moqui-sv-localization/screen/SvLocalization/OrgSettingsTabs/SvEmisor.xml"/>
+        </screen>
+        <screen location="component://SimpleScreens/screen/SimpleScreens/Manufacturing/Run.xml">
+            <subscreens-item name="FindRun" menu-title="Buscar" menu-index="1"
+                    location="component://moqui-sv-localization/screen/SvLocalization/ManufacturingScreens/FindRunSv.xml"/>
+            <subscreens-item name="EditRun" menu-title="Orden" menu-index="2"
+                    location="component://moqui-sv-localization/screen/SvLocalization/ManufacturingScreens/EditRunSv.xml"/>
+            <subscreens-item name="RunCostSheet" menu-title="Hoja de Costeo" menu-index="6"
+                    location="component://moqui-sv-localization/screen/SvLocalization/ManufacturingScreens/RunCostSheet.xml"/>
+            <subscreens-item name="RunAuditTrail" menu-title="Trazabilidad" menu-index="7"
+                    location="component://moqui-sv-localization/screen/SvLocalization/ManufacturingScreens/RunAuditTrail.xml"/>
+            <subscreens-item name="PrintRunPdf" menu-include="false"
+                    location="component://moqui-sv-localization/screen/SvLocalization/ManufacturingScreens/PrintRunPdf.xml"/>
+        </screen>
+    </screen-facade>
+
+</moqui-conf>

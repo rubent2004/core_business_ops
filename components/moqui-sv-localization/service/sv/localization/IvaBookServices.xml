@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="build" noun="IvaSalesBook" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="buildIvaSalesBook">
+        <description>Regenera o actualiza el Libro IVA Ventas desde DteEmision.jsonOriginal aceptados.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+            <parameter name="includeMockAccepted" type="Boolean" default-value="true"/>
+            <parameter name="rebuild" type="Boolean" default-value="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="createdCount" type="Integer"/>
+            <parameter name="updatedCount" type="Integer"/>
+            <parameter name="deletedCount" type="Integer"/>
+            <parameter name="entryList" type="List"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="get" noun="IvaSalesBookSummary" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="getIvaSalesBookSummary">
+        <description>Obtiene totales del Libro IVA Ventas regenerable para una organizacion y periodo.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="export" noun="IvaSalesBookCsv" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="exportIvaSalesBookCsv">
+        <description>Export operativo CSV del Libro IVA Ventas. No es formato oficial certificado.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="csvText"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="IvaSalesBookPdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="renderIvaSalesBookPdf">
+        <description>Renderiza PDF operativo FOP del Libro IVA Ventas desde SvIvaBookEntry.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="build" noun="IvaPurchasesBook" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="buildIvaPurchasesBook">
+        <description>Regenera o actualiza el Libro IVA Compras desde facturas proveedor de Mantle y DTEs aceptados cuando existan.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+            <parameter name="includeMockAccepted" type="Boolean" default-value="true"/>
+            <parameter name="rebuild" type="Boolean" default-value="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="createdCount" type="Integer"/>
+            <parameter name="updatedCount" type="Integer"/>
+            <parameter name="deletedCount" type="Integer"/>
+            <parameter name="entryList" type="List"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="get" noun="IvaPurchasesBookSummary" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="getIvaPurchasesBookSummary">
+        <description>Obtiene totales del Libro IVA Compras regenerable para una organizacion y periodo.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="export" noun="IvaPurchasesBookCsv" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="exportIvaPurchasesBookCsv">
+        <description>Export operativo CSV del Libro IVA Compras. No es formato oficial certificado.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="csvText"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="IvaPurchasesBookPdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="renderIvaPurchasesBookPdf">
+        <description>Renderiza PDF operativo FOP del Libro IVA Compras desde SvIvaBookEntry.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="get" noun="CanceledDtesForPeriod" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="getCanceledDtesForPeriod">
+        <description>Lista los DTE emitidos por la organización anulados/invalidados (DteCanceled) con
+            fecha de emisión en el periodo. Control: explica exclusiones del libro y prepara el anexo
+            F-07 de documentos anulados. No afecta los totales del libro.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="canceledList" type="List"/>
+            <parameter name="canceledCount" type="Integer"/>
+        </out-parameters>
+    </service>
+
+    <service verb="get" noun="FiscalEventsForPeriod" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="getFiscalEventsForPeriod">
+        <description>Reporte auxiliar de eventos fiscales aceptados del periodo. No sustituye ni inventa
+            anexos oficiales; sirve para auditar ERET/EOP y explicar neteos.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="eventList" type="List"/>
+            <parameter name="eventCount" type="Integer"/>
+        </out-parameters>
+    </service>
+
+    <service verb="snapshot" noun="IvaSalesBook" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="snapshotIvaSalesBook">
+        <description>Congela un cierre inmutable del Libro IVA Ventas (SvIvaBookSnapshot) con hash
+            SHA-256, versión, usuario y fecha. Append-only: no altera versiones previas.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svIvaBookSnapshotId"/>
+            <parameter name="versionNum" type="Integer"/>
+            <parameter name="contentHash"/>
+            <parameter name="hashAlgorithm"/>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="mockEntryCount" type="Integer"/>
+            <parameter name="containsMock" type="Boolean"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="snapshot" noun="IvaPurchasesBook" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="snapshotIvaPurchasesBook">
+        <description>Congela un cierre inmutable del Libro IVA Compras (SvIvaBookSnapshot) con hash
+            SHA-256, versión, usuario y fecha. Append-only: no altera versiones previas.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svIvaBookSnapshotId"/>
+            <parameter name="versionNum" type="Integer"/>
+            <parameter name="contentHash"/>
+            <parameter name="hashAlgorithm"/>
+            <parameter name="entryCount" type="Integer"/>
+            <parameter name="mockEntryCount" type="Integer"/>
+            <parameter name="containsMock" type="Boolean"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="rebuild" noun="CurrentPeriodIvaBooks" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/IvaBookServices.groovy"
+             method="rebuildCurrentPeriodIvaBooks" transaction="force-new" authenticate="false">
+        <description>Job orquestador diario: itera todas las organizaciones internas
+            (mantle.party.PartyRole roleTypeId=OrgInternal, no deshabilitadas) y reconstruye
+            los libros IVA ventas y compras del período actual en TZ El Salvador. Idempotente
+            (cada build hace upsert). Tolerante a fallos por organización: registra y
+            continúa.</description>
+        <in-parameters>
+            <parameter name="periodYearMonth">
+                <description>Opcional. Si se omite usa el periodo actual (YYYY-MM) en TZ America/El_Salvador.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="periodYearMonth"/>
+            <parameter name="orgsProcessed" type="Integer"/>
+            <parameter name="orgsFailed" type="Integer"/>
+            <parameter name="salesCreatedCount" type="Integer"/>
+            <parameter name="salesUpdatedCount" type="Integer"/>
+            <parameter name="purchasesCreatedCount" type="Integer"/>
+            <parameter name="purchasesUpdatedCount" type="Integer"/>
+            <parameter name="failures" type="List"/>
+        </out-parameters>
+    </service>
+
+</services>

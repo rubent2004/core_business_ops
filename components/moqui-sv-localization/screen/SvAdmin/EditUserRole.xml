@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Editar usuario — datos de acceso, empleado ligado, roles SV y reseteo de
+    contraseña. Todo vía sv.localization.UserAdminServices (sólo SvAdmin).
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Editar Usuario" default-menu-index="2" menu-include="false">
+
+    <parameter name="userId" required="true"/>
+
+    <transition name="updateAccount">
+        <service-call name="sv.localization.UserAdminServices.update#SvUserAccount"/>
+        <default-response url="."><parameter name="userId"/></default-response>
+    </transition>
+    <transition name="setRoles">
+        <service-call name="sv.localization.UserAdminServices.set#SvUserRoles"/>
+        <default-response url="."><parameter name="userId"/></default-response>
+    </transition>
+    <transition name="setPassword">
+        <service-call name="sv.localization.UserAdminServices.set#SvUserPassword"/>
+        <default-response url="."><parameter name="userId"/></default-response>
+    </transition>
+    <transition name="backToList"><default-response url="../UsersRoles"/></transition>
+
+    <actions>
+        <entity-find-one entity-name="moqui.security.UserAccount" value-field="userAccount"/>
+        <if condition="userAccount == null"><return error="true" message="Usuario no encontrado: ${userId}"/></if>
+
+        <!-- Roles SV vigentes del usuario (para preseleccionar) -->
+        <entity-find entity-name="moqui.security.UserGroupMember" list="currentRoleList">
+            <econdition field-name="userId"/>
+            <econdition field-name="userGroupId" operator="like" value="Sv%"/>
+            <date-filter/>
+        </entity-find>
+        <set field="currentRoleIds" from="currentRoleList.collect{ it.userGroupId }"/>
+
+        <!-- Empleados para el combo -->
+        <entity-find entity-name="mantle.party.PartyRole" list="employeeRoleList">
+            <econdition field-name="roleTypeId" value="Employee"/>
+        </entity-find>
+        <set field="employeeOptions" from="[]"/>
+        <iterate list="employeeRoleList" entry="empRole">
+            <entity-find-one entity-name="mantle.party.PartyDetail" value-field="empParty">
+                <field-map field-name="partyId" from="empRole.partyId"/>
+            </entity-find-one>
+            <if condition="empParty != null">
+                <set field="empLabel" from="(empParty.organizationName ?: ((empParty.firstName ?: '') + ' ' + (empParty.lastName ?: '')).trim()) ?: empParty.partyId"/>
+                <script>employeeOptions.add([partyId: empParty.partyId, label: empLabel + ' (' + empParty.partyId + ')'])</script>
+            </if>
+        </iterate>
+    </actions>
+
+    <widgets>
+        <container-row><row-col lg="6">
+            <container-box>
+                <box-header title="Datos de acceso"/>
+                <box-toolbar><link url="backToList" text="◂ Volver al listado" btn-type="default"/></box-toolbar>
+                <box-body>
+                    <form-single name="AccountForm" transition="updateAccount" map="userAccount">
+                        <field name="userId"><default-field><hidden/></default-field></field>
+                        <field name="username"><default-field title="Usuario"><display/></default-field></field>
+                        <field name="userFullName"><default-field title="Nombre completo">
+                            <text-line size="36"/></default-field></field>
+                        <field name="emailAddress"><default-field title="Correo electrónico">
+                            <text-line size="32" input-type="email"/></default-field></field>
+                        <field name="partyId"><default-field title="Empleado ligado">
+                            <drop-down allow-empty="true">
+                                <list-options list="employeeOptions" key="${partyId}" text="${label}"/>
+                            </drop-down></default-field></field>
+                        <field name="disabled"><default-field title="Deshabilitado">
+                            <drop-down><option key="N" text="No"/><option key="Y" text="Sí"/></drop-down></default-field></field>
+                        <field name="submitButton"><default-field title="Guardar cambios"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+
+            <container-box>
+                <box-header title="Restablecer contraseña"/>
+                <box-body>
+                    <form-single name="PasswordForm" transition="setPassword">
+                        <field name="userId" from="userId"><default-field><hidden/></default-field></field>
+                        <field name="newPassword"><default-field title="Nueva contraseña">
+                            <password size="20"/></default-field></field>
+                        <field name="newPasswordVerify"><default-field title="Repetir contraseña">
+                            <password size="20"/></default-field></field>
+                        <field name="requirePasswordChange"><default-field title="Forzar cambio al ingresar">
+                            <drop-down no-current-selected-key="Y">
+                                <option key="Y" text="Sí"/><option key="N" text="No"/>
+                            </drop-down></default-field></field>
+                        <field name="submitButton"><default-field title="Restablecer contraseña"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </row-col><row-col lg="6">
+            <container-box>
+                <box-header title="Roles del sistema"/>
+                <box-body>
+                    <form-single name="RolesForm" transition="setRoles">
+                        <field name="userId" from="userId"><default-field><hidden/></default-field></field>
+                        <field name="roleIds" from="currentRoleIds"><default-field title="Roles asignados">
+                            <drop-down allow-multiple="true" allow-empty="true">
+                                <entity-options key="${userGroupId}" text="${userGroupId} — ${description}">
+                                    <entity-find entity-name="moqui.security.UserGroup">
+                                        <econdition field-name="userGroupId" operator="like" value="Sv%"/>
+                                        <order-by field-name="userGroupId"/>
+                                    </entity-find>
+                                </entity-options>
+                            </drop-down></default-field></field>
+                        <field name="submitButton"><default-field title="Guardar roles"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </row-col></container-row>
+    </widgets>
+</screen>

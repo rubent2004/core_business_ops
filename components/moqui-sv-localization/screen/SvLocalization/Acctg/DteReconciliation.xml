@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Conciliación DTE vs GL" default-menu-index="3">
+
+    <parameter name="organizationPartyId"/>
+    <parameter name="periodYearMonth"/>
+
+    <actions>
+        <if condition="organizationPartyId &amp;&amp; periodYearMonth">
+            <service-call name="sv.localization.PeriodCloseServices.reconcile#DteVsGl"
+                          in-map="[organizationPartyId: organizationPartyId, periodYearMonth: periodYearMonth]"
+                          out-map="recon"/>
+        </if>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Conciliación DTE vs Asientos Contables"/>
+            <box-body>
+                <label type="p" text="Verifica que cada DTE aceptado en el período tenga su asiento contable correspondiente. Ejecutar antes de cerrar el período."/>
+                <form-single name="FilterForm" transition=".">
+                    <field name="organizationPartyId"><default-field title="Organización">
+                        <drop-down><entity-options key="${partyId}" text="PartyNameTemplate">
+                            <entity-find entity-name="mantle.party.PartyDetailAndRole">
+                                <econdition field-name="roleTypeId" value="OrgInternal"/>
+                                <econdition field-name="disabled" value="N" or-null="true"/>
+                                <order-by field-name="organizationName"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="periodYearMonth"><default-field title="Período (YYYY-MM)">
+                        <text-line size="10" maxlength="7"/>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Conciliar"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <section name="ResultsSection" condition="recon"><widgets>
+            <container-box type="${recon.coverage == 100 ? 'success' : 'warning'}">
+                <box-header title="Cobertura ${recon.periodYearMonth}"/>
+                <box-body>
+                    <container-row>
+                        <row-col lg="3">
+                            <label text="DTEs aceptados:" type="strong"/>
+                            <label text=" ${recon.totalAccepted}"/>
+                        </row-col>
+                        <row-col lg="3">
+                            <label text="Con asiento:" type="strong"/>
+                            <label text=" ${recon.totalPosted}" style="text-success"/>
+                        </row-col>
+                        <row-col lg="3">
+                            <label text="Sin asiento:" type="strong"/>
+                            <label text=" ${recon.totalAccepted - recon.totalPosted}"
+                                   style="${recon.totalAccepted - recon.totalPosted > 0 ? 'text-danger' : ''}"/>
+                        </row-col>
+                        <row-col lg="3">
+                            <label text="Cobertura:" type="strong"/>
+                            <label text=" ${recon.coverage}%"
+                                   style="${recon.coverage == 100 ? 'text-success' : 'text-warning'}"/>
+                        </row-col>
+                    </container-row>
+                </box-body>
+            </container-box>
+
+            <section name="OrphansSection" condition="recon.dtesWithoutAcctgTrans"><widgets>
+                <container-box type="danger">
+                    <box-header title="DTEs SIN asiento contable (${recon.dtesWithoutAcctgTrans?.size() ?: 0})"/>
+                    <box-body-nopad>
+                        <container style="table-responsive">
+                            <form-list name="OrphanDtes" list="recon.dtesWithoutAcctgTrans" skip-form="true">
+                                <field name="dteEmisionId"><header-field title="DTE ID"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                                <field name="tipoDteCode"><header-field title="Tipo"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                                <field name="numeroControl"><header-field title="No. Control"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                                <field name="invoiceId"><header-field title="Invoice"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                            </form-list>
+                        </container>
+                    </box-body-nopad>
+                </container-box>
+            </widgets></section>
+
+            <section name="ManualSection" condition="recon.acctgTransWithoutDte"><widgets>
+                <container-box>
+                    <box-header title="Asientos manuales (sin DTE asociado)"/>
+                    <box-body-nopad>
+                        <container style="table-responsive">
+                            <form-list name="ManualTrans" list="recon.acctgTransWithoutDte" skip-form="true">
+                                <field name="acctgTransId"><header-field title="ID"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                                <field name="description"><header-field title="Descripción"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                                <field name="invoiceId"><header-field title="Invoice"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                            </form-list>
+                        </container>
+                    </box-body-nopad>
+                </container-box>
+            </widgets></section>
+        </widgets></section>
+    </widgets>
+</screen>

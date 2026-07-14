@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Trazabilidad" default-menu-index="4">
+
+    <parameter name="workEffortId" required="true"/>
+
+    <transition name="editParty"><default-response url="//${appRoot}/Party/EditParty"/></transition>
+    <transition name="assetDetail"><default-response url="//${appRoot}/Asset/Asset/AssetDetail"/></transition>
+
+    <actions>
+        <entity-find-one entity-name="mantle.work.effort.WorkEffort" value-field="workEffort"/>
+        <if condition="workEffort == null"><return error="true" message="Orden de producción no encontrada"/></if>
+
+        <!-- Despachos de material (BOM) — quién despachó qué cuando -->
+        <entity-find entity-name="mantle.product.issuance.AssetIssuance" list="issuanceList">
+            <econdition field-name="workEffortId"/>
+            <order-by field-name="-issuedDate"/>
+        </entity-find>
+        <set field="issuanceListWithUser" from="[]"/>
+        <iterate list="issuanceList" entry="iss">
+            <entity-find-one entity-name="moqui.security.UserAccount" value-field="issuedBy">
+                <field-map field-name="userId" from="iss.issuedByUserId"/>
+            </entity-find-one>
+            <entity-find-one entity-name="mantle.product.asset.Asset" value-field="asset">
+                <field-map field-name="assetId" from="iss.assetId"/>
+            </entity-find-one>
+            <entity-find-one entity-name="mantle.product.Product" value-field="product">
+                <field-map field-name="productId" from="asset?.productId"/>
+            </entity-find-one>
+            <set field="issuanceListWithUser" from='issuanceListWithUser + [[
+                assetIssuanceId: iss.assetIssuanceId,
+                issuedDate: iss.issuedDate,
+                userId: iss.issuedByUserId,
+                userFullName: issuedBy?.userFullName ?: iss.issuedByUserId ?: "—",
+                username: issuedBy?.username ?: "—",
+                productId: product?.productId,
+                productName: product?.productName ?: asset?.productId ?: "—",
+                quantity: iss.quantity,
+                assetId: iss.assetId
+            ]]'/>
+        </iterate>
+
+        <!-- Recepciones de producto terminado — quién recibió qué cuando -->
+        <entity-find entity-name="mantle.product.receipt.AssetReceipt" list="receiptList">
+            <econdition field-name="workEffortId"/>
+            <order-by field-name="-receivedDate"/>
+        </entity-find>
+        <set field="receiptListWithUser" from="[]"/>
+        <iterate list="receiptList" entry="rec">
+            <entity-find-one entity-name="moqui.security.UserAccount" value-field="receivedBy">
+                <field-map field-name="userId" from="rec.receivedByUserId"/>
+            </entity-find-one>
+            <entity-find-one entity-name="mantle.product.Product" value-field="recProduct">
+                <field-map field-name="productId" from="rec.productId"/>
+            </entity-find-one>
+            <set field="receiptListWithUser" from='receiptListWithUser + [[
+                assetReceiptId: rec.assetReceiptId,
+                receivedDate: rec.receivedDate,
+                userId: rec.receivedByUserId,
+                userFullName: receivedBy?.userFullName ?: rec.receivedByUserId ?: "—",
+                username: receivedBy?.username ?: "—",
+                productId: rec.productId,
+                productName: recProduct?.productName ?: rec.productId ?: "—",
+                quantity: rec.quantityAccepted ?: rec.quantityRejected,
+                assetId: rec.assetId
+            ]]'/>
+        </iterate>
+
+        <!-- Bitácora completa (EntityAuditLog) — cualquier cambio auditable
+             en el WorkEffort registra usuario, fecha y campo modificado. -->
+        <entity-find entity-name="moqui.entity.EntityAuditLog" list="auditLogList" limit="50">
+            <econdition field-name="changedEntityName" value="mantle.work.effort.WorkEffort"/>
+            <econdition field-name="pkPrimaryValue" from="workEffortId"/>
+            <order-by field-name="-changedDate"/>
+        </entity-find>
+        <set field="statusHistoryWithUser" from="[]"/>
+        <iterate list="auditLogList" entry="hist">
+            <entity-find-one entity-name="moqui.security.UserAccount" value-field="changeUser">
+                <field-map field-name="userId" from="hist.changedByUserId"/>
+            </entity-find-one>
+            <set field="statusHistoryWithUser" from='statusHistoryWithUser + [[
+                statusHistoryId: hist.auditHistorySeqId,
+                statusDate: hist.changedDate,
+                userId: hist.changedByUserId,
+                userFullName: changeUser?.userFullName ?: hist.changedByUserId ?: "—",
+                statusFrom: hist.oldValueText ?: "—",
+                statusTo: hist.newValueText ?: "—",
+                fieldName: hist.changedFieldName
+            ]]'/>
+        </iterate>
+
+        <!-- Responsables / partes asignadas -->
+        <entity-find entity-name="mantle.work.effort.WorkEffortAndPartyDetail" list="partyList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <order-by field-name="firstName,lastName,organizationName"/>
+        </entity-find>
+
+        <set field="totalIssuances" from="issuanceListWithUser.size()"/>
+        <set field="totalReceipts" from="receiptListWithUser.size()"/>
+        <set field="totalStatusChanges" from="statusHistoryWithUser.size()"/>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Trazabilidad de Orden ${workEffortId}"/>
+            <box-body>
+                <container style="alert alert-info" style-condition="true">
+                    <label text="Este registro es la huella de auditoría del sistema. Cada despacho, recepción y cambio de estado queda registrado con usuario, fecha y hora. Útil para auditoría externa y revisión interna." type="p"/>
+                </container>
+
+                <container-row>
+                    <row-col lg="4"><container style="text-center" >
+                        <label text="${totalIssuances}" type="h2"/>
+                        <label text="Despachos de material (BOM)" type="span"/>
+                    </container></row-col>
+                    <row-col lg="4"><container style="text-center">
+                        <label text="${totalReceipts}" type="h2"/>
+                        <label text="Recepciones de Producto Terminado" type="span"/>
+                    </container></row-col>
+                    <row-col lg="4"><container style="text-center">
+                        <label text="${totalStatusChanges}" type="h2"/>
+                        <label text="Cambios de estado" type="span"/>
+                    </container></row-col>
+                </container-row>
+            </box-body>
+        </container-box>
+
+        <!-- Despachos de material -->
+        <container-box>
+            <box-header title="Despachos de Material — ¿Quién sacó qué de bodega?"/>
+            <box-body-nopad>
+                <form-list name="IssuanceList" list="issuanceListWithUser" skip-form="true">
+                    <field name="userFullName"><default-field title="Despachado por">
+                        <display text="${userFullName} (${username})"/>
+                    </default-field></field>
+                    <field name="issuedDate"><default-field title="Fecha y hora">
+                        <display format="yyyy-MM-dd HH:mm:ss"/>
+                    </default-field></field>
+                    <field name="productName"><default-field title="Producto">
+                        <display text="${productId}: ${productName}"/>
+                    </default-field></field>
+                    <field name="quantity"><default-field title="Cantidad">
+                        <display format="#,##0.####"/>
+                    </default-field></field>
+                    <field name="assetId"><default-field title="Asset">
+                        <link url="assetDetail" text="${assetId}" link-type="anchor" parameter-map="[assetId:assetId]"/>
+                    </default-field></field>
+                </form-list>
+                <section name="EmptyIssuances">
+                    <condition><expression>!issuanceListWithUser</expression></condition>
+                    <widgets><label text="(Sin despachos registrados aún)" type="p" style="text-muted text-center"/></widgets>
+                </section>
+            </box-body-nopad>
+        </container-box>
+
+        <!-- Recepciones de producto terminado -->
+        <container-box>
+            <box-header title="Recepciones de Producto Terminado — ¿Quién recibió qué?"/>
+            <box-body-nopad>
+                <form-list name="ReceiptList" list="receiptListWithUser" skip-form="true">
+                    <field name="userFullName"><default-field title="Recibido por">
+                        <display text="${userFullName} (${username})"/>
+                    </default-field></field>
+                    <field name="receivedDate"><default-field title="Fecha y hora">
+                        <display format="yyyy-MM-dd HH:mm:ss"/>
+                    </default-field></field>
+                    <field name="productName"><default-field title="Producto">
+                        <display text="${productId}: ${productName}"/>
+                    </default-field></field>
+                    <field name="quantity"><default-field title="Cantidad">
+                        <display format="#,##0.####"/>
+                    </default-field></field>
+                    <field name="assetId"><default-field title="Asset">
+                        <link url="assetDetail" text="${assetId}" link-type="anchor" parameter-map="[assetId:assetId]"/>
+                    </default-field></field>
+                </form-list>
+                <section name="EmptyReceipts">
+                    <condition><expression>!receiptListWithUser</expression></condition>
+                    <widgets><label text="(Sin recepciones registradas aún)" type="p" style="text-muted text-center"/></widgets>
+                </section>
+            </box-body-nopad>
+        </container-box>
+
+        <!-- Bitácora de cambios (EntityAuditLog) -->
+        <container-box>
+            <box-header title="Bitácora de cambios — ¿Quién la abrió, aprobó, cerró?"/>
+            <box-body-nopad>
+                <form-list name="StatusHistory" list="statusHistoryWithUser" skip-form="true">
+                    <field name="userFullName"><default-field title="Cambiado por">
+                        <display/>
+                    </default-field></field>
+                    <field name="statusDate"><default-field title="Fecha y hora">
+                        <display format="yyyy-MM-dd HH:mm:ss"/>
+                    </default-field></field>
+                    <field name="fieldName"><default-field title="Campo">
+                        <display/>
+                    </default-field></field>
+                    <field name="statusFrom"><default-field title="Valor anterior">
+                        <display/>
+                    </default-field></field>
+                    <field name="statusTo"><default-field title="Valor nuevo">
+                        <display/>
+                    </default-field></field>
+                </form-list>
+                <section name="EmptyStatus">
+                    <condition><expression>!statusHistoryWithUser</expression></condition>
+                    <widgets><label text="(Sin cambios de estado registrados — el campo statusId puede no tener audit-log activado todavía)" type="p" style="text-muted text-center"/></widgets>
+                </section>
+            </box-body-nopad>
+        </container-box>
+
+        <!-- Responsables -->
+        <container-box>
+            <box-header title="Responsables / Partes asignadas a la orden"/>
+            <box-body-nopad>
+                <form-list name="PartyList" list="partyList" skip-form="true">
+                    <field name="partyId"><default-field title="Persona">
+                        <link url="editParty" text="${pseudoId ?: partyId}: ${firstName?:''} ${lastName?:''}${organizationName?:''}" link-type="anchor" parameter-map="[partyId:partyId]"/>
+                    </default-field></field>
+                    <field name="roleTypeId"><default-field title="Rol"><display-entity entity-name="moqui.basic.RoleType"/></default-field></field>
+                    <field name="fromDate"><default-field title="Desde"><display format="yyyy-MM-dd"/></default-field></field>
+                    <field name="thruDate"><default-field title="Hasta"><display format="yyyy-MM-dd"/></default-field></field>
+                </form-list>
+            </box-body-nopad>
+        </container-box>
+    </widgets>
+</screen>

@@ -1,0 +1,53 @@
+# Build artifacts
+build/
+.gradle/
+out/
+*.class
+*.war
+*.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.settings/
+.project
+.classpath
+nbproject/
+nbbuild/
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Runtime / data (not in repo)
+runtime/
+db/
+*.db
+*.mv.db
+*.trace.db
+
+# Upload artifacts
+upload/
+!upload/.gitignore
+
+# Private keys / certs (demo cert is OK, real ones are not)
+*.key
+*.p12
+*.jks
+*.pem
+*.pfx
+
+# Docker compose overrides (if any)
+docker-compose.override.yml

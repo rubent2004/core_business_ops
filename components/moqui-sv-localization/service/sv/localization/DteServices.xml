@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="generate" noun="DteJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="generateDteJson">
+        <in-parameters>
+            <parameter name="invoiceId" required="true"/>
+            <parameter name="tipoModelo" type="Integer">
+                <description>Modelo de facturación MH CAT-001: 1=previo, 2=diferido. Opcional; si se
+                    omite usa el default del emisor (SvFiscalProfile.modeloFacturacionDefault) o 1.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteEmisionId"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="numeroControl"/>
+            <parameter name="tipoDteCode"/>
+            <parameter name="schemaName"/>
+            <parameter name="dteJson" type="Map"/>
+            <parameter name="dteJsonText"/>
+        </out-parameters>
+    </service>
+
+    <service verb="validate" noun="DteJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="validateDteJson">
+        <in-parameters>
+            <parameter name="dteEmisionId"/>
+            <parameter name="dteJson" type="Map"/>
+            <parameter name="dteJsonText"/>
+            <parameter name="tipoDteCode" default-value="01"/>
+            <parameter name="schemaName"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="schemaName"/>
+            <parameter name="errors" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="sign" noun="Dte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="signDte">
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="estadoLeyenda">
+                <description>Leyenda visual opcional sobre el DTE impreso, por ejemplo INVALIDADO para entrega posterior a invalidación.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="signed" type="Boolean"/>
+            <parameter name="jwsCompactSerialization"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="transmit" noun="Dte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="transmitDte">
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="estadoLeyenda">
+                <description>Leyenda visual opcional que se propagará al render PDF.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="transmitted" type="Boolean"/>
+            <parameter name="mock" type="Boolean"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="contingency" type="Boolean"/>
+            <parameter name="contingenciaId"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="emit" noun="FromInvoice" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="emitFromInvoice">
+        <in-parameters>
+            <parameter name="invoiceId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteEmisionId"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="get" noun="DtePrintContext" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="getDtePrintContext">
+        <description>Prepara el contexto del template FOP para impresión del DTE.
+            Incluye dteEmision, dteJson parseado, QR de verificación pública MH
+            como `data:image/png;base64,…` y URL del logo del emisor si está
+            configurado en SvFiscalProfile.logoContentLocation. La base pública
+            del QR se configura con `sv.dte.verification.public.url`. Reutilizable desde
+            render#DtePdf (bytes) y desde la screen FOP standalone PrintDte.</description>
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="estadoLeyenda">
+                <description>Leyenda visual opcional que se propagará al render PDF.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteEmision"/>
+            <parameter name="dteJson" type="Map"/>
+            <parameter name="verificationQr"/>
+            <parameter name="verificationQrUrl"/>
+            <parameter name="verificationBarcode"/>
+            <parameter name="emisorLogoUrl"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="DtePdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="renderDtePdf">
+        <description>Renderiza una representación fiscal imprimible del DTE persistido.
+            Usa jsonOriginal y templates XSL-FO del componente; no recalcula la factura.</description>
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="estadoLeyenda">
+                <description>Leyenda visual opcional sobre el DTE impreso, por ejemplo INVALIDADO para entrega posterior a invalidación.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="check" noun="MhHealth" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="checkMhHealth" transaction="force-new" authenticate="false">
+        <description>Verifica el estado del MH haciendo auth contra el endpoint configurado.
+            Actualiza SvDteSystemHealth. Si MH se recupera de DOWN, dispara cierre de
+            contingencia activa. Se invoca cada N minutos por ServiceJob.</description>
+        <out-parameters>
+            <parameter name="status"/>
+            <parameter name="httpStatus" type="Integer"/>
+            <parameter name="skipped" type="Boolean"/>
+            <parameter name="error"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="retry" noun="FailedDtes" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteServices.groovy"
+             method="retryFailedDtes" transaction="force-new" authenticate="false">
+        <description>Busca DTEs en estado DteError/DteRetryQueued con backoff cumplido y
+            reintenta su transmisión. Se invoca cada N minutos por ServiceJob.
+            Backoff: baseMinutes * 2^intentos (1, 2, 4, 8, 16 min por defecto).</description>
+        <out-parameters>
+            <parameter name="candidates" type="Integer"/>
+            <parameter name="processed" type="Integer"/>
+            <parameter name="accepted" type="Integer"/>
+            <parameter name="stillFailing" type="Integer"/>
+            <parameter name="skipped" type="Integer"/>
+        </out-parameters>
+    </service>
+</services>

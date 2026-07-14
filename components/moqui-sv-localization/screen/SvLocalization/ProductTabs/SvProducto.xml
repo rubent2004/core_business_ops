@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Fiscal" default-menu-index="9">
+    <parameter name="productId" required="true"/>
+
+    <transition name="saveSvProduct">
+        <service-call name="store#mantle.product.Product"/>
+        <default-response url="."/>
+    </transition>
+    <transition name="productKardex"><default-response url="//${appRoot}/Asset/KardexSv"/></transition>
+
+    <actions>
+        <entity-find-one entity-name="mantle.product.Product" value-field="product"/>
+        <if condition="product == null"><return error="true" message="Product not found with ID ${productId}"/></if>
+
+        <service-call name="sv.localization.InventorySvServices.calculate#AverageCost"
+                      in-map="[productId:productId]" out-map="costSummary"/>
+    </actions>
+
+    <widgets>
+        <label text="Defaults fiscales salvadoreños usados al construir líneas DTE. La factura puede ajustar casos especiales antes de emitir." type="p"/>
+
+        <container-box>
+            <box-header title="Costo de Inventario (Promedio Ponderado)"/>
+            <box-toolbar>
+                <link url="productKardex" text="Ver Kardex" link-type="anchor"
+                      parameter-map="[productId:productId]" icon="fa fa-list"/>
+            </box-toolbar>
+            <box-body>
+                <container-row>
+                    <row-col lg="4">
+                        <label text="Costo Promedio Actual:" type="strong"/>
+                        <label text="${ec.l10n.format(costSummary?.averageCost ?: 0, '$ #,##0.0000')}"/>
+                    </row-col>
+                    <row-col lg="4">
+                        <label text="Existencia:" type="strong"/>
+                        <label text="${ec.l10n.format(costSummary?.quantityOnHand ?: 0, '#,##0.####')}"/>
+                    </row-col>
+                    <row-col lg="4">
+                        <label text="Valor Inventario:" type="strong"/>
+                        <label text="${ec.l10n.format(costSummary?.inventoryValue ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                </container-row>
+            </box-body>
+        </container-box>
+
+        <container-row>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Identificación DTE del Producto"/>
+                    <box-body>
+                        <form-single name="SvProductFiscalForm" map="product" transition="saveSvProduct">
+                            <field name="productId"><default-field><hidden/></default-field></field>
+
+                            <field name="svUnidadMedidaCode"><default-field title="Unidad de medida (CAT-014)">
+                                <drop-down allow-empty="true" no-current-selected-key="59"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvUnidadMedida"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="svTipoItemCode"><default-field title="Tipo ítem (CAT-011)">
+                                <drop-down allow-empty="true" no-current-selected-key="1"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvTipoItem"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="svTributoCode"><default-field title="Tributo por defecto (CAT-015)">
+                                <drop-down allow-empty="true" no-current-selected-key="20"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvTributo"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="svTaxTreatmentEnumId"><default-field title="Tratamiento fiscal">
+                                <drop-down allow-empty="true" no-current-selected-key="SvTaxGravada"><entity-options key="${enumId}" text="${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvProductTaxTreatment"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="svIvaRetencionAplica"><default-field title="Aplica retención IVA">
+                                <drop-down no-current-selected-key="N"><option key="N" text="No"/><option key="Y" text="Sí"/></drop-down>
+                            </default-field></field>
+                            <field name="svIvaPercepcionAplica"><default-field title="Aplica percepción IVA">
+                                <drop-down no-current-selected-key="N"><option key="N" text="No"/><option key="Y" text="Sí"/></drop-down>
+                            </default-field></field>
+                            <field name="svRetencionIvaMhCode"><default-field title="Código retención IVA (CAT-006)">
+                                <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvRetencionIvaMh"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="submitButton"><default-field title="Guardar datos fiscales"><submit/></default-field></field>
+                        </form-single>
+                    </box-body>
+                </container-box>
+            </row-col>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Exportación y Retornos"/>
+                    <box-body>
+                        <form-single name="SvProductExportForm" map="product" transition="saveSvProduct">
+                            <field name="productId"><default-field><hidden/></default-field></field>
+
+                            <field name="svTipoItemExportCode"><default-field title="Tipo ítem exportación">
+                                <text-line size="8" maxlength="4"/>
+                            </default-field></field>
+
+                            <field name="svRecintoFiscalCode"><default-field title="Recinto fiscal (CAT-027)">
+                                <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvRecintoFiscal"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="svTipoRegimenCode"><default-field title="Tipo régimen (CAT-033)">
+                                <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvTipoRegimen"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="svRegimenCode"><default-field title="Régimen aduanero (CAT-028)">
+                                <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                    <entity-find entity-name="moqui.basic.Enumeration">
+                                        <econdition field-name="enumTypeId" value="SvRegimen"/>
+                                        <order-by field-name="sequenceNum"/>
+                                    </entity-find>
+                                </entity-options></drop-down>
+                            </default-field></field>
+
+                            <field name="submitExportButton"><default-field title="Guardar exportación"><submit/></default-field></field>
+                        </form-single>
+                    </box-body>
+                </container-box>
+            </row-col>
+        </container-row>
+    </widgets>
+</screen>

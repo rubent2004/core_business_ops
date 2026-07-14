@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="DTE recibidos" default-menu-index="3">
+    <transition name="importDte">
+        <service-call name="sv.localization.DteReceptionServices.import#DteRecibido"/>
+        <default-response url=".">
+            <parameter name="organizationPartyId"/>
+            <parameter name="periodYearMonth"/>
+        </default-response>
+    </transition>
+    <transition name="refreshReceivedDte">
+        <service-call name="sv.localization.DteReceptionServices.refresh#DteRecibidoStatus"/>
+        <default-response url=".">
+            <parameter name="organizationPartyId"/>
+            <parameter name="periodYearMonth"/>
+        </default-response>
+    </transition>
+    <transition name="refreshReceivedDtes">
+        <service-call name="sv.localization.DteReceptionServices.refresh#DteRecibidosStatus"/>
+        <default-response url=".">
+            <parameter name="organizationPartyId"/>
+            <parameter name="periodYearMonth"/>
+        </default-response>
+    </transition>
+
+    <actions>
+        <set field="periodYearMonth" from="periodYearMonth ?: ec.user.nowTimestamp.toString().substring(0, 7)"/>
+        <set field="receivedDteList" from="[]"/>
+        <if condition="organizationPartyId">
+            <entity-find entity-name="sv.localization.dte.DteRecepcion" list="receivedDteList">
+                <econdition field-name="receptorPartyId" from="organizationPartyId"/>
+                <order-by field-name="-fechaEmision"/>
+                <order-by field-name="-importedDate"/>
+            </entity-find>
+        </if>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Importar DTE recibido de proveedor"/>
+            <box-body>
+                <label type="p" text="Pega el JSON del DTE recibido. Se valida contra el schema oficial y se guarda como registro independiente (DteRecepcion); alimenta el Libro IVA Compras del periodo correspondiente sin crear factura en Mantle. No es formato oficial certificado MH/DGI."/>
+                <form-single name="ImportReceivedDte" transition="importDte">
+                    <field name="organizationPartyId"><default-field title="Organización receptora">
+                        <text-line size="24"/>
+                    </default-field></field>
+                    <field name="selloRecepcion"><default-field title="Sello (si no viene en el JSON)">
+                        <text-line size="40"/>
+                    </default-field></field>
+                    <field name="allowUnvalidated"><default-field title="Permitir aunque falle schema">
+                        <drop-down no-current-selected-key="true"><option key="false" text="No"/><option key="true" text="Sí"/></drop-down>
+                    </default-field></field>
+                    <field name="jsonText"><default-field title="JSON del DTE">
+                        <text-area cols="90" rows="12"/>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Importar"><submit/></default-field></field>
+                </form-single>
+                <form-single name="RefreshReceivedDtes" transition="refreshReceivedDtes">
+                    <field name="organizationPartyId"><default-field title="Organización receptora">
+                        <text-line size="24"/>
+                    </default-field></field>
+                    <field name="periodYearMonth"><default-field title="Periodo YYYY-MM">
+                        <text-line size="8" default-value="${periodYearMonth}"/>
+                    </default-field></field>
+                    <field name="useLocalSim"><default-field title="Usar simulador local">
+                        <drop-down no-current-selected-key="true"><option key="true" text="Sí"/><option key="false" text="No"/></drop-down>
+                    </default-field></field>
+                    <field name="submitRefresh"><default-field title="Consultar recibidos"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="DTE recibidos registrados"/>
+            <box-body>
+                <form-list name="ReceivedDteList" list="receivedDteList" skip-form="true" show-csv-button="true">
+                    <field name="fechaEmision"><default-field title="Fecha"><display/></default-field></field>
+                    <field name="tipoDteCode"><default-field title="Tipo"><display/></default-field></field>
+                    <field name="numeroControl"><default-field title="Núm. control"><display/></default-field></field>
+                    <field name="emisorNombre"><default-field title="Proveedor"><display/></default-field></field>
+                    <field name="emisorNit"><default-field title="NIT"><display/></default-field></field>
+                    <field name="montoGravado"><default-field title="Gravado"><display/></default-field></field>
+                    <field name="iva"><default-field title="IVA"><display/></default-field></field>
+                    <field name="total"><default-field title="Total"><display/></default-field></field>
+                    <field name="validatedBySchema"><default-field title="Schema OK"><display/></default-field></field>
+                    <field name="selloRecepcion"><default-field title="Sello">
+                        <display text="${selloRecepcion ? 'Sí' : 'No'}"/>
+                    </default-field></field>
+                    <field name="consultaEstado"><default-field title="Estado MH"><display/></default-field></field>
+                    <field name="requiresReview"><default-field title="Alerta">
+                        <display text="${requiresReview == 'Y' ? reviewMessage : ''}"/>
+                    </default-field></field>
+                    <field name="consultaDate"><default-field title="Última consulta"><display/></default-field></field>
+                    <field name="codigoGeneracion"><default-field title="Cód. generación"><display/></default-field></field>
+                    <field name="actions"><default-field title="">
+                        <link url="refreshReceivedDte" text="Consultar" link-type="anchor-button"
+                              parameter-map="[dteRecepcionId:dteRecepcionId, organizationPartyId:organizationPartyId, periodYearMonth:periodYearMonth]"/>
+                    </default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

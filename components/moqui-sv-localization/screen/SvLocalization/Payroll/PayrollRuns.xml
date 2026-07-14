@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Corridas" default-menu-index="6">
+
+    <transition name="createPayrollRun">
+        <service-call name="sv.localization.PayrollSvServices.create#PayrollRun"/>
+        <default-response url="EditPayrollRun"/>
+    </transition>
+
+    <transition name="editPayrollRun"><default-response url="EditPayrollRun"/></transition>
+
+    <transition-include name="searchPartyList" location="component://SimpleScreens/template/party/PartyForms.xml"/>
+
+    <actions>
+        <entity-find entity-name="sv.localization.payroll.SvPayrollRun" list="runList">
+            <search-form-inputs default-order-by="-runDate,-periodYearMonth"/>
+        </entity-find>
+
+        <!-- Solo roles operativos (RRHH/Admin) crean corridas. Contador/Auditor en lectura. -->
+        <set field="canCreateRun" from="ec.user.isInGroup('SvRRHH') || ec.user.isInGroup('SvAdmin')"/>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Corridas de Nómina"/>
+            <box-toolbar>
+                <section name="PayrollWriteActions" condition="canCreateRun"><widgets>
+                <container-dialog id="NewRunDialog" button-text="Nueva Corrida" type="success">
+                    <form-single name="NewRunForm" transition="createPayrollRun">
+                        <field name="organizationPartyId"><default-field title="Organización">
+                            <drop-down><entity-options key="${partyId}" text="PartyNameTemplate">
+                                <entity-find entity-name="mantle.party.PartyDetailAndRole">
+                                    <econdition field-name="roleTypeId" value="OrgInternal"/>
+                                    <econdition field-name="disabled" value="N" or-null="true"/>
+                                    <order-by field-name="organizationName"/>
+                                </entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+                        <field name="periodYearMonth"><default-field title="Período (YYYY-MM)">
+                            <text-line size="10" maxlength="7"/>
+                        </default-field></field>
+                        <field name="currencyUomId"><default-field title="Moneda">
+                            <drop-down no-current-selected-key="USD"><option key="USD" text="USD"/></drop-down>
+                        </default-field></field>
+                        <field name="notes"><default-field title="Notas">
+                            <text-area cols="50" rows="2"/>
+                        </default-field></field>
+                        <field name="submitButton"><default-field title="Crear Corrida"><submit/></default-field></field>
+                    </form-single>
+                </container-dialog>
+                </widgets></section>
+            </box-toolbar>
+            <box-body-nopad>
+                <container style="table-responsive">
+                    <form-list name="PayrollRunList" list="runList" skip-form="true"
+                               header-dialog="true" saved-finds="true">
+                        <entity-find entity-name="sv.localization.payroll.SvPayrollRun" list="runList">
+                            <search-form-inputs default-order-by="-runDate,-periodYearMonth"/>
+                        </entity-find>
+
+                        <field name="svPayrollRunId">
+                            <header-field title="# Corrida" show-order-by="case-insensitive">
+                                <text-find size="10" hide-options="true"/>
+                            </header-field>
+                            <default-field>
+                                <link url="editPayrollRun" text="${svPayrollRunId}" link-type="anchor"
+                                      parameter-map="[svPayrollRunId:svPayrollRunId]"/>
+                            </default-field>
+                        </field>
+                        <field name="periodYearMonth">
+                            <header-field title="Período" show-order-by="true">
+                                <text-find size="8" hide-options="true"/>
+                            </header-field>
+                            <default-field><display/></default-field>
+                        </field>
+                        <field name="organizationPartyId">
+                            <header-field title="Organización">
+                                <drop-down allow-empty="true">
+                                    <entity-options key="${partyId}" text="PartyNameTemplate">
+                                        <entity-find entity-name="mantle.party.PartyDetailAndRole">
+                                            <econdition field-name="roleTypeId" value="OrgInternal"/>
+                                            <order-by field-name="organizationName"/>
+                                        </entity-find>
+                                    </entity-options>
+                                </drop-down>
+                            </header-field>
+                            <default-field>
+                                <display-entity entity-name="mantle.party.Organization" text="${organizationName ?: partyId}"/>
+                            </default-field>
+                        </field>
+                        <field name="statusId">
+                            <header-field title="Estado">
+                                <widget-template-include location="component://webroot/template/screen/BasicWidgetTemplates.xml#statusDropDown">
+                                    <set field="statusTypeId" value="SvPayrollRun"/>
+                                    <set field="allowEmpty" value="true"/>
+                                    <set field="allowMultiple" value="true"/>
+                                </widget-template-include>
+                            </header-field>
+                            <default-field><display-entity entity-name="moqui.basic.StatusItem"/></default-field>
+                        </field>
+                        <field name="employeeCount">
+                            <header-field title="Empleados"/>
+                            <default-field><display/></default-field>
+                        </field>
+                        <field name="totalGross">
+                            <header-field title="Bruto Total"/>
+                            <default-field><display format="$ #,##0.00"/></default-field>
+                        </field>
+                        <field name="totalNet">
+                            <header-field title="Neto Total"/>
+                            <default-field><display format="$ #,##0.00"/></default-field>
+                        </field>
+                        <field name="totalEmployerCost">
+                            <header-field title="Costo Empresa"/>
+                            <default-field><display format="$ #,##0.00"/></default-field>
+                        </field>
+                        <field name="runDate">
+                            <header-field title="Fecha" show-order-by="true"/>
+                            <default-field><display format="dd/MM/yyyy HH:mm"/></default-field>
+                        </field>
+                        <field name="findButton"><header-field title="Buscar"><submit/></header-field></field>
+                    </form-list>
+                </container>
+            </box-body-nopad>
+        </container-box>
+    </widgets>
+</screen>

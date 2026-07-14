@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Configuración" default-menu-index="1">
+    <transition name="storeConfig"><service-call name="store#sv.localization.tax.SvTaxAuthorityConfig"/><default-response url="."/></transition>
+
+    <actions>
+        <entity-find entity-name="sv.localization.tax.SvTaxAuthorityConfig" list="configList">
+            <order-by field-name="taxAuthorityId"/>
+        </entity-find>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Configuración MH / Mock"/>
+            <box-body>
+                <form-list name="DteConfigList" list="configList" transition="storeConfig" multi="true">
+                    <field name="taxAuthorityId"><default-field title="Autoridad"><display also-hidden="true"/></default-field></field>
+                    <field name="mhAmbienteEnumId"><default-field title="Ambiente">
+                        <drop-down><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvAmbiente"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="nitEmisor"><default-field title="NIT emisor"><text-line size="18"/></default-field></field>
+                    <field name="defaultUserMh"><default-field title="Usuario MH"><text-line size="24"/></default-field></field>
+                    <field name="passwordMhSecretKey"><default-field title="Secret credencial MH"><text-line size="32"/></default-field></field>
+                    <field name="mockEnabled"><default-field title="Mock MH"><drop-down no-current-selected-key="Y">
+                        <option key="Y" text="Sí"/><option key="N" text="No"/>
+                    </drop-down></default-field></field>
+                    <field name="mhAuthUrl"><default-field title="Auth URL"><text-line size="60"/></default-field></field>
+                    <field name="mhRecepcionUrl"><default-field title="Recepción URL"><text-line size="60"/></default-field></field>
+                    <field name="mhAnulacionUrl"><default-field title="Anulación URL"><text-line size="60"/></default-field></field>
+                    <field name="mhContingenciaUrl"><default-field title="Contingencia URL"><text-line size="60"/></default-field></field>
+                    <field name="mhConsultaUrl"><default-field title="Consulta URL"><text-line size="60"/></default-field></field>
+                    <field name="submitButton"><default-field title="Guardar"><submit/></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

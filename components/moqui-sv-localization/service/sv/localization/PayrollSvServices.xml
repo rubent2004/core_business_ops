@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="calculate" noun="MonthlyPayroll" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="calculateMonthlyPayroll">
+        <description>Calcula nomina mensual SV local con reglas semilla vigentes.
+            No genera facturas, pagos ni asientos contables.</description>
+        <in-parameters>
+            <parameter name="grossMonthlyAmount" required="true"/>
+            <parameter name="asOfDate"/>
+            <parameter name="currencyUomId" default-value="USD"/>
+            <parameter name="includeEmployerContributions" type="Boolean" default-value="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="grossPay"/>
+            <parameter name="currencyUomId"/>
+            <parameter name="rentaBase"/>
+            <parameter name="rentaTaxableBase"/>
+            <parameter name="isssEmployee"/>
+            <parameter name="isssEmployer"/>
+            <parameter name="afpEmployee"/>
+            <parameter name="afpEmployer"/>
+            <parameter name="rentaMonthly"/>
+            <parameter name="totalEmployeeDeductions"/>
+            <parameter name="netPay"/>
+            <parameter name="totalEmployerContributions"/>
+            <parameter name="employerCost"/>
+            <parameter name="appliedSchemes" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="calculate" noun="VacationPay" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="calculateVacationPay">
+        <description>Calcula vacacion anual remunerada SV: 15 dias mas 30%.</description>
+        <in-parameters>
+            <parameter name="monthlySalary" required="true"/>
+            <parameter name="asOfDate"/>
+            <parameter name="currencyUomId" default-value="USD"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="monthlySalary"/>
+            <parameter name="dailySalary"/>
+            <parameter name="vacationDays" type="Integer"/>
+            <parameter name="baseVacationPay"/>
+            <parameter name="vacationBonus"/>
+            <parameter name="totalVacationPay"/>
+            <parameter name="currencyUomId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="calculate" noun="Aguinaldo" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="calculateAguinaldo">
+        <description>Calcula aguinaldo SV por antiguedad: 15, 19 o 21 dias.</description>
+        <in-parameters>
+            <parameter name="monthlySalary" required="true"/>
+            <parameter name="hireDate" required="true"/>
+            <parameter name="asOfDate"/>
+            <parameter name="currencyUomId" default-value="USD"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="monthlySalary"/>
+            <parameter name="dailySalary"/>
+            <parameter name="yearsOfService" type="Integer"/>
+            <parameter name="aguinaldoDays" type="Integer"/>
+            <parameter name="aguinaldoAmount"/>
+            <parameter name="currencyUomId"/>
+        </out-parameters>
+    </service>
+
+    <!-- =================================================================== -->
+    <!-- Corrida de nomina mensual: orquestracion sobre los calculos base    -->
+    <!-- =================================================================== -->
+
+    <service verb="create" noun="PayrollRun" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="createPayrollRun">
+        <description>Crea una corrida de nomina vacia para un periodo y organizacion.
+            El periodo debe estar en formato YYYY-MM. Status inicial: SvPayCreated.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="periodYearMonth" required="true">
+                <text-length min="7" max="7"/>
+            </parameter>
+            <parameter name="currencyUomId" default-value="USD"/>
+            <parameter name="notes"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svPayrollRunId"/>
+            <parameter name="statusId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="calculate" noun="PayrollRun" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="calculatePayrollRun">
+        <description>Calcula la corrida para todos los empleados activos de la organizacion.
+            Itera sobre PartyRole=Employee, obtiene salario base de RateAmount tipo PayMonthly,
+            invoca calculate#MonthlyPayroll, persiste un snapshot por empleado y actualiza totales.
+            La corrida pasa de SvPayCreated a SvPayCalculated.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+            <parameter name="includeAguinaldo" type="Boolean" default-value="false">
+                <description>Si true, agrega calculo de aguinaldo (usar solo en diciembre).</description>
+            </parameter>
+            <parameter name="includeVacation" type="Boolean" default-value="false">
+                <description>Si true, agrega calculo de vacacion anual.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svPayrollRunId"/>
+            <parameter name="employeeCount" type="Integer"/>
+            <parameter name="skippedCount" type="Integer"/>
+            <parameter name="totalGross"/>
+            <parameter name="totalNet"/>
+            <parameter name="totalEmployerCost"/>
+            <parameter name="statusId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="approve" noun="PayrollRun" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="approvePayrollRun">
+        <description>Aprueba una corrida calculada. Solo permitido desde SvPayCalculated.
+            Marca approvedByUserId y approvedDate. Las lineas pasan a SvPayLineApproved.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svPayrollRunId"/>
+            <parameter name="statusId"/>
+        </out-parameters>
+    </service>
+
+    <!-- =================================================================== -->
+    <!-- ACTUALIZACION SEGURA DE ESQUEMAS                                    -->
+    <!-- =================================================================== -->
+    <!-- Cuando el gobierno actualiza ISSS/AFP/Renta o salarios minimos NO   -->
+    <!-- se debe editar el esquema vigente: se crea una NUEVA VIGENCIA con   -->
+    <!-- fromDate del cambio, cerrando la anterior. Esto preserva el calculo -->
+    <!-- correcto de corridas historicas y permite recalculos puntuales para -->
+    <!-- corridas anteriores al cambio.                                      -->
+    <!-- =================================================================== -->
+
+    <service verb="version" noun="PayrollScheme" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="versionPayrollScheme">
+        <description>Versionado atomico de un SvPayrollScheme. Cierra la vigencia del
+            esquema actual (poniendo thruDate = effectiveFromDate) y crea una nueva con
+            fromDate = effectiveFromDate. Copia los tramos del esquema anterior para que
+            queden editables en el nuevo. Todo en una transaccion.
+
+            sourceSchemeId puede ser null si es la primera vigencia (no hay version anterior).
+            En ese caso newSchemeId y schemeTypeEnumId deben proporcionarse.</description>
+        <in-parameters>
+            <parameter name="sourceSchemeId">
+                <description>ID del esquema vigente a cerrar. Null si es primera vigencia.</description>
+            </parameter>
+            <parameter name="newSchemeId" required="true">
+                <description>ID unico de la nueva vigencia (ej. SvPayrollIsssEmp2027).</description>
+            </parameter>
+            <parameter name="effectiveFromDate" type="Timestamp" required="true">
+                <description>Fecha de inicio de la nueva vigencia. La anterior se cierra
+                    con thruDate = este valor.</description>
+            </parameter>
+            <parameter name="schemeTypeEnumId">
+                <description>Requerido si sourceSchemeId es null. Si se proporciona y
+                    sourceSchemeId existe, debe coincidir.</description>
+            </parameter>
+            <parameter name="description"/>
+            <parameter name="currencyUomId" default-value="USD"/>
+            <parameter name="copyBrackets" type="Boolean" default-value="true">
+                <description>Si true y existe sourceSchemeId, copia los tramos del esquema
+                    anterior. Si false, la nueva vigencia queda sin tramos.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="newSchemeId"/>
+            <parameter name="sourceSchemeId"/>
+            <parameter name="bracketsCopied" type="Integer"/>
+        </out-parameters>
+    </service>
+
+    <service verb="version" noun="MinimumWageSector" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="versionMinimumWageSector">
+        <description>Versionado atomico de un salario minimo sectorial. Cierra la
+            vigencia anterior del mismo sector con thruDate = effectiveFromDate y crea
+            una nueva fila con los nuevos montos.</description>
+        <in-parameters>
+            <parameter name="sectorEnumId" required="true"/>
+            <parameter name="effectiveFromDate" type="Timestamp" required="true"/>
+            <parameter name="monthlyAmount" required="true"/>
+            <parameter name="dailyAmount" required="true"/>
+            <parameter name="description"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="sectorEnumId"/>
+            <parameter name="effectiveFromDate"/>
+            <parameter name="previousFromDate"/>
+        </out-parameters>
+    </service>
+
+    <service verb="update" noun="PayrollSchemeBracketsSafe" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="updatePayrollSchemeBracketsSafe">
+        <description>Reemplaza todos los tramos de un esquema de forma transaccional.
+            Bloquea la operacion si existe una SvPayrollRun en estado SvPayCalculated o
+            SvPayApproved cuyo asOfDate cae dentro del periodo de vigencia del esquema:
+            en ese caso forzaria recalcular esos snapshots, lo cual debe ser una decision
+            explicita (recalcular la corrida).
+
+            Para corridas SvPayPosted (contabilizadas) la modificacion es siempre
+            permitida porque el snapshot ya esta congelado: el recalculo no afecta esa
+            corrida. Para SvPayCreated (sin calcular) tambien es seguro porque no hay
+            snapshot que invalidar.</description>
+        <in-parameters>
+            <parameter name="svPayrollSchemeId" required="true"/>
+            <parameter name="brackets" type="List" required="true">
+                <description>Lista de Maps con bracketSeq, bracketFromAmount,
+                    bracketThruAmount, percentage, fixedAmount, cap, deductionAmount,
+                    deductionAnnualMaxAmount.</description>
+            </parameter>
+            <parameter name="forceUnsafe" type="Boolean" default-value="false">
+                <description>Si true, omite el chequeo de corridas calculadas/aprobadas
+                    sin contabilizar. Solo usar en correccion de error de captura.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svPayrollSchemeId"/>
+            <parameter name="bracketsReplaced" type="Integer"/>
+            <parameter name="affectedRunIds" type="List"/>
+        </out-parameters>
+    </service>
+
+    <!-- =================================================================== -->
+    <!-- REPORTES: boleta PDF y exportes ISSS / AFP / Renta                  -->
+    <!-- =================================================================== -->
+
+    <service verb="get" noun="PayrollSlipContext" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="getPayrollSlipContext">
+        <description>Prepara el contexto (employee, payrollRun, organization, payrollLine, totals,
+            generatedAt) que consume la plantilla FOP de la boleta de pago. Usado por
+            renderPayrollSlip y por la pantalla standalone PrintPayrollSlip.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+            <parameter name="employeePartyId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="employee" type="Map"/>
+            <parameter name="payrollRun" type="Map"/>
+            <parameter name="organization" type="Map"/>
+            <parameter name="payrollLine"/>
+            <parameter name="totals" type="Map"/>
+            <parameter name="generatedAt"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="PayrollSlip" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="renderPayrollSlip">
+        <description>Genera la boleta de pago en PDF (FOP) para un empleado de una
+            corrida. Requiere que la linea exista y no este en estado SvPayLineSkipped.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+            <parameter name="employeePartyId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+        </out-parameters>
+    </service>
+
+    <service verb="export" noun="IsssReport" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="exportIsssReport">
+        <description>Genera CSV operativo de planilla ISSS para una corrida. Incluye
+            NUP ISSS, DUI, nombre, salario devengado, aporte trabajador 3%, aporte patronal 7.5%
+            y totales. No es formato oficial certificado por ISSS.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="csvText"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="rowCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="export" noun="AfpReport" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="exportAfpReport">
+        <description>Genera CSV operativo de planilla AFP para una corrida. Incluye
+            NUP AFP, DUI, AFP, nombre, salario base, aporte trabajador 7.25%, aporte patronal 8.75%
+            y totales. No es formato oficial certificado por SSF.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="csvText"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="rowCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+    <service verb="export" noun="RentaReport" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PayrollSvServices.groovy"
+             method="exportRentaReport">
+        <description>Genera CSV operativo de renta retenida para una corrida. Incluye
+            NIT, DUI, nombre, sueldo gravado, renta imponible (con deduccion especial aplicada)
+            y renta retenida. Util para insumo del formulario F-14 mensual y F-910 anual.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="csvText"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="rowCount" type="Integer"/>
+            <parameter name="totals" type="Map"/>
+        </out-parameters>
+    </service>
+
+</services>

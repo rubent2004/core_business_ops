@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="install">
+    <moqui.basic.Enumeration description="District" enumId="GEOT_DISTRICT" enumTypeId="GeoType"/>
+    <!-- Municipios repetidos para que distritos no dependan del orden alfabético de carga data/*.xml. -->
+    <moqui.basic.Geo geoId="SV01_M13" geoName="AHUACHAPÁN NORTE" geoNameLocal="Ahuachapán Norte" geoCodeAlpha2="13" geoCodeAlpha3="0113" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV01_M14" geoName="AHUACHAPÁN CENTRO" geoNameLocal="Ahuachapán Centro" geoCodeAlpha2="14" geoCodeAlpha3="0114" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV01_M15" geoName="AHUACHAPÁN SUR" geoNameLocal="Ahuachapán Sur" geoCodeAlpha2="15" geoCodeAlpha3="0115" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV02_M14" geoName="SANTA ANA NORTE" geoNameLocal="Santa Ana Norte" geoCodeAlpha2="14" geoCodeAlpha3="0214" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV02_M15" geoName="SANTA ANA CENTRO" geoNameLocal="Santa Ana Centro" geoCodeAlpha2="15" geoCodeAlpha3="0215" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV02_M16" geoName="SANTA ANA ESTE" geoNameLocal="Santa Ana Este" geoCodeAlpha2="16" geoCodeAlpha3="0216" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV02_M17" geoName="SANTA ANA OESTE" geoNameLocal="Santa Ana Oeste" geoCodeAlpha2="17" geoCodeAlpha3="0217" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV03_M17" geoName="SONSONATE NORTE" geoNameLocal="Sonsonate Norte" geoCodeAlpha2="17" geoCodeAlpha3="0317" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV03_M18" geoName="SONSONATE CENTRO" geoNameLocal="Sonsonate Centro" geoCodeAlpha2="18" geoCodeAlpha3="0318" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV03_M19" geoName="SONSONATE ESTE" geoNameLocal="Sonsonate Este" geoCodeAlpha2="19" geoCodeAlpha3="0319" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV03_M20" geoName="SONSONATE OESTE" geoNameLocal="Sonsonate Oeste" geoCodeAlpha2="20" geoCodeAlpha3="0320" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV04_M34" geoName="CHALATENANGO NORTE" geoNameLocal="Chalatenango Norte" geoCodeAlpha2="34" geoCodeAlpha3="0434" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV04_M35" geoName="CHALATENANGO CENTRO" geoNameLocal="Chalatenango Centro" geoCodeAlpha2="35" geoCodeAlpha3="0435" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV04_M36" geoName="CHALATENANGO SUR" geoNameLocal="Chalatenango Sur" geoCodeAlpha2="36" geoCodeAlpha3="0436" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV05_M23" geoName="LA LIBERTAD NORTE" geoNameLocal="La Libertad Norte" geoCodeAlpha2="23" geoCodeAlpha3="0523" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV05_M24" geoName="LA LIBERTAD CENTRO" geoNameLocal="La Libertad Centro" geoCodeAlpha2="24" geoCodeAlpha3="0524" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV05_M25" geoName="LA LIBERTAD OESTE" geoNameLocal="La Libertad Oeste" geoCodeAlpha2="25" geoCodeAlpha3="0525" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV05_M26" geoName="LA LIBERTAD ESTE" geoNameLocal="La Libertad Este" geoCodeAlpha2="26" geoCodeAlpha3="0526" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV05_M27" geoName="LA LIBERTAD COSTA" geoNameLocal="La Libertad Costa" geoCodeAlpha2="27" geoCodeAlpha3="0527" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV05_M28" geoName="LA LIBERTAD SUR" geoNameLocal="La Libertad Sur" geoCodeAlpha2="28" geoCodeAlpha3="0528" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV06_M20" geoName="SAN SALVADOR NORTE" geoNameLocal="San Salvador Norte" geoCodeAlpha2="20" geoCodeAlpha3="0620" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV06_M21" geoName="SAN SALVADOR OESTE" geoNameLocal="San Salvador Oeste" geoCodeAlpha2="21" geoCodeAlpha3="0621" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV06_M22" geoName="SAN SALVADOR ESTE" geoNameLocal="San Salvador Este" geoCodeAlpha2="22" geoCodeAlpha3="0622" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV06_M23" geoName="SAN SALVADOR CENTRO" geoNameLocal="San Salvador Centro" geoCodeAlpha2="23" geoCodeAlpha3="0623" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV06_M24" geoName="SAN SALVADOR SUR" geoNameLocal="San Salvador Sur" geoCodeAlpha2="24" geoCodeAlpha3="0624" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV07_M17" geoName="CUSCATLÁN NORTE" geoNameLocal="Cuscatlán Norte" geoCodeAlpha2="17" geoCodeAlpha3="0717" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV07_M18" geoName="CUSCATLÁN SUR" geoNameLocal="Cuscatlán Sur" geoCodeAlpha2="18" geoCodeAlpha3="0718" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV08_M23" geoName="LA PAZ OESTE" geoNameLocal="La Paz Oeste" geoCodeAlpha2="23" geoCodeAlpha3="0823" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV08_M24" geoName="LA PAZ CENTRO" geoNameLocal="La Paz Centro" geoCodeAlpha2="24" geoCodeAlpha3="0824" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV08_M25" geoName="LA PAZ ESTE" geoNameLocal="La Paz Este" geoCodeAlpha2="25" geoCodeAlpha3="0825" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV09_M10" geoName="CABAÑAS OESTE" geoNameLocal="Cabañas Oeste" geoCodeAlpha2="10" geoCodeAlpha3="0910" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV09_M11" geoName="CABAÑAS ESTE" geoNameLocal="Cabañas Este" geoCodeAlpha2="11" geoCodeAlpha3="0911" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV10_M14" geoName="SAN VICENTE NORTE" geoNameLocal="San Vicente Norte" geoCodeAlpha2="14" geoCodeAlpha3="1014" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV10_M15" geoName="SAN VICENTE SUR" geoNameLocal="San Vicente Sur" geoCodeAlpha2="15" geoCodeAlpha3="1015" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV11_M24" geoName="USULUTÁN NORTE" geoNameLocal="Usulután Norte" geoCodeAlpha2="24" geoCodeAlpha3="1124" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV11_M25" geoName="USULUTÁN ESTE" geoNameLocal="Usulután Este" geoCodeAlpha2="25" geoCodeAlpha3="1125" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV11_M26" geoName="USULUTÁN OESTE" geoNameLocal="Usulután Oeste" geoCodeAlpha2="26" geoCodeAlpha3="1126" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV12_M21" geoName="SAN MIGUEL NORTE" geoNameLocal="San Miguel Norte" geoCodeAlpha2="21" geoCodeAlpha3="1221" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV12_M22" geoName="SAN MIGUEL CENTRO" geoNameLocal="San Miguel Centro" geoCodeAlpha2="22" geoCodeAlpha3="1222" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV12_M23" geoName="SAN MIGUEL OESTE" geoNameLocal="San Miguel Oeste" geoCodeAlpha2="23" geoCodeAlpha3="1223" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV13_M27" geoName="MORAZÁN NORTE" geoNameLocal="Morazán Norte" geoCodeAlpha2="27" geoCodeAlpha3="1327" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV13_M28" geoName="MORAZÁN SUR" geoNameLocal="Morazán Sur" geoCodeAlpha2="28" geoCodeAlpha3="1328" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV14_M19" geoName="LA UNIÓN NORTE" geoNameLocal="La Unión Norte" geoCodeAlpha2="19" geoCodeAlpha3="1419" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV14_M20" geoName="LA UNIÓN SUR" geoNameLocal="La Unión Sur" geoCodeAlpha2="20" geoCodeAlpha3="1420" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.Geo geoId="SV01_M13_D01" geoName="Atiquizaya" geoCodeAlpha2="01" geoCodeAlpha3="011301" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M13" toGeoId="SV01_M13_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M13_D02" geoName="El Refugio" geoCodeAlpha2="02" geoCodeAlpha3="011302" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M13" toGeoId="SV01_M13_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M13_D03" geoName="San Lorenzo" geoCodeAlpha2="03" geoCodeAlpha3="011303" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M13" toGeoId="SV01_M13_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M13_D04" geoName="Turín" geoCodeAlpha2="04" geoCodeAlpha3="011304" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M13" toGeoId="SV01_M13_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M14_D01" geoName="Ahuachapán" geoCodeAlpha2="01" geoCodeAlpha3="011401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M14" toGeoId="SV01_M14_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M14_D02" geoName="Apaneca" geoCodeAlpha2="02" geoCodeAlpha3="011402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M14" toGeoId="SV01_M14_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M14_D03" geoName="Concepción de Ataco" geoCodeAlpha2="03" geoCodeAlpha3="011403" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M14" toGeoId="SV01_M14_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M14_D04" geoName="Tacuba" geoCodeAlpha2="04" geoCodeAlpha3="011404" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M14" toGeoId="SV01_M14_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M15_D01" geoName="Guaymango" geoCodeAlpha2="01" geoCodeAlpha3="011501" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M15" toGeoId="SV01_M15_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M15_D02" geoName="Jujutla" geoCodeAlpha2="02" geoCodeAlpha3="011502" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M15" toGeoId="SV01_M15_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M15_D03" geoName="San Francisco Menéndez" geoCodeAlpha2="03" geoCodeAlpha3="011503" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M15" toGeoId="SV01_M15_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M15_D04" geoName="San Pedro Puxtla" geoCodeAlpha2="04" geoCodeAlpha3="011504" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV01_M15" toGeoId="SV01_M15_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M14_D01" geoName="Masahuat" geoCodeAlpha2="01" geoCodeAlpha3="021401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M14" toGeoId="SV02_M14_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M14_D02" geoName="Metapán" geoCodeAlpha2="02" geoCodeAlpha3="021402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M14" toGeoId="SV02_M14_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M14_D03" geoName="Santa Rosa Guachipilín" geoCodeAlpha2="03" geoCodeAlpha3="021403" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M14" toGeoId="SV02_M14_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M14_D04" geoName="Texistepeque" geoCodeAlpha2="04" geoCodeAlpha3="021404" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M14" toGeoId="SV02_M14_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M15_D01" geoName="Santa Ana" geoCodeAlpha2="01" geoCodeAlpha3="021501" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M15" toGeoId="SV02_M15_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M16_D01" geoName="Coatepeque" geoCodeAlpha2="01" geoCodeAlpha3="021601" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M16" toGeoId="SV02_M16_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M16_D02" geoName="El Congo" geoCodeAlpha2="02" geoCodeAlpha3="021602" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M16" toGeoId="SV02_M16_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M17_D01" geoName="Candelaria de la Frontera" geoCodeAlpha2="01" geoCodeAlpha3="021701" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M17" toGeoId="SV02_M17_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M17_D02" geoName="Chalchuapa" geoCodeAlpha2="02" geoCodeAlpha3="021702" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M17" toGeoId="SV02_M17_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M17_D03" geoName="El Porvenir" geoCodeAlpha2="03" geoCodeAlpha3="021703" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M17" toGeoId="SV02_M17_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M17_D04" geoName="San Antonio Pajonal" geoCodeAlpha2="04" geoCodeAlpha3="021704" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M17" toGeoId="SV02_M17_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M17_D05" geoName="San Sebastián Salitrillo" geoCodeAlpha2="05" geoCodeAlpha3="021705" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M17" toGeoId="SV02_M17_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M17_D06" geoName="Santiago de la Frontera" geoCodeAlpha2="06" geoCodeAlpha3="021706" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV02_M17" toGeoId="SV02_M17_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M17_D01" geoName="Juayúa" geoCodeAlpha2="01" geoCodeAlpha3="031701" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M17" toGeoId="SV03_M17_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M17_D02" geoName="Nahuizalco" geoCodeAlpha2="02" geoCodeAlpha3="031702" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M17" toGeoId="SV03_M17_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M17_D03" geoName="Salcoatitán" geoCodeAlpha2="03" geoCodeAlpha3="031703" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M17" toGeoId="SV03_M17_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M17_D04" geoName="Santa Catarina Masahuat" geoCodeAlpha2="04" geoCodeAlpha3="031704" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M17" toGeoId="SV03_M17_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M18_D01" geoName="Sonsonate" geoCodeAlpha2="01" geoCodeAlpha3="031801" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M18" toGeoId="SV03_M18_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M18_D02" geoName="Sonzacate" geoCodeAlpha2="02" geoCodeAlpha3="031802" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M18" toGeoId="SV03_M18_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M18_D03" geoName="Nahulingo" geoCodeAlpha2="03" geoCodeAlpha3="031803" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M18" toGeoId="SV03_M18_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M18_D04" geoName="San Antonio del Monte" geoCodeAlpha2="04" geoCodeAlpha3="031804" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M18" toGeoId="SV03_M18_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M18_D05" geoName="Santo Domingo de Guzmán" geoCodeAlpha2="05" geoCodeAlpha3="031805" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M18" toGeoId="SV03_M18_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M19_D01" geoName="Izalco" geoCodeAlpha2="01" geoCodeAlpha3="031901" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M19" toGeoId="SV03_M19_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M19_D02" geoName="Armenia" geoCodeAlpha2="02" geoCodeAlpha3="031902" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M19" toGeoId="SV03_M19_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M19_D03" geoName="Caluco" geoCodeAlpha2="03" geoCodeAlpha3="031903" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M19" toGeoId="SV03_M19_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M19_D04" geoName="San Julián" geoCodeAlpha2="04" geoCodeAlpha3="031904" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M19" toGeoId="SV03_M19_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M19_D05" geoName="Cuisnahuat" geoCodeAlpha2="05" geoCodeAlpha3="031905" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M19" toGeoId="SV03_M19_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M19_D06" geoName="Santa Isabel Ishuatán" geoCodeAlpha2="06" geoCodeAlpha3="031906" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M19" toGeoId="SV03_M19_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M20_D01" geoName="Acajutla" geoCodeAlpha2="01" geoCodeAlpha3="032001" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV03_M20" toGeoId="SV03_M20_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M34_D01" geoName="La Palma" geoCodeAlpha2="01" geoCodeAlpha3="043401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M34" toGeoId="SV04_M34_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M34_D02" geoName="Citalá" geoCodeAlpha2="02" geoCodeAlpha3="043402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M34" toGeoId="SV04_M34_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M34_D03" geoName="San Ignacio" geoCodeAlpha2="03" geoCodeAlpha3="043403" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M34" toGeoId="SV04_M34_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D01" geoName="Nueva Concepción" geoCodeAlpha2="01" geoCodeAlpha3="043501" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D02" geoName="Tejutla" geoCodeAlpha2="02" geoCodeAlpha3="043502" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D03" geoName="La Reina" geoCodeAlpha2="03" geoCodeAlpha3="043503" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D04" geoName="Agua Caliente" geoCodeAlpha2="04" geoCodeAlpha3="043504" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D05" geoName="Dulce Nombre de María" geoCodeAlpha2="05" geoCodeAlpha3="043505" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D06" geoName="El Paraíso" geoCodeAlpha2="06" geoCodeAlpha3="043506" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D07" geoName="San Fernando" geoCodeAlpha2="07" geoCodeAlpha3="043507" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D08" geoName="San Francisco Morazán" geoCodeAlpha2="08" geoCodeAlpha3="043508" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D09" geoName="San Rafael" geoCodeAlpha2="09" geoCodeAlpha3="043509" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35_D10" geoName="Santa Rita" geoCodeAlpha2="10" geoCodeAlpha3="043510" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M35" toGeoId="SV04_M35_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D01" geoName="Chalatenango" geoCodeAlpha2="01" geoCodeAlpha3="043601" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D02" geoName="Arcatao" geoCodeAlpha2="02" geoCodeAlpha3="043602" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D03" geoName="Azacualpa" geoCodeAlpha2="03" geoCodeAlpha3="043603" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D04" geoName="Comalapa" geoCodeAlpha2="04" geoCodeAlpha3="043604" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D05" geoName="Concepción Quezaltepeque" geoCodeAlpha2="05" geoCodeAlpha3="043605" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D06" geoName="El Carrizal" geoCodeAlpha2="06" geoCodeAlpha3="043606" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D07" geoName="La Laguna" geoCodeAlpha2="07" geoCodeAlpha3="043607" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D08" geoName="Las Vueltas" geoCodeAlpha2="08" geoCodeAlpha3="043608" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D09" geoName="Nombre de Jesús" geoCodeAlpha2="09" geoCodeAlpha3="043609" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D10" geoName="Nueva Trinidad" geoCodeAlpha2="10" geoCodeAlpha3="043610" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D11" geoName="Ojos de Agua" geoCodeAlpha2="11" geoCodeAlpha3="043611" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D11" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D12" geoName="Potonico" geoCodeAlpha2="12" geoCodeAlpha3="043612" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D12" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D13" geoName="San Antonio de la Cruz" geoCodeAlpha2="13" geoCodeAlpha3="043613" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D13" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D14" geoName="San Antonio Los Ranchos" geoCodeAlpha2="14" geoCodeAlpha3="043614" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D14" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D15" geoName="San Francisco Lempa" geoCodeAlpha2="15" geoCodeAlpha3="043615" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D15" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D16" geoName="San Isidro Labrador" geoCodeAlpha2="16" geoCodeAlpha3="043616" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D16" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D17" geoName="San José Cancasque" geoCodeAlpha2="17" geoCodeAlpha3="043617" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D17" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D18" geoName="San Miguel de Mercedes" geoCodeAlpha2="18" geoCodeAlpha3="043618" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D18" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D19" geoName="San José Las Flores" geoCodeAlpha2="19" geoCodeAlpha3="043619" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D19" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36_D20" geoName="San Luis del Carmen" geoCodeAlpha2="20" geoCodeAlpha3="043620" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV04_M36" toGeoId="SV04_M36_D20" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M23_D01" geoName="Quezaltepeque" geoCodeAlpha2="01" geoCodeAlpha3="052301" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M23" toGeoId="SV05_M23_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M23_D02" geoName="San Matías" geoCodeAlpha2="02" geoCodeAlpha3="052302" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M23" toGeoId="SV05_M23_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M23_D03" geoName="San Pablo Tacachico" geoCodeAlpha2="03" geoCodeAlpha3="052303" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M23" toGeoId="SV05_M23_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M24_D01" geoName="San Juan Opico" geoCodeAlpha2="01" geoCodeAlpha3="052401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M24" toGeoId="SV05_M24_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M24_D02" geoName="Ciudad Arce" geoCodeAlpha2="02" geoCodeAlpha3="052402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M24" toGeoId="SV05_M24_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M25_D01" geoName="Colón" geoCodeAlpha2="01" geoCodeAlpha3="052501" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M25" toGeoId="SV05_M25_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M25_D02" geoName="Jayaque" geoCodeAlpha2="02" geoCodeAlpha3="052502" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M25" toGeoId="SV05_M25_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M25_D03" geoName="Sacacoyo" geoCodeAlpha2="03" geoCodeAlpha3="052503" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M25" toGeoId="SV05_M25_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M25_D04" geoName="Tepecoyo" geoCodeAlpha2="04" geoCodeAlpha3="052504" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M25" toGeoId="SV05_M25_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M25_D05" geoName="Talnique" geoCodeAlpha2="05" geoCodeAlpha3="052505" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M25" toGeoId="SV05_M25_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M26_D01" geoName="Antiguo Cuscatlán" geoCodeAlpha2="01" geoCodeAlpha3="052601" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M26" toGeoId="SV05_M26_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M26_D02" geoName="Huizúcar" geoCodeAlpha2="02" geoCodeAlpha3="052602" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M26" toGeoId="SV05_M26_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M26_D03" geoName="Nuevo Cuscatlán" geoCodeAlpha2="03" geoCodeAlpha3="052603" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M26" toGeoId="SV05_M26_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M26_D04" geoName="San José Villanueva" geoCodeAlpha2="04" geoCodeAlpha3="052604" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M26" toGeoId="SV05_M26_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M26_D05" geoName="Zaragoza" geoCodeAlpha2="05" geoCodeAlpha3="052605" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M26" toGeoId="SV05_M26_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M27_D01" geoName="Chiltiupán" geoCodeAlpha2="01" geoCodeAlpha3="052701" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M27" toGeoId="SV05_M27_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M27_D02" geoName="Jicalapa" geoCodeAlpha2="02" geoCodeAlpha3="052702" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M27" toGeoId="SV05_M27_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M27_D03" geoName="La Libertad" geoCodeAlpha2="03" geoCodeAlpha3="052703" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M27" toGeoId="SV05_M27_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M27_D04" geoName="Tamanique" geoCodeAlpha2="04" geoCodeAlpha3="052704" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M27" toGeoId="SV05_M27_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M27_D05" geoName="Teotepeque" geoCodeAlpha2="05" geoCodeAlpha3="052705" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M27" toGeoId="SV05_M27_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M28_D01" geoName="Comasagua" geoCodeAlpha2="01" geoCodeAlpha3="052801" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M28" toGeoId="SV05_M28_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M28_D02" geoName="Santa Tecla" geoCodeAlpha2="02" geoCodeAlpha3="052802" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV05_M28" toGeoId="SV05_M28_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M20_D01" geoName="Aguilares" geoCodeAlpha2="01" geoCodeAlpha3="062001" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M20" toGeoId="SV06_M20_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M20_D02" geoName="El Paisnal" geoCodeAlpha2="02" geoCodeAlpha3="062002" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M20" toGeoId="SV06_M20_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M20_D03" geoName="Guazapa" geoCodeAlpha2="03" geoCodeAlpha3="062003" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M20" toGeoId="SV06_M20_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M21_D01" geoName="Apopa" geoCodeAlpha2="01" geoCodeAlpha3="062101" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M21" toGeoId="SV06_M21_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M21_D02" geoName="Nejapa" geoCodeAlpha2="02" geoCodeAlpha3="062102" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M21" toGeoId="SV06_M21_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M22_D01" geoName="Ilopango" geoCodeAlpha2="01" geoCodeAlpha3="062201" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M22" toGeoId="SV06_M22_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M22_D02" geoName="San Martín" geoCodeAlpha2="02" geoCodeAlpha3="062202" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M22" toGeoId="SV06_M22_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M22_D03" geoName="Soyapango" geoCodeAlpha2="03" geoCodeAlpha3="062203" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M22" toGeoId="SV06_M22_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M22_D04" geoName="Tonacatepeque" geoCodeAlpha2="04" geoCodeAlpha3="062204" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M22" toGeoId="SV06_M22_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M23_D01" geoName="Ayutuxtepeque" geoCodeAlpha2="01" geoCodeAlpha3="062301" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M23" toGeoId="SV06_M23_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M23_D02" geoName="Mejicanos" geoCodeAlpha2="02" geoCodeAlpha3="062302" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M23" toGeoId="SV06_M23_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M23_D03" geoName="San Salvador" geoCodeAlpha2="03" geoCodeAlpha3="062303" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M23" toGeoId="SV06_M23_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M23_D04" geoName="Cuscatancingo" geoCodeAlpha2="04" geoCodeAlpha3="062304" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M23" toGeoId="SV06_M23_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M23_D05" geoName="Ciudad Delgado" geoCodeAlpha2="05" geoCodeAlpha3="062305" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M23" toGeoId="SV06_M23_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M24_D01" geoName="Panchimalco" geoCodeAlpha2="01" geoCodeAlpha3="062401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M24" toGeoId="SV06_M24_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M24_D02" geoName="Rosario de Mora" geoCodeAlpha2="02" geoCodeAlpha3="062402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M24" toGeoId="SV06_M24_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M24_D03" geoName="San Marcos" geoCodeAlpha2="03" geoCodeAlpha3="062403" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M24" toGeoId="SV06_M24_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M24_D04" geoName="Santo Tomás" geoCodeAlpha2="04" geoCodeAlpha3="062404" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M24" toGeoId="SV06_M24_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M24_D05" geoName="Santiago Texacuangos" geoCodeAlpha2="05" geoCodeAlpha3="062405" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV06_M24" toGeoId="SV06_M24_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M17_D01" geoName="Suchitoto" geoCodeAlpha2="01" geoCodeAlpha3="071701" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M17" toGeoId="SV07_M17_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M17_D02" geoName="San José Guayabal" geoCodeAlpha2="02" geoCodeAlpha3="071702" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M17" toGeoId="SV07_M17_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M17_D03" geoName="Oratorio de Concepción" geoCodeAlpha2="03" geoCodeAlpha3="071703" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M17" toGeoId="SV07_M17_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M17_D04" geoName="San Bartolomé Perulapía" geoCodeAlpha2="04" geoCodeAlpha3="071704" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M17" toGeoId="SV07_M17_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M17_D05" geoName="San Pedro Perulapán" geoCodeAlpha2="05" geoCodeAlpha3="071705" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M17" toGeoId="SV07_M17_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D01" geoName="Cojutepeque" geoCodeAlpha2="01" geoCodeAlpha3="071801" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D02" geoName="San Rafael Cedros" geoCodeAlpha2="02" geoCodeAlpha3="071802" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D03" geoName="Candelaria" geoCodeAlpha2="03" geoCodeAlpha3="071803" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D04" geoName="Monte San Juan" geoCodeAlpha2="04" geoCodeAlpha3="071804" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D05" geoName="El Carmen" geoCodeAlpha2="05" geoCodeAlpha3="071805" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D06" geoName="San Cristóbal" geoCodeAlpha2="06" geoCodeAlpha3="071806" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D07" geoName="Santa Cruz Michapa" geoCodeAlpha2="07" geoCodeAlpha3="071807" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D08" geoName="San Ramón" geoCodeAlpha2="08" geoCodeAlpha3="071808" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D09" geoName="El Rosario" geoCodeAlpha2="09" geoCodeAlpha3="071809" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D10" geoName="Santa Cruz Analquito" geoCodeAlpha2="10" geoCodeAlpha3="071810" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18_D11" geoName="Tenancingo" geoCodeAlpha2="11" geoCodeAlpha3="071811" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV07_M18" toGeoId="SV07_M18_D11" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23_D01" geoName="Cuyultitán" geoCodeAlpha2="01" geoCodeAlpha3="082301" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M23" toGeoId="SV08_M23_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23_D02" geoName="Olocuilta" geoCodeAlpha2="02" geoCodeAlpha3="082302" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M23" toGeoId="SV08_M23_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23_D03" geoName="San Juan Talpa" geoCodeAlpha2="03" geoCodeAlpha3="082303" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M23" toGeoId="SV08_M23_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23_D04" geoName="San Luis Talpa" geoCodeAlpha2="04" geoCodeAlpha3="082304" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M23" toGeoId="SV08_M23_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23_D05" geoName="San Pedro Masahuat" geoCodeAlpha2="05" geoCodeAlpha3="082305" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M23" toGeoId="SV08_M23_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23_D06" geoName="Tapalhuaca" geoCodeAlpha2="06" geoCodeAlpha3="082306" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M23" toGeoId="SV08_M23_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23_D07" geoName="San Francisco Chinameca" geoCodeAlpha2="07" geoCodeAlpha3="082307" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M23" toGeoId="SV08_M23_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D01" geoName="El Rosario" geoCodeAlpha2="01" geoCodeAlpha3="082401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D02" geoName="Jerusalén" geoCodeAlpha2="02" geoCodeAlpha3="082402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D03" geoName="Mercedes La Ceiba" geoCodeAlpha2="03" geoCodeAlpha3="082403" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D04" geoName="Paraíso de Osorio" geoCodeAlpha2="04" geoCodeAlpha3="082404" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D05" geoName="San Antonio Masahuat" geoCodeAlpha2="05" geoCodeAlpha3="082405" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D06" geoName="San Emigdio" geoCodeAlpha2="06" geoCodeAlpha3="082406" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D07" geoName="San Juan Tepezontes" geoCodeAlpha2="07" geoCodeAlpha3="082407" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D08" geoName="San Luis La Herradura" geoCodeAlpha2="08" geoCodeAlpha3="082408" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D09" geoName="San Miguel Tepezontes" geoCodeAlpha2="09" geoCodeAlpha3="082409" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D10" geoName="San Pedro Nonualco" geoCodeAlpha2="10" geoCodeAlpha3="082410" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D11" geoName="Santa María Ostuma" geoCodeAlpha2="11" geoCodeAlpha3="082411" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D11" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24_D12" geoName="Santiago Nonualco" geoCodeAlpha2="12" geoCodeAlpha3="082412" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M24" toGeoId="SV08_M24_D12" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M25_D01" geoName="San Juan Nonualco" geoCodeAlpha2="01" geoCodeAlpha3="082501" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M25" toGeoId="SV08_M25_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M25_D02" geoName="San Rafael Obrajuelo" geoCodeAlpha2="02" geoCodeAlpha3="082502" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M25" toGeoId="SV08_M25_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M25_D03" geoName="Zacatecoluca" geoCodeAlpha2="03" geoCodeAlpha3="082503" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV08_M25" toGeoId="SV08_M25_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M10_D01" geoName="Ilobasco" geoCodeAlpha2="01" geoCodeAlpha3="091001" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M10" toGeoId="SV09_M10_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M10_D02" geoName="Tejutepeque" geoCodeAlpha2="02" geoCodeAlpha3="091002" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M10" toGeoId="SV09_M10_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M10_D03" geoName="Jutiapa" geoCodeAlpha2="03" geoCodeAlpha3="091003" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M10" toGeoId="SV09_M10_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M10_D04" geoName="Cinquera" geoCodeAlpha2="04" geoCodeAlpha3="091004" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M10" toGeoId="SV09_M10_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M11_D01" geoName="Sensuntepeque" geoCodeAlpha2="01" geoCodeAlpha3="091101" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M11" toGeoId="SV09_M11_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M11_D02" geoName="Victoria" geoCodeAlpha2="02" geoCodeAlpha3="091102" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M11" toGeoId="SV09_M11_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M11_D03" geoName="Dolores" geoCodeAlpha2="03" geoCodeAlpha3="091103" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M11" toGeoId="SV09_M11_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M11_D04" geoName="Guacotecti" geoCodeAlpha2="04" geoCodeAlpha3="091104" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M11" toGeoId="SV09_M11_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M11_D05" geoName="San Isidro" geoCodeAlpha2="05" geoCodeAlpha3="091105" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV09_M11" toGeoId="SV09_M11_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14_D01" geoName="Apastepeque" geoCodeAlpha2="01" geoCodeAlpha3="101401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M14" toGeoId="SV10_M14_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14_D02" geoName="Santa Clara" geoCodeAlpha2="02" geoCodeAlpha3="101402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M14" toGeoId="SV10_M14_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14_D03" geoName="San Ildefonso" geoCodeAlpha2="03" geoCodeAlpha3="101403" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M14" toGeoId="SV10_M14_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14_D04" geoName="San Esteban Catarina" geoCodeAlpha2="04" geoCodeAlpha3="101404" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M14" toGeoId="SV10_M14_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14_D05" geoName="San Sebastián" geoCodeAlpha2="05" geoCodeAlpha3="101405" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M14" toGeoId="SV10_M14_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14_D06" geoName="San Lorenzo" geoCodeAlpha2="06" geoCodeAlpha3="101406" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M14" toGeoId="SV10_M14_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14_D07" geoName="Santo Domingo" geoCodeAlpha2="07" geoCodeAlpha3="101407" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M14" toGeoId="SV10_M14_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M15_D01" geoName="San Vicente" geoCodeAlpha2="01" geoCodeAlpha3="101501" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M15" toGeoId="SV10_M15_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M15_D02" geoName="Guadalupe" geoCodeAlpha2="02" geoCodeAlpha3="101502" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M15" toGeoId="SV10_M15_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M15_D03" geoName="Verapaz" geoCodeAlpha2="03" geoCodeAlpha3="101503" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M15" toGeoId="SV10_M15_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M15_D04" geoName="Tepetitán" geoCodeAlpha2="04" geoCodeAlpha3="101504" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M15" toGeoId="SV10_M15_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M15_D05" geoName="Tecoluca" geoCodeAlpha2="05" geoCodeAlpha3="101505" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M15" toGeoId="SV10_M15_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M15_D06" geoName="San Cayetano Istepeque" geoCodeAlpha2="06" geoCodeAlpha3="101506" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV10_M15" toGeoId="SV10_M15_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D01" geoName="Santiago de María" geoCodeAlpha2="01" geoCodeAlpha3="112401" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D02" geoName="Alegría" geoCodeAlpha2="02" geoCodeAlpha3="112402" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D03" geoName="Berlín" geoCodeAlpha2="03" geoCodeAlpha3="112403" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D04" geoName="Mercedes Umaña" geoCodeAlpha2="04" geoCodeAlpha3="112404" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D05" geoName="Jucuapa" geoCodeAlpha2="05" geoCodeAlpha3="112405" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D06" geoName="El Triunfo" geoCodeAlpha2="06" geoCodeAlpha3="112406" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D07" geoName="Estanzuelas" geoCodeAlpha2="07" geoCodeAlpha3="112407" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D08" geoName="San Buenaventura" geoCodeAlpha2="08" geoCodeAlpha3="112408" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24_D09" geoName="Nueva Granada" geoCodeAlpha2="09" geoCodeAlpha3="112409" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M24" toGeoId="SV11_M24_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D01" geoName="Usulután" geoCodeAlpha2="01" geoCodeAlpha3="112501" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D02" geoName="Jucuarán" geoCodeAlpha2="02" geoCodeAlpha3="112502" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D03" geoName="San Dionisio" geoCodeAlpha2="03" geoCodeAlpha3="112503" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D04" geoName="Concepción Batres" geoCodeAlpha2="04" geoCodeAlpha3="112504" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D05" geoName="Santa María" geoCodeAlpha2="05" geoCodeAlpha3="112505" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D06" geoName="Ozatlán" geoCodeAlpha2="06" geoCodeAlpha3="112506" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D07" geoName="Tecapán" geoCodeAlpha2="07" geoCodeAlpha3="112507" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D08" geoName="Santa Elena" geoCodeAlpha2="08" geoCodeAlpha3="112508" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D09" geoName="California" geoCodeAlpha2="09" geoCodeAlpha3="112509" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25_D10" geoName="Ereguayquín" geoCodeAlpha2="10" geoCodeAlpha3="112510" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M25" toGeoId="SV11_M25_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M26_D01" geoName="Jiquilisco" geoCodeAlpha2="01" geoCodeAlpha3="112601" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M26" toGeoId="SV11_M26_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M26_D02" geoName="Puerto El Triunfo" geoCodeAlpha2="02" geoCodeAlpha3="112602" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M26" toGeoId="SV11_M26_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M26_D03" geoName="San Agustín" geoCodeAlpha2="03" geoCodeAlpha3="112603" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M26" toGeoId="SV11_M26_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M26_D04" geoName="San Francisco Javier" geoCodeAlpha2="04" geoCodeAlpha3="112604" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV11_M26" toGeoId="SV11_M26_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D01" geoName="Ciudad Barrios" geoCodeAlpha2="01" geoCodeAlpha3="122101" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D02" geoName="Sesori" geoCodeAlpha2="02" geoCodeAlpha3="122102" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D03" geoName="Nuevo Edén de San Juan" geoCodeAlpha2="03" geoCodeAlpha3="122103" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D04" geoName="San Gerardo" geoCodeAlpha2="04" geoCodeAlpha3="122104" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D05" geoName="San Luis de la Reina" geoCodeAlpha2="05" geoCodeAlpha3="122105" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D06" geoName="Carolina" geoCodeAlpha2="06" geoCodeAlpha3="122106" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D07" geoName="San Antonio del Mosco" geoCodeAlpha2="07" geoCodeAlpha3="122107" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21_D08" geoName="Chapeltique" geoCodeAlpha2="08" geoCodeAlpha3="122108" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M21" toGeoId="SV12_M21_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M22_D01" geoName="San Miguel" geoCodeAlpha2="01" geoCodeAlpha3="122201" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M22" toGeoId="SV12_M22_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M22_D02" geoName="Comacarán" geoCodeAlpha2="02" geoCodeAlpha3="122202" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M22" toGeoId="SV12_M22_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M22_D03" geoName="Uluazapa" geoCodeAlpha2="03" geoCodeAlpha3="122203" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M22" toGeoId="SV12_M22_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M22_D04" geoName="Moncagua" geoCodeAlpha2="04" geoCodeAlpha3="122204" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M22" toGeoId="SV12_M22_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M22_D05" geoName="Quelepa" geoCodeAlpha2="05" geoCodeAlpha3="122205" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M22" toGeoId="SV12_M22_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M22_D06" geoName="Chirilagua" geoCodeAlpha2="06" geoCodeAlpha3="122206" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M22" toGeoId="SV12_M22_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M23_D01" geoName="Chinameca" geoCodeAlpha2="01" geoCodeAlpha3="122301" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M23" toGeoId="SV12_M23_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M23_D02" geoName="Nueva Guadalupe" geoCodeAlpha2="02" geoCodeAlpha3="122302" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M23" toGeoId="SV12_M23_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M23_D03" geoName="Lolotique" geoCodeAlpha2="03" geoCodeAlpha3="122303" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M23" toGeoId="SV12_M23_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M23_D04" geoName="San Jorge" geoCodeAlpha2="04" geoCodeAlpha3="122304" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M23" toGeoId="SV12_M23_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M23_D05" geoName="San Rafael Oriente" geoCodeAlpha2="05" geoCodeAlpha3="122305" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M23" toGeoId="SV12_M23_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M23_D06" geoName="El Tránsito" geoCodeAlpha2="06" geoCodeAlpha3="122306" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV12_M23" toGeoId="SV12_M23_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D01" geoName="Arambala" geoCodeAlpha2="01" geoCodeAlpha3="132701" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D02" geoName="Cacaopera" geoCodeAlpha2="02" geoCodeAlpha3="132702" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D03" geoName="Corinto" geoCodeAlpha2="03" geoCodeAlpha3="132703" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D04" geoName="El Rosario" geoCodeAlpha2="04" geoCodeAlpha3="132704" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D05" geoName="Joateca" geoCodeAlpha2="05" geoCodeAlpha3="132705" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D06" geoName="Jocoaitique" geoCodeAlpha2="06" geoCodeAlpha3="132706" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D07" geoName="Meanguera" geoCodeAlpha2="07" geoCodeAlpha3="132707" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D08" geoName="Perquín" geoCodeAlpha2="08" geoCodeAlpha3="132708" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D09" geoName="San Fernando" geoCodeAlpha2="09" geoCodeAlpha3="132709" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D10" geoName="San Isidro" geoCodeAlpha2="10" geoCodeAlpha3="132710" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27_D11" geoName="Torola" geoCodeAlpha2="11" geoCodeAlpha3="132711" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M27" toGeoId="SV13_M27_D11" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D01" geoName="Chilanga" geoCodeAlpha2="01" geoCodeAlpha3="132801" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D02" geoName="Delicias de Concepción" geoCodeAlpha2="02" geoCodeAlpha3="132802" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D03" geoName="El Divisadero" geoCodeAlpha2="03" geoCodeAlpha3="132803" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D04" geoName="Gualococti" geoCodeAlpha2="04" geoCodeAlpha3="132804" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D05" geoName="Guatajiagua" geoCodeAlpha2="05" geoCodeAlpha3="132805" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D06" geoName="Jocoro" geoCodeAlpha2="06" geoCodeAlpha3="132806" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D07" geoName="Lolotiquillo" geoCodeAlpha2="07" geoCodeAlpha3="132807" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D08" geoName="Osicala" geoCodeAlpha2="08" geoCodeAlpha3="132808" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D09" geoName="San Carlos" geoCodeAlpha2="09" geoCodeAlpha3="132809" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D10" geoName="San Francisco Gotera" geoCodeAlpha2="10" geoCodeAlpha3="132810" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D11" geoName="San Simón" geoCodeAlpha2="11" geoCodeAlpha3="132811" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D11" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D12" geoName="Sensembra" geoCodeAlpha2="12" geoCodeAlpha3="132812" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D12" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D13" geoName="Sociedad" geoCodeAlpha2="13" geoCodeAlpha3="132813" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D13" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D14" geoName="Yamabal" geoCodeAlpha2="14" geoCodeAlpha3="132814" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D14" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28_D15" geoName="Yoloaiquín" geoCodeAlpha2="15" geoCodeAlpha3="132815" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV13_M28" toGeoId="SV13_M28_D15" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D01" geoName="Anamorós" geoCodeAlpha2="01" geoCodeAlpha3="141901" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D02" geoName="Bolívar" geoCodeAlpha2="02" geoCodeAlpha3="141902" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D03" geoName="Concepción de Oriente" geoCodeAlpha2="03" geoCodeAlpha3="141903" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D04" geoName="El Sauce" geoCodeAlpha2="04" geoCodeAlpha3="141904" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D05" geoName="Lislique" geoCodeAlpha2="05" geoCodeAlpha3="141905" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D06" geoName="Nueva Esparta" geoCodeAlpha2="06" geoCodeAlpha3="141906" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D07" geoName="Pasaquina" geoCodeAlpha2="07" geoCodeAlpha3="141907" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D08" geoName="Polorós" geoCodeAlpha2="08" geoCodeAlpha3="141908" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D09" geoName="San José La Fuente" geoCodeAlpha2="09" geoCodeAlpha3="141909" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D09" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19_D10" geoName="Santa Rosa de Lima" geoCodeAlpha2="10" geoCodeAlpha3="141910" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M19" toGeoId="SV14_M19_D10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D01" geoName="Conchagua" geoCodeAlpha2="01" geoCodeAlpha3="142001" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D01" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D02" geoName="El Carmen" geoCodeAlpha2="02" geoCodeAlpha3="142002" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D02" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D03" geoName="Intipucá" geoCodeAlpha2="03" geoCodeAlpha3="142003" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D03" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D04" geoName="La Unión" geoCodeAlpha2="04" geoCodeAlpha3="142004" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D04" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D05" geoName="Meanguera del Golfo" geoCodeAlpha2="05" geoCodeAlpha3="142005" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D05" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D06" geoName="San Alejo" geoCodeAlpha2="06" geoCodeAlpha3="142006" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D06" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D07" geoName="Yayantique" geoCodeAlpha2="07" geoCodeAlpha3="142007" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D07" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20_D08" geoName="Yucuaiquín" geoCodeAlpha2="08" geoCodeAlpha3="142008" geoTypeEnumId="GEOT_DISTRICT"/>
+    <moqui.basic.GeoAssoc geoId="SV14_M20" toGeoId="SV14_M20_D08" geoAssocTypeEnumId="GAT_REGIONS"/>
+</entity-facade-xml>

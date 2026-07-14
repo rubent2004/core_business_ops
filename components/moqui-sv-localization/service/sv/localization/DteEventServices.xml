@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="generate" noun="DteEventJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="generateDteEventJson">
+        <description>Persiste un JSON oficial de evento fiscal 16/17/18. No sintetiza valores
+            fiscales obligatorios: si faltan, falla de forma explícita.</description>
+        <in-parameters>
+            <parameter name="tipoEventoCode" default-value="17"/>
+            <parameter name="eventJson" type="Map"/>
+            <parameter name="eventJsonText"/>
+            <parameter name="eventItems" type="List">
+                <description>Líneas auditables para persistir en DteFiscalEventItem.payloadJson.</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteFiscalEventId"/>
+            <parameter name="tipoEventoCode"/>
+            <parameter name="codigoGeneracion"/>
+            <parameter name="eventJson" type="Map"/>
+            <parameter name="eventJsonText"/>
+            <parameter name="schemaName"/>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="errors" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="validate" noun="DteEventJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="validateDteEventJson">
+        <in-parameters>
+            <parameter name="dteFiscalEventId"/>
+            <parameter name="tipoEventoCode" default-value="17"/>
+            <parameter name="eventJson" type="Map"/>
+            <parameter name="eventJsonText"/>
+            <parameter name="schemaName"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="schemaName"/>
+            <parameter name="errors" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="build" noun="EopOperacionEspecial" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="buildEopOperacionEspecial">
+        <description>Construye JSON operativo para Evento de Operaciones Especiales (17) desde líneas
+            manuales/resumidas: factura simplificada (02) o control interno (97). Valida luego contra fe-eop-v1.</description>
+        <in-parameters>
+            <parameter name="organizationPartyId" required="true"/>
+            <parameter name="operacionEspecialCode" default-value="02"/>
+            <parameter name="fechaOperacion"/>
+            <parameter name="descripcion"/>
+            <parameter name="eopItems" type="List"/>
+            <parameter name="eopItemsJson"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoEventoCode"/>
+            <parameter name="eventJson" type="Map"/>
+            <parameter name="eventJsonText"/>
+            <parameter name="eventItems" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="sign" noun="DteEvent" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="signDteEvent">
+        <in-parameters>
+            <parameter name="dteFiscalEventId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="signed" type="Boolean"/>
+            <parameter name="jwsCompactSerialization"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="transmit" noun="DteEvent" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="transmitDteEvent">
+        <in-parameters>
+            <parameter name="dteFiscalEventId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="transmitted" type="Boolean"/>
+            <parameter name="mock" type="Boolean"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="emit" noun="DteEvent" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="emitDteEvent">
+        <in-parameters>
+            <parameter name="tipoEventoCode" default-value="17"/>
+            <parameter name="eventJson" type="Map"/>
+            <parameter name="eventJsonText"/>
+            <parameter name="eventItems" type="List"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteFiscalEventId"/>
+            <parameter name="statusId"/>
+            <parameter name="selloRecepcion"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="build" noun="EopFromDteList" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="buildEopFromDteList">
+        <description>Construye JSON para Evento de Operaciones Especiales (tipo 17) a partir de DTEs aceptados existentes.</description>
+        <in-parameters>
+            <parameter name="dteEmisionIds" type="List" required="true"/>
+            <parameter name="operacionEspecialCode" default-value="02"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoEventoCode"/>
+            <parameter name="eventJson" type="Map"/>
+            <parameter name="eventJsonText"/>
+            <parameter name="eventItems" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="build" noun="EretFromDte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteEventServices.groovy"
+             method="buildEretFromDte">
+        <description>Construye JSON para Evento de Retorno (tipo 18) a partir de un DTE aceptado (FE/FEXE/FSEE).</description>
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="motivo"/>
+            <parameter name="returnItems" type="List"/>
+            <parameter name="returnItemsJson"/>
+            <parameter name="strict" type="Boolean" default-value="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="tipoEventoCode"/>
+            <parameter name="eventJson" type="Map"/>
+            <parameter name="eventJsonText"/>
+            <parameter name="eventItems" type="List"/>
+        </out-parameters>
+    </service>
+
+</services>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+
+    <!-- ================================================================ -->
+    <!-- Fase 2: capa es_SV sobre SimpleScreens/MarbleERP                 -->
+    <!--                                                                  -->
+    <!-- Moqui resuelve LocalizedMessage por locale exacto y luego cae    -->
+    <!-- a es/default. Esta capa conserva las traducciones base es y solo -->
+    <!-- especializa términos operativos salvadoreños visibles.           -->
+    <!-- ================================================================ -->
+
+    <!-- Menú principal MarbleERP y módulos frecuentes -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Marble ERP" localized="CORE Business/Ops"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="CORE Business/Ops" localized="CORE Business/Ops"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Marble ERP" localized="CORE Business/Ops"/>
+    <moqui.basic.LocalizedMessage locale="es" original="CORE Business/Ops" localized="CORE Business/Ops"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Quick Search" localized="Búsqueda Rápida"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Accounting" localized="Contabilidad"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Asset" localized="Inventario"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Assets" localized="Inventario"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Catalog" localized="Catálogo"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Customer" localized="Cliente"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Customers" localized="Clientes"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Facility" localized="Bodega"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Facilities" localized="Bodegas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Human Resources" localized="Recursos Humanos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Manufacturing" localized="Producción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Order" localized="Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Orders" localized="Órdenes"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Party" localized="Contacto"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Parties" localized="Contactos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Project" localized="Proyecto"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Projects" localized="Proyectos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Product Store" localized="Tienda"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Product Stores" localized="Tiendas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Request" localized="Solicitud"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Requests" localized="Solicitudes"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Return" localized="Devolución"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Returns" localized="Devoluciones"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Shipment" localized="Remisión"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Shipments" localized="Remisiones"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Shipping" localized="Despachos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Supplier" localized="Proveedor"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Suppliers" localized="Proveedores"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Vendor" localized="Empresa"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Vendors" localized="Empresas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Survey" localized="Encuesta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Task" localized="Tarea"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Tasks" localized="Tareas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Wiki/Content" localized="Wiki/Contenido"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Custom Reports" localized="Reportes Personalizados"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Report Builder" localized="Constructor de Reportes"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Fiscal" localized="Fiscal"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="PartyNameTemplate"
+            localized="${pseudoId?:partyId?:''}: ${organizationName?:''}${firstName?:''}${middleName ? ' ' + middleName : ''}${lastName ? ' ' + lastName : ''}"/>
+
+    <!-- Acciones y términos de formulario -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Submit" localized="Guardar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Update" localized="Guardar Cambios"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Create" localized="Crear"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Add" localized="Agregar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Delete" localized="Eliminar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find" localized="Buscar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Search" localized="Buscar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Save" localized="Guardar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Cancel" localized="Cancelar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Close" localized="Cerrar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Hidden" localized="Inactivo"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Disabled" localized="Deshabilitado"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Enabled" localized="Habilitado"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Duplicates" localized="Buscar Duplicados"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Type" localized="Tipo"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Status" localized="Estado"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Description" localized="Descripción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Comments" localized="Comentarios"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Internal Comments" localized="Notas Internas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Shipping Instructions" localized="Instrucciones de Despacho"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Content" localized="Contenido"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Associated" localized="Asociados"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Associated From" localized="Asociados Desde"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Categories" localized="Categorías"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Prices" localized="Precios"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Product" localized="Producto"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Products" localized="Productos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Clone Product" localized="Clonar Producto"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="New Product" localized="Nuevo Producto"/>
+
+    <!-- Flujo comercial fiscal -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Sales Order" localized="Orden de Venta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Purchase Order" localized="Orden de Compra"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Order Detail" localized="Detalle de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Order Items" localized="Líneas de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Order Part" localized="Parte de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Order Parts" localized="Partes de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Sales Order Part" localized="Parte de Orden de Venta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Add Part" localized="Agregar Parte"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Add Party" localized="Agregar Contacto"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Create Sales Order" localized="Crear Orden de Venta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Create Purchase Order" localized="Crear Orden de Compra"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Invoice" localized="Factura"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Invoices" localized="Facturas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Credit Memo" localized="Nota de Crédito"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Debit Memo" localized="Nota de Débito"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Payment" localized="Pago"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Payments" localized="Pagos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Tax Authority" localized="Ministerio de Hacienda"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="DTE" localized="DTE"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Documento Tributario Electrónico" localized="Documento Tributario Electrónico"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="DTE Readiness" localized="Preparación DTE"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Preparación DTE" localized="Preparación DTE"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Sello de recepción" localized="Sello de recepción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Código de generación" localized="Código de generación"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Tipo DTE" localized="Tipo de DTE"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Condición de operación" localized="Condición de operación"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Forma de pago" localized="Forma de pago"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="From Party" localized="Emisor"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="To Party" localized="Receptor"/>
+
+    <!-- Personas, proveedores y empresa emisora -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Customer" localized="Buscar Clientes"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Supplier" localized="Buscar Proveedores"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Vendor" localized="Buscar Empresas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Search Vendors" localized="Buscar Empresas"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Add Vendor" localized="Agregar Empresa"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Create Vendor" localized="Crear Empresa"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Vendor/Org" localized="Empresa"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Party" localized="Buscar Contactos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Customer Data" localized="Datos del Cliente"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Organization Name" localized="Razón Social"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Identification" localized="Identificación"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Add Identification" localized="Agregar Identificación"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Contact Info" localized="Información de Contacto"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Phone, Email, and Other" localized="Teléfono, Correo y Otros"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Postal Addresses" localized="Direcciones"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="DUI" localized="DUI"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="NIT" localized="NIT"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="NRC" localized="NRC"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Departamento" localized="Departamento"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Municipio" localized="Municipio"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Distrito" localized="Distrito"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Actividad económica" localized="Actividad económica"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Nombre comercial" localized="Nombre comercial"/>
+
+    <!-- Producción, inventario y logística -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Production Run" localized="Orden de Producción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Production Runs" localized="Órdenes de Producción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Run" localized="Buscar Órdenes de Producción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Edit Run" localized="Orden de Producción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Run Products" localized="Materiales y Productos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Run Consumed" localized="Materiales Consumidos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Assets Consumed" localized="Materiales Consumidos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Run Produced" localized="Producto Terminado"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Assets Produced" localized="Producto Terminado"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Consume Product" localized="Consumir Material"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Consume Asset" localized="Despachar Inventario"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Produce Asset" localized="Registrar Producción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Run Pick Document" localized="Hoja de Requisición"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Run Pick PDF" localized="PDF Requisición"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Work Effort" localized="Orden de Trabajo"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="BOM" localized="Lista de Materiales"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Estimated Quantity" localized="Cantidad Estimada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Actual Quantity" localized="Cantidad Real"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Estimated Start Date" localized="Fecha Inicio Estimada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Estimated Completion Date" localized="Fecha Entrega Estimada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Actual Start Date" localized="Fecha Inicio Real"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Actual Completion Date" localized="Fecha Finalización Real"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Quantity On Hand" localized="Existencia"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Available To Promise" localized="Disponible"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Physical Inventory" localized="Inventario Físico"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Move Asset" localized="Trasladar Inventario"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Asset Issuance" localized="Despacho de Material"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Asset Receipt" localized="Recepción de Inventario"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Warehouse" localized="Bodega"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Facility" localized="Buscar Bodega"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Edit Facility" localized="Editar Bodega"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Shipment" localized="Buscar Remisión"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Incoming Shipment" localized="Recepción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Outgoing Shipment" localized="Despacho"/>
+
+    <!-- Contabilidad y RRHH -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="GL Account" localized="Cuenta Contable"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="GL Accounts" localized="Cuentas Contables"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Journal" localized="Diario"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Transaction" localized="Transacción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Transactions" localized="Transacciones"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Time Period" localized="Período"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Fiscal Year" localized="Año Fiscal"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Debit" localized="Débito"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Credit" localized="Crédito"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Balance" localized="Saldo"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Payroll" localized="Nómina"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Employee" localized="Empleado"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Employees" localized="Empleados"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Position" localized="Puesto"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Rate Amounts" localized="Tarifas y Salarios"/>
+
+    <!-- Descripciones exactas de StatusItem/Enumeration base visibles en dropdowns -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Open (Tentative)" localized="Abierta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Quote Requested by Customer" localized="Cotización Solicitada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Quote Proposed by Vendor" localized="Cotización Propuesta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Placed by Customer" localized="Colocada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Held" localized="Retenida"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Processing" localized="En Proceso"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Approved" localized="Aprobada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Sent" localized="Enviada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Completed" localized="Completada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Rejected by Vendor" localized="Rechazada por Proveedor"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Cancelled by Customer" localized="Cancelada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="In-Process" localized="En Proceso"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Finalized" localized="Finalizada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Acknowledged" localized="Confirmada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Payment Received" localized="Pagada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Write Off" localized="Incobrable"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Incoming" localized="Recibida"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Received" localized="Recibida"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Payment Sent" localized="Pagada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Billed Through" localized="Facturada Hasta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Cancelled" localized="Cancelada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Routing" localized="Enrutamiento"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Produce" localized="Producción"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Consume" localized="Consumo"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Sales" localized="Venta"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Created" localized="Creada"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Available" localized="Disponible"/>
+
+    <!-- Transiciones frecuentes de status -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Place" localized="Colocar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Place##Order" localized="Colocar Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Approve" localized="Aprobar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Complete" localized="Completar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Finalize" localized="Finalizar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Receive" localized="Recibir"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Send##Order" localized="Enviar Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Hold##Order" localized="Retener Orden"/>
+
+    <!-- ================================================================ -->
+    <!-- Templates de nombre — corrige traducciones literales de          -->
+    <!-- SimpleScreensL10nData.xml que rompieron interpolacion ${...}.   -->
+    <!-- Reimplementamos los templates default de mantle-udm en es/es_SV  -->
+    <!-- para que muestren el nombre real (no el placeholder "Plantilla   -->
+    <!-- de nombre de ...").                                              -->
+    <!-- ================================================================ -->
+    <moqui.basic.LocalizedMessage locale="es" original="FacilityNameTemplate"
+            localized="${pseudoId?:facilityId}: ${facilityName?:name?:''}"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="FacilityNameTemplate"
+            localized="${pseudoId?:facilityId}: ${facilityName?:name?:''}"/>
+
+    <moqui.basic.LocalizedMessage locale="es" original="FacilityLocationNameTemplate"
+            localized="${locationSeqId?:''} ${description?:''} [${areaId?:' '}:${aisleId?:' '}:${sectionId?:' '}:${levelId?:' '}:${positionId?:' '}] ${type?.description?:(locationTypeEnumId?locationTypeEnumId.substring(3):null)?:''}"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="FacilityLocationNameTemplate"
+            localized="${locationSeqId?:''} ${description?:''} [${areaId?:' '}:${aisleId?:' '}:${sectionId?:' '}:${levelId?:' '}:${positionId?:' '}] ${type?.description?:(locationTypeEnumId?locationTypeEnumId.substring(3):null)?:''}"/>
+
+    <moqui.basic.LocalizedMessage locale="es" original="PartyNameTemplate"
+            localized="${pseudoId}: ${organizationName?:''}${firstName?:''}${lastName ? ' ' + lastName : ''}"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="PartyNameTemplate"
+            localized="${pseudoId}: ${organizationName?:''}${firstName?:''}${lastName ? ' ' + lastName : ''}"/>
+
+    <moqui.basic.LocalizedMessage locale="es" original="ProductNameTemplate"
+            localized="${pseudoId?:productId}: ${productName?:name?:''}"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="ProductNameTemplate"
+            localized="${pseudoId?:productId}: ${productName?:name?:''}"/>
+
+    <moqui.basic.LocalizedMessage locale="es" original="ProductAmountNameTemplate"
+            localized="${(amountFixed&amp;&amp;amountFixed!=1?(ec.l10n.format(amountFixed,'')+' '):'')+(uomDescription?:description?:'')}"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="ProductAmountNameTemplate"
+            localized="${(amountFixed&amp;&amp;amountFixed!=1?(ec.l10n.format(amountFixed,'')+' '):'')+(uomDescription?:description?:'')}"/>
+
+    <moqui.basic.LocalizedMessage locale="es" original="WorkEffortNameTemplate"
+            localized="${workEffortId}: ${workEffortName?:''}"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="WorkEffortNameTemplate"
+            localized="${workEffortId}: ${workEffortName?:''}"/>
+
+    <!-- ================================================================ -->
+    <!-- Strings sueltos sin traducir o mal traducidos en SimpleScreens   -->
+    <!-- (mezcla EN/ES tipo "Colocar Orden Anyway", "Quick Artículos").   -->
+    <!-- ================================================================ -->
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Place Order Anyway" localized="Colocar Orden de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Place Warnings" localized="Advertencias al Colocar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Approve Order Anyway" localized="Aprobar Orden de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Approve Warnings" localized="Advertencias al Aprobar"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Get Label Anyway" localized="Obtener Etiqueta de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Get Labels Anyway" localized="Obtener Etiquetas de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Quick Items" localized="Artículos Rápidos"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Clear Parameters" localized="Limpiar Parámetros"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Find Options" localized="Opciones de Búsqueda"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Order Roles and Parts" localized="Roles y Partes de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Order Status Reference" localized="Referencia de Estados de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es_SV" original="Scheme Type Block" localized="Esquemas por Tipo"/>
+
+    <moqui.basic.LocalizedMessage locale="es" original="Place Order Anyway" localized="Colocar Orden de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Place Warnings" localized="Advertencias al Colocar"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Approve Order Anyway" localized="Aprobar Orden de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Approve Warnings" localized="Advertencias al Aprobar"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Get Label Anyway" localized="Obtener Etiqueta de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Get Labels Anyway" localized="Obtener Etiquetas de Todos Modos"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Quick Items" localized="Artículos Rápidos"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Clear Parameters" localized="Limpiar Parámetros"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Find Options" localized="Opciones de Búsqueda"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Order Roles and Parts" localized="Roles y Partes de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Order Status Reference" localized="Referencia de Estados de Orden"/>
+    <moqui.basic.LocalizedMessage locale="es" original="Scheme Type Block" localized="Esquemas por Tipo"/>
+</entity-facade-xml>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="DTE" default-menu-index="9">
+    <parameter name="invoiceId" required="true"/>
+
+    <transition name="generateValidate"><actions>
+        <service-call name="sv.localization.DteServices.generate#DteJson" in-map="[invoiceId:invoiceId]" out-map="context"/>
+        <service-call name="sv.localization.DteServices.validate#DteJson" in-map="[dteEmisionId:dteEmisionId]" out-map="context"/>
+    </actions><default-response url="."><parameter name="invoiceId"/></default-response></transition>
+    <transition name="signDte"><service-call name="sv.localization.DteServices.sign#Dte"/><default-response url="."><parameter name="invoiceId"/></default-response></transition>
+    <transition name="transmitDte"><service-call name="sv.localization.DteServices.transmit#Dte"/><default-response url="."><parameter name="invoiceId"/></default-response></transition>
+    <transition name="emitFromInvoice"><service-call name="sv.localization.DteServices.emit#FromInvoice"/><default-response url="."><parameter name="invoiceId"/></default-response></transition>
+    <transition name="saveSvInvoiceFields"><service-call name="store#mantle.account.invoice.Invoice"/><default-response url="."><parameter name="invoiceId"/></default-response></transition>
+    <transition name="anularDte"><service-call name="sv.localization.DteAnulationServices.anular#Dte"/><default-response url="."><parameter name="invoiceId"/></default-response></transition>
+    <transition name="viewJson" read-only="true"><actions>
+        <entity-find-one entity-name="sv.localization.dte.DteEmision" value-field="dteEmision">
+            <field-map field-name="invoiceId"/>
+        </entity-find-one>
+        <script>ec.web.sendTextResponse(dteEmision?.jsonOriginal ?: '{}', 'application/json', null)</script>
+    </actions><default-response type="none"/></transition>
+    <transition name="viewJws" read-only="true"><actions>
+        <entity-find-one entity-name="sv.localization.dte.DteEmision" value-field="dteEmision">
+            <field-map field-name="invoiceId"/>
+        </entity-find-one>
+        <script>ec.web.sendTextResponse(dteEmision?.jwsCompactSerialization ?: '', 'text/plain', null)</script>
+    </actions><default-response type="none"/></transition>
+
+    <actions>
+        <entity-find-one entity-name="mantle.account.invoice.Invoice" value-field="invoice"/>
+        <if condition="invoice == null"><return error="true" message="Invoice ${invoiceId} not found"/></if>
+        <entity-find-one entity-name="sv.localization.dte.DteEmision" value-field="dteEmision">
+            <field-map field-name="invoiceId"/>
+        </entity-find-one>
+        <if condition="dteEmision != null"><entity-find entity-name="sv.localization.dte.DteEmisionEvent" list="eventList">
+            <econdition field-name="dteEmisionId" from="dteEmision.dteEmisionId"/>
+            <order-by field-name="-eventDate"/>
+        </entity-find></if>
+        <entity-find entity-name="sv.localization.dte.DteEmision" list="ccfReferenceList">
+            <econdition field-name="tipoDteCode" value="03"/>
+            <order-by field-name="-fechaGeneracion"/>
+        </entity-find>
+
+        <!-- DTE Readiness of receiver party -->
+        <set field="receiverPartyId" from="invoice.toPartyId"/>
+        <if condition="receiverPartyId">
+            <service-call name="sv.localization.PartyFiscalServices.check#DteReadiness"
+                          in-map="[partyId:receiverPartyId]" out-map="receptorCheck"/>
+        </if>
+    </actions>
+
+    <widgets>
+        <!-- SV Invoice Fields: tipo DTE, condición, forma pago, plazo -->
+        <container-box>
+            <box-header title="Datos Fiscales"/>
+            <box-body>
+                <form-single name="SvInvoiceFields" map="invoice" transition="saveSvInvoiceFields">
+                    <field name="invoiceId"><default-field><hidden/></default-field></field>
+
+                    <field name="tipoDteCode"><default-field title="Tipo DTE">
+                        <drop-down allow-empty="true" no-current-selected-key="01">
+                            <entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                                <entity-find entity-name="moqui.basic.Enumeration">
+                                    <econdition field-name="enumTypeId" value="SvTipoDte"/>
+                                    <econdition field-name="optionValue" operator="not-in" value="16,17,18"/>
+                                    <order-by field-name="sequenceNum"/>
+                                </entity-find>
+                            </entity-options>
+                        </drop-down>
+                    </default-field></field>
+
+                    <field name="condicionOperacionEnumId"><default-field title="Condición de operación">
+                        <drop-down allow-empty="true"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvCondicionOperacion"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+
+                    <field name="formaPagoEnumId"><default-field title="Forma de pago">
+                        <drop-down allow-empty="true"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvFormaPago"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+
+                    <field name="plazoEnumId"><default-field title="Plazo (si crédito)">
+                        <drop-down allow-empty="true"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvPlazo"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+
+                    <field name="plazoPeriodo"><default-field title="Período (ej: 30)">
+                        <text-line size="6" maxlength="5"/>
+                    </default-field></field>
+                    <field name="fusionNit"><default-field title="Fusión / otros NIT">
+                        <text-line size="18" maxlength="14"/>
+                    </default-field></field>
+                    <field name="svRecintoFiscalCode"><default-field title="Recinto fiscal">
+                        <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvRecintoFiscal"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="svTipoRegimenCode"><default-field title="Tipo régimen">
+                        <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvTipoRegimen"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="svRegimenCode"><default-field title="Régimen">
+                        <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvRegimen"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="svOperacionEspecialCode"><default-field title="Operación especial">
+                        <drop-down allow-empty="true"><entity-options key="${optionValue}" text="${optionValue} - ${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvOperacionEspecial"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+
+                    <field name="submitSvFields"><default-field title="Guardar datos fiscales"><submit/></default-field></field>
+
+                    <field-layout>
+                        <field-row><field-ref name="tipoDteCode"/><field-ref name="condicionOperacionEnumId"/></field-row>
+                        <field-row><field-ref name="formaPagoEnumId"/><field-ref name="plazoEnumId"/></field-row>
+                        <field-row><field-ref name="plazoPeriodo"/><field-ref name="fusionNit"/></field-row>
+                        <field-row><field-ref name="svRecintoFiscalCode"/><field-ref name="svTipoRegimenCode"/></field-row>
+                        <field-row><field-ref name="svRegimenCode"/><field-ref name="svOperacionEspecialCode"/></field-row>
+                        <field-ref name="submitSvFields"/>
+                    </field-layout>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <!-- Receptor readiness -->
+        <section name="ReceptorReadinessSection" condition="receptorCheck"><widgets>
+            <container-box>
+                <box-header title="Receptor: Preparación DTE"/>
+                <box-body>
+                    <container-row><row-col lg="6">
+                        <label text="Factura (FC): " type="strong"/>
+                        <label text="${receptorCheck.readyForFc ? 'Listo' : 'Incompleto'}"
+                               style="${receptorCheck.readyForFc ? 'text-success' : 'text-danger'}"/>
+                    </row-col><row-col lg="6">
+                        <label text="CCF: " type="strong"/>
+                        <label text="${receptorCheck.readyForCcf ? 'Listo' : 'Incompleto'}"
+                               style="${receptorCheck.readyForCcf ? 'text-success' : 'text-danger'}"/>
+                    </row-col></container-row>
+                    <section name="ReceptorIssues" condition="receptorCheck.issues"><widgets>
+                        <section-iterate name="RcpIssueList" list="receptorCheck.issues" entry="issue"><widgets>
+                            <label text="- ${issue}" style="text-warning" type="div"/>
+                        </widgets></section-iterate>
+                    </widgets></section>
+                </box-body>
+            </container-box>
+        </widgets></section>
+
+        <!-- DTE Actions & Reference -->
+        <section name="ReferenceSection" condition="invoice.invoiceTypeEnumId in ['InvSvNc','InvSvNd']"><widgets>
+            <container-box>
+                <box-header title="Documento CCF relacionado"/>
+                <box-body>
+                    <form-single name="DteReferenceForm" map="invoice" transition="saveSvInvoiceFields">
+                        <field name="invoiceId"><default-field><hidden/></default-field></field>
+                        <field name="dteReferenceEmisionId"><default-field title="CCF aceptado">
+                            <drop-down allow-empty="true">
+                                <list-options list="ccfReferenceList" key="${dteEmisionId}" text="${numeroControl} - ${codigoGeneracion} - ${statusId}"/>
+                            </drop-down>
+                        </default-field></field>
+                        <field name="submitButton"><default-field title="Guardar referencia"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </widgets></section>
+
+        <container-box>
+            <box-header title="Emisión DTE"/>
+            <box-body>
+                <container>
+                    <link url="generateValidate" text="Generar/Validar" link-type="anchor-button"><parameter name="invoiceId"/></link>
+                    <link url="emitFromInvoice" text="Emitir DTE" link-type="anchor-button" btn-type="success"><parameter name="invoiceId"/></link>
+                    <section name="DteActionSection" condition="dteEmision != null"><widgets>
+                        <link url="signDte" text="Firmar" link-type="anchor-button"><parameter name="invoiceId"/><parameter name="dteEmisionId" from="dteEmision.dteEmisionId"/></link>
+                        <link url="transmitDte" text="Transmitir" link-type="anchor-button"><parameter name="invoiceId"/><parameter name="dteEmisionId" from="dteEmision.dteEmisionId"/></link>
+                        <link url="viewJson" text="Ver JSON" link-type="anchor-button" target-window="_blank"><parameter name="invoiceId"/></link>
+                        <link url="viewJws" text="Ver JWS" link-type="anchor-button" target-window="_blank"><parameter name="invoiceId"/></link>
+                        <link url="/fop/apps/SvLocalization/Dte/PrintDte" text="PDF" link-type="anchor-button" target-window="_blank">
+                            <parameter name="dteEmisionId" from="dteEmision.dteEmisionId"/>
+                            <parameter name="filename" value="dte-${dteEmision.codigoGeneracion}.pdf"/>
+                        </link>
+                        <section name="AnularAction" condition="dteEmision.statusId in ['DteAccepted','DteMockAccepted']"><widgets>
+                            <form-single name="AnularDteForm" transition="anularDte">
+                                <field name="invoiceId"><default-field><hidden/></default-field></field>
+                                <field name="dteEmisionId" from="dteEmision.dteEmisionId"><default-field><hidden/></default-field></field>
+                                <field name="tipoAnulacion"><default-field title="Tipo anulación"><drop-down no-current-selected-key="2">
+                                    <option key="1" text="1 - Error en información"/>
+                                    <option key="2" text="2 - Rescindir operación"/>
+                                    <option key="3" text="3 - Otro"/>
+                                </drop-down></default-field></field>
+                                <field name="motivo"><default-field title="Motivo"><text-line size="40"/></default-field></field>
+                                <field name="responsableNombre"><default-field title="Responsable"><text-line size="30"/></default-field></field>
+                                <field name="responsableNumDoc"><default-field title="Doc responsable"><text-line size="20"/></default-field></field>
+                                <field name="submitButton"><default-field title="Anular"><submit confirmation="Confirma la anulación del DTE?"/></default-field></field>
+                            </form-single>
+                        </widgets></section>
+                    </widgets></section>
+                </container>
+            </box-body>
+        </container-box>
+
+        <!-- DTE Status -->
+        <container-box>
+            <box-header title="Estado DTE"/>
+            <box-body>
+                <section name="NoDteSection" condition="dteEmision == null"><widgets>
+                    <label text="Esta factura todavía no tiene DTE generado." type="p"/>
+                </widgets></section>
+                <section name="DteStatusSection" condition="dteEmision != null"><widgets>
+                    <form-single name="DteStatus" map="dteEmision" skip-form="true">
+                        <field name="statusId"><default-field title="Estado"><display-entity entity-name="moqui.basic.StatusItem"/></default-field></field>
+                        <field name="tipoDteCode"><default-field title="Tipo DTE"><display/></default-field></field>
+                        <field name="numeroControl"><default-field title="Número control"><display/></default-field></field>
+                        <field name="codigoGeneracion"><default-field title="Código generación"><display/></default-field></field>
+                        <field name="selloRecepcion"><default-field title="Sello recepción"><display/></default-field></field>
+                        <field name="errorCode"><default-field title="Código error"><display/></default-field></field>
+                        <field name="errorMessage"><default-field title="Mensaje error"><display/></default-field></field>
+                    </form-single>
+                </widgets></section>
+            </box-body>
+        </container-box>
+
+        <!-- DTE Events -->
+        <section name="DteEventsSection" condition="dteEmision != null"><widgets>
+            <container-box>
+                <box-header title="Eventos DTE"/>
+                <box-body-nopad>
+                    <form-list name="DteEventList" list="eventList" skip-form="true">
+                        <field name="eventDate"><default-field title="Fecha"><display/></default-field></field>
+                        <field name="eventTypeEnumId"><default-field title="Evento"><display-entity entity-name="moqui.basic.Enumeration"/></default-field></field>
+                        <field name="httpStatus"><default-field title="HTTP"><display/></default-field></field>
+                        <field name="comments"><default-field title="Comentario"><display/></default-field></field>
+                    </form-list>
+                </box-body-nopad>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>

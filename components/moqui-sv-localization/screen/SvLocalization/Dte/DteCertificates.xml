@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Certificados" default-menu-index="2">
+    <transition name="storeCertificate"><service-call name="store#sv.localization.dte.DteCertificate"/><default-response url="."/></transition>
+
+    <actions>
+        <entity-find entity-name="sv.localization.dte.DteCertificate" list="certificateList">
+            <order-by field-name="nit"/>
+        </entity-find>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Certificados DTE"/>
+            <box-body>
+                <form-list name="DteCertificateList" list="certificateList" transition="storeCertificate" multi="true">
+                    <field name="dteCertificateId"><default-field title="ID"><display also-hidden="true"/></default-field></field>
+                    <field name="nit"><default-field title="NIT"><text-line size="18"/></default-field></field>
+                    <field name="pathCrt"><default-field title="Path CRT"><text-line size="60"/></default-field></field>
+                    <field name="passwordSecretKey"><default-field title="Secret key"><text-line size="32"/></default-field></field>
+                    <field name="commonName"><default-field title="Nombre común"><text-line size="40"/></default-field></field>
+                    <field name="fromDate"><default-field title="Desde"><date-time/></default-field></field>
+                    <field name="thruDate"><default-field title="Hasta"><date-time/></default-field></field>
+                    <field name="submitButton"><default-field title="Guardar"><submit/></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

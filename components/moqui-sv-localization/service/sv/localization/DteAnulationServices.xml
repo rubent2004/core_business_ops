@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="generate" noun="AnulacionJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteAnulationServices.groovy"
+             method="generateAnulacionJson">
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="tipoAnulacion" required="true" default-value="2"/>
+            <parameter name="motivo"/>
+            <parameter name="responsableNombre"/>
+            <parameter name="responsableTipDoc" default-value="13"/>
+            <parameter name="responsableNumDoc"/>
+            <parameter name="solicitanteNombre"/>
+            <parameter name="solicitanteTipDoc" default-value="13"/>
+            <parameter name="solicitanteNumDoc"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteAnulacionId"/>
+            <parameter name="anulacionJson" type="Map"/>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="schemaName"/>
+            <parameter name="errors" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="validate" noun="AnulacionJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteAnulationServices.groovy"
+             method="validateAnulacionJson">
+        <in-parameters>
+            <parameter name="anulacionJson" type="Map"/>
+            <parameter name="anulacionJsonText"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="schemaName"/>
+            <parameter name="errors" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="anular" noun="Dte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteAnulationServices.groovy"
+             method="anularDte">
+        <description>Orquesta anulación de un DTE ya aceptado por MH: genera JSON
+            anulacion-v2, firma con el firmador y transmite al endpoint de anulación.</description>
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="tipoAnulacion" default-value="2"/>
+            <parameter name="motivo"/>
+            <parameter name="responsableNombre"/>
+            <parameter name="responsableTipDoc" default-value="13"/>
+            <parameter name="responsableNumDoc"/>
+            <parameter name="solicitanteNombre"/>
+            <parameter name="solicitanteTipDoc" default-value="13"/>
+            <parameter name="solicitanteNumDoc"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteAnulacionId"/>
+            <parameter name="statusId"/>
+            <parameter name="selloAnulacion"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+</services>

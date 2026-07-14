@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ============================================================================
+    SARA CORE BUSINESS/OPS — DATOS DEMO (empresa 100% ficticia)
+    ============================================================================
+    Empresa demo: METALÚRGICA DEL PACÍFICO, S.A. de C.V. (MetalPacífico)
+    Rubro: fabricación de estructuras y productos metálicos.
+
+    TODO en este archivo es INVENTADO para propósitos de demostración:
+    NIT, NRC, DUI, direcciones, clientes, montos y DTEs NO corresponden a
+    ninguna persona o empresa real, ni al ambiente de pruebas del Ministerio
+    de Hacienda. El sistema corre en modo MOCK (sin firmar ni transmitir a MH).
+
+    El seed simula ~2 semanas de operación (julio 2026): emisión de FC/CCF/FSE,
+    corridas de producción y una corrida de nómina cerrada de junio 2026.
+    Se carga como type="demo" (./gradlew load -Ptypes=seed,demo).
+-->
+<entity-facade-xml type="demo">
+
+    <!-- ================================================================ -->
+    <!-- EMISOR: METALÚRGICA DEL PACÍFICO, S.A. de C.V.                    -->
+    <!-- ================================================================ -->
+
+    <mantle.party.Party partyId="MP_ORG" pseudoId="MEPAC" partyTypeEnumId="PtyOrganization"/>
+    <mantle.party.Organization partyId="MP_ORG" organizationName="Metalúrgica del Pacífico, S.A. de C.V."
+            nombreComercial="Metalúrgica del Pacífico" actividadEconomicaId="SVEA_25111"/>
+    <mantle.party.PartyRole partyId="MP_ORG" roleTypeId="OrgInternal"/>
+    <mantle.party.PartyRole partyId="MP_ORG" roleTypeId="Vendor"/>
+    <mantle.party.PartyRole partyId="MP_ORG" roleTypeId="Supplier"/>
+
+    <sv.localization.party.SvFiscalProfile svFiscalProfileId="SvFpMp"
+            partyId="MP_ORG" tipoContribuyenteEnumId="TcMediano"
+            actividadEconomicaId="SVEA_25111" nrc="2589631"
+            tipoEstablecimientoMhCode="01" nombreComercial="Metalúrgica del Pacífico"
+            codEstableMhCode="M001" codPuntoVentaMhCode="P001"
+            codEstableCode="0001" codPuntoVentaCode="0001"
+            responsableNombre="Andrea Beltrán Solís" responsableDui="03456789-0"
+            fechaInicioOperaciones="2015-03-02"/>
+    <mantle.party.PartyIdentification partyId="MP_ORG" partyIdTypeEnumId="PitNit" idValue="0514-210798-101-5"/>
+    <mantle.party.PartyIdentification partyId="MP_ORG" partyIdTypeEnumId="PitNrc" idValue="2589631"/>
+
+    <mantle.party.contact.ContactMech contactMechId="MP_PA" contactMechTypeEnumId="CmtPostalAddress"/>
+    <mantle.party.contact.PostalAddress contactMechId="MP_PA" toName="Metalúrgica del Pacífico, S.A. de C.V."
+            address1="Boulevard del Ejército Nacional Km 5½, Zona Industrial" city="San Salvador"
+            stateProvinceGeoId="SV06" countryGeoId="SLV" postalCode="0000"
+            departamentoGeoId="SV06" municipioGeoId="SV06_M23" distritoGeoId="SV06_M23_D03"
+            complemento="Boulevard del Ejército Nacional Km 5½, Zona Industrial, San Salvador"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_ORG" contactMechId="MP_PA"
+            contactMechPurposeId="PostalPrimary" fromDate="2015-03-02 00:00:00"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_ORG" contactMechId="MP_PA"
+            contactMechPurposeId="PostalBilling" fromDate="2015-03-02 00:00:00"/>
+
+    <mantle.party.contact.ContactMech contactMechId="MP_PT" contactMechTypeEnumId="CmtTelecomNumber"/>
+    <mantle.party.contact.TelecomNumber contactMechId="MP_PT" countryCode="503" contactNumber="25001234"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_ORG" contactMechId="MP_PT"
+            contactMechPurposeId="PhonePrimary" fromDate="2015-03-02 00:00:00"/>
+
+    <mantle.party.contact.ContactMech contactMechId="MP_EM" contactMechTypeEnumId="CmtEmailAddress"
+            infoString="facturacion@metalpacifico.com.sv"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_ORG" contactMechId="MP_EM"
+            contactMechPurposeId="EmailPrimary" fromDate="2015-03-02 00:00:00"/>
+
+    <!-- ================================================================ -->
+    <!-- CLIENTE 1: CONSTRUCTORA HORIZONTE, S.A. de C.V. (CCF)            -->
+    <!-- ================================================================ -->
+
+    <mantle.party.Party partyId="MP_CLI_HORIZ" pseudoId="HORIZONTE" partyTypeEnumId="PtyOrganization"
+            ownerPartyId="MP_ORG"/>
+    <mantle.party.Organization partyId="MP_CLI_HORIZ" organizationName="Constructora Horizonte, S.A. de C.V."
+            nombreComercial="Constructora Horizonte" actividadEconomicaId="SVEA_41001"/>
+    <mantle.party.PartyRole partyId="MP_CLI_HORIZ" roleTypeId="Customer"/>
+    <mantle.party.PartyRole partyId="MP_CLI_HORIZ" roleTypeId="Account"/>
+    <sv.localization.party.SvFiscalProfile svFiscalProfileId="SvFpHoriz" partyId="MP_CLI_HORIZ"
+            tipoContribuyenteEnumId="TcMediano" actividadEconomicaId="SVEA_41001" nrc="1904552"
+            tipoEstablecimientoMhCode="02" nombreComercial="Constructora Horizonte"/>
+    <mantle.party.PartyIdentification partyId="MP_CLI_HORIZ" partyIdTypeEnumId="PitNit" idValue="0614-050411-103-8"/>
+    <mantle.party.PartyIdentification partyId="MP_CLI_HORIZ" partyIdTypeEnumId="PitNrc" idValue="1904552"/>
+    <mantle.party.contact.ContactMech contactMechId="MP_HORIZ_PA" contactMechTypeEnumId="CmtPostalAddress"/>
+    <mantle.party.contact.PostalAddress contactMechId="MP_HORIZ_PA" toName="Constructora Horizonte, S.A. de C.V."
+            address1="Calle El Progreso, Colonia San Benito No. 214" city="San Salvador"
+            stateProvinceGeoId="SV06" countryGeoId="SLV" postalCode="0000"
+            departamentoGeoId="SV06" municipioGeoId="SV06_M23" distritoGeoId="SV06_M23_D03"
+            complemento="Calle El Progreso, Colonia San Benito No. 214, San Salvador"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_CLI_HORIZ" contactMechId="MP_HORIZ_PA"
+            contactMechPurposeId="PostalPrimary" fromDate="2024-01-01 00:00:00"/>
+    <mantle.party.contact.ContactMech contactMechId="MP_HORIZ_EM" contactMechTypeEnumId="CmtEmailAddress"
+            infoString="compras@constructorahorizonte.com.sv"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_CLI_HORIZ" contactMechId="MP_HORIZ_EM"
+            contactMechPurposeId="EmailPrimary" fromDate="2024-01-01 00:00:00"/>
+
+    <!-- ================================================================ -->
+    <!-- CLIENTE 2: FERRETERÍA LA BODEGA, S.A. de C.V. (CCF)             -->
+    <!-- ================================================================ -->
+
+    <mantle.party.Party partyId="MP_CLI_FERRE" pseudoId="LABODEGA" partyTypeEnumId="PtyOrganization"
+            ownerPartyId="MP_ORG"/>
+    <mantle.party.Organization partyId="MP_CLI_FERRE" organizationName="Ferretería La Bodega, S.A. de C.V."
+            nombreComercial="Ferretería La Bodega" actividadEconomicaId="SVEA_47522"/>
+    <mantle.party.PartyRole partyId="MP_CLI_FERRE" roleTypeId="Customer"/>
+    <mantle.party.PartyRole partyId="MP_CLI_FERRE" roleTypeId="Account"/>
+    <sv.localization.party.SvFiscalProfile svFiscalProfileId="SvFpFerre" partyId="MP_CLI_FERRE"
+            tipoContribuyenteEnumId="TcOtros" actividadEconomicaId="SVEA_47522" nrc="2277410"
+            tipoEstablecimientoMhCode="04" nombreComercial="Ferretería La Bodega"/>
+    <mantle.party.PartyIdentification partyId="MP_CLI_FERRE" partyIdTypeEnumId="PitNit" idValue="0210-160809-101-3"/>
+    <mantle.party.PartyIdentification partyId="MP_CLI_FERRE" partyIdTypeEnumId="PitNrc" idValue="2277410"/>
+    <mantle.party.contact.ContactMech contactMechId="MP_FERRE_PA" contactMechTypeEnumId="CmtPostalAddress"/>
+    <mantle.party.contact.PostalAddress contactMechId="MP_FERRE_PA" toName="Ferretería La Bodega, S.A. de C.V."
+            address1="Avenida Independencia No. 55, Barrio El Centro" city="Santa Ana"
+            stateProvinceGeoId="SV06" countryGeoId="SLV" postalCode="0000"
+            departamentoGeoId="SV06" municipioGeoId="SV06_M23" distritoGeoId="SV06_M23_D03"
+            complemento="Avenida Independencia No. 55, Barrio El Centro, Santa Ana"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_CLI_FERRE" contactMechId="MP_FERRE_PA"
+            contactMechPurposeId="PostalPrimary" fromDate="2024-01-01 00:00:00"/>
+
+    <!-- ================================================================ -->
+    <!-- CLIENTE 3: CONSUMIDOR FINAL (persona natural, para FC)           -->
+    <!-- ================================================================ -->
+
+    <mantle.party.Party partyId="MP_CLI_CF" pseudoId="CFRODRIGO" partyTypeEnumId="PtyPerson"
+            ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_CLI_CF" firstName="Rodrigo" lastName="Alvarenga Mejía"/>
+    <mantle.party.PartyRole partyId="MP_CLI_CF" roleTypeId="Customer"/>
+    <sv.localization.party.SvFiscalProfile svFiscalProfileId="SvFpCf" partyId="MP_CLI_CF"
+            tipoContribuyenteEnumId="TcOtros"/>
+    <mantle.party.PartyIdentification partyId="MP_CLI_CF" partyIdTypeEnumId="PitDui" idValue="052341890"/>
+    <mantle.party.contact.ContactMech contactMechId="MP_CF_EM" contactMechTypeEnumId="CmtEmailAddress"
+            infoString="rodrigo.alvarenga@correo.demo"/>
+    <mantle.party.contact.PartyContactMech partyId="MP_CLI_CF" contactMechId="MP_CF_EM"
+            contactMechPurposeId="EmailPrimary" fromDate="2024-01-01 00:00:00"/>
+
+    <!-- ================================================================ -->
+    <!-- PROVEEDOR: ACEROS DEL ISTMO, S.A. de C.V.                        -->
+    <!-- ================================================================ -->
+
+    <mantle.party.Party partyId="MP_PROV_ACERO" pseudoId="ACEROSISTMO" partyTypeEnumId="PtyOrganization"
+            ownerPartyId="MP_ORG"/>
+    <mantle.party.Organization partyId="MP_PROV_ACERO" organizationName="Aceros del Istmo, S.A. de C.V."
+            nombreComercial="Aceros del Istmo" actividadEconomicaId="SVEA_46639"/>
+    <mantle.party.PartyRole partyId="MP_PROV_ACERO" roleTypeId="Supplier"/>
+    <mantle.party.PartyRole partyId="MP_PROV_ACERO" roleTypeId="Vendor"/>
+    <mantle.party.PartyIdentification partyId="MP_PROV_ACERO" partyIdTypeEnumId="PitNit" idValue="0614-100302-105-1"/>
+
+    <!-- ================================================================ -->
+    <!-- SUJETO EXCLUIDO: persona natural, para FSE (compra tipo 14)      -->
+    <!-- ================================================================ -->
+
+    <mantle.party.Party partyId="MP_SUJ_EXCL" pseudoId="SUJEXCL" partyTypeEnumId="PtyPerson"
+            ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_SUJ_EXCL" firstName="María Elena" lastName="Portillo Vásquez"/>
+    <mantle.party.PartyRole partyId="MP_SUJ_EXCL" roleTypeId="Supplier"/>
+    <mantle.party.PartyRole partyId="MP_SUJ_EXCL" roleTypeId="Vendor"/>
+    <sv.localization.party.SvFiscalProfile svFiscalProfileId="SvFpSujExcl" partyId="MP_SUJ_EXCL"
+            tipoContribuyenteEnumId="TcExcluido" actividadEconomicaId="SVEA_43900"/>
+    <mantle.party.PartyIdentification partyId="MP_SUJ_EXCL" partyIdTypeEnumId="PitDui" idValue="048712300"/>
+
+    <!-- ================================================================ -->
+    <!-- EMPLEADOS (para nómina)                                          -->
+    <!-- ================================================================ -->
+
+    <mantle.party.Party partyId="MP_EMP_ANDREA" pseudoId="ANDREA" partyTypeEnumId="PtyPerson" ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_EMP_ANDREA" firstName="Andrea" lastName="Beltrán Solís"/>
+    <mantle.party.PartyRole partyId="MP_EMP_ANDREA" roleTypeId="Employee"/>
+
+    <mantle.party.Party partyId="MP_EMP_CARLOS" pseudoId="CARLOS" partyTypeEnumId="PtyPerson" ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_EMP_CARLOS" firstName="Carlos" lastName="Rivas Handal"/>
+    <mantle.party.PartyRole partyId="MP_EMP_CARLOS" roleTypeId="Employee"/>
+    <mantle.party.PartyRole partyId="MP_EMP_CARLOS" roleTypeId="Worker"/>
+
+    <mantle.party.Party partyId="MP_EMP_SOFIA" pseudoId="SOFIA" partyTypeEnumId="PtyPerson" ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_EMP_SOFIA" firstName="Sofía" lastName="Menjívar López"/>
+    <mantle.party.PartyRole partyId="MP_EMP_SOFIA" roleTypeId="Employee"/>
+
+    <mantle.party.Party partyId="MP_EMP_LUIS" pseudoId="LUIS" partyTypeEnumId="PtyPerson" ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_EMP_LUIS" firstName="Luis" lastName="Interiano Cruz"/>
+    <mantle.party.PartyRole partyId="MP_EMP_LUIS" roleTypeId="Employee"/>
+    <mantle.party.PartyRole partyId="MP_EMP_LUIS" roleTypeId="Worker"/>
+
+    <mantle.party.Party partyId="MP_EMP_JOSE" pseudoId="JOSE" partyTypeEnumId="PtyPerson" ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_EMP_JOSE" firstName="José" lastName="Campos Meléndez"/>
+    <mantle.party.PartyRole partyId="MP_EMP_JOSE" roleTypeId="Employee"/>
+    <mantle.party.PartyRole partyId="MP_EMP_JOSE" roleTypeId="Worker"/>
+
+    <mantle.party.Party partyId="MP_EMP_MARIA" pseudoId="MARIAG" partyTypeEnumId="PtyPerson" ownerPartyId="MP_ORG"/>
+    <mantle.party.Person partyId="MP_EMP_MARIA" firstName="María" lastName="Guzmán Portillo"/>
+    <mantle.party.PartyRole partyId="MP_EMP_MARIA" roleTypeId="Employee"/>
+    <mantle.party.PartyRole partyId="MP_EMP_MARIA" roleTypeId="Worker"/>
+
+    <!-- ================================================================ -->
+    <!-- BODEGAS (Facilities)                                             -->
+    <!-- ================================================================ -->
+
+    <mantle.facility.Facility facilityId="MP_BOD_GRAL" facilityTypeEnumId="FcTpWarehouse"
+            facilityName="Bodega General" ownerPartyId="MP_ORG" facilitySize="600" facilitySizeUomId="LEN_m"/>
+    <mantle.facility.Facility facilityId="MP_BOD_INSUMOS" facilityTypeEnumId="FcTpWarehouse"
+            facilityName="Bodega de Insumos" ownerPartyId="MP_ORG"/>
+    <mantle.facility.Facility facilityId="MP_BOD_PT" facilityTypeEnumId="FcTpWarehouse"
+            facilityName="Bodega de Producto Terminado" ownerPartyId="MP_ORG"/>
+    <mantle.facility.Facility facilityId="MP_BOD_PROCESO" facilityTypeEnumId="FcTpWarehouse"
+            facilityName="Bodega de Producto en Proceso" ownerPartyId="MP_ORG"/>
+
+    <mantle.facility.FacilityLocation facilityId="MP_BOD_GRAL" locationSeqId="GRAL_MP"
+            locationTypeEnumId="FltBulk" description="Materia prima - rack general"
+            areaId="GRAL" aisleId="A" sectionId="01" levelId="01" positionId="01" sequenceNum="10"/>
+    <mantle.facility.FacilityLocation facilityId="MP_BOD_INSUMOS" locationSeqId="INS_PICK"
+            locationTypeEnumId="FltPick" description="Insumos de corte, soldadura y pintura"
+            areaId="INS" aisleId="A" sectionId="01" levelId="01" positionId="01" sequenceNum="20"/>
+    <mantle.facility.FacilityLocation facilityId="MP_BOD_PT" locationSeqId="PT_PICK"
+            locationTypeEnumId="FltPick" description="Producto terminado disponible"
+            areaId="PT" aisleId="A" sectionId="01" levelId="01" positionId="01" sequenceNum="40"/>
+
+    <!-- ================================================================ -->
+    <!-- PRODUCTOS                                                        -->
+    <!-- ================================================================ -->
+
+    <!-- Producto terminado -->
+    <mantle.product.Product productId="MP_PROD_PORTON" pseudoId="PT-PORTON"
+            productName="Portón corredizo de acero estructural según diseño"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="59" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+    <mantle.product.Product productId="MP_PROD_BARANDA" pseudoId="PT-BARANDA"
+            productName="Baranda de acero inoxidable (metro lineal)"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="34" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+
+    <!-- Materia prima -->
+    <mantle.product.Product productId="MP_MAT_TUBO" pseudoId="MP-TUBO2"
+            productName="Tubo estructural 2x2 CH.16"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="59" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+    <mantle.product.Product productId="MP_MAT_LAM" pseudoId="MP-LAM18"
+            productName="Lámina negra 1/8 4x8"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="59" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+    <mantle.product.Product productId="MP_MAT_ANGULO" pseudoId="MP-ANG"
+            productName="Ángulo 1½ x 1/8"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="59" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+    <mantle.product.Product productId="MP_MAT_PLAT" pseudoId="MP-PLAT"
+            productName="Platina 1 x 1/8"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="59" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+    <mantle.product.Product productId="MP_MAT_VARILLA" pseudoId="MP-VAR38"
+            productName="Varilla lisa 3/8"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="59" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+
+    <!-- Insumos -->
+    <mantle.product.Product productId="MP_INS_ELECTRODO" pseudoId="MP-EL6013"
+            productName="Electrodo 6013 (libra)"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="23" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+    <mantle.product.Product productId="MP_INS_DISCO" pseudoId="MP-DISCO7"
+            productName="Disco de corte 7&quot;"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="59" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+    <mantle.product.Product productId="MP_INS_PINTURA" pseudoId="MP-PINT"
+            productName="Pintura anticorrosiva (galón)"
+            productTypeEnumId="PtAsset" amountUomId="USD"
+            svUnidadMedidaCode="18" svTipoItemCode="1" svTributoCode="20" svTaxTreatmentEnumId="SvTaxGravada"/>
+
+    <!-- Precios de venta -->
+    <mantle.product.ProductPrice productId="MP_PROD_PORTON" priceTypeEnumId="PptCurrent"
+            pricePurposeEnumId="PppPurchase" vendorPartyId="MP_ORG"
+            fromDate="2024-01-01 00:00:00" price="450.00" priceUomId="USD" minQuantity="1"/>
+    <mantle.product.ProductPrice productId="MP_PROD_BARANDA" priceTypeEnumId="PptCurrent"
+            pricePurposeEnumId="PppPurchase" vendorPartyId="MP_ORG"
+            fromDate="2024-01-01 00:00:00" price="56.50" priceUomId="USD" minQuantity="1"/>
+
+    <!-- ================================================================ -->
+    <!-- INVENTARIO INICIAL                                               -->
+    <!-- ================================================================ -->
+
+    <mantle.product.asset.Asset assetId="MP_AST_TUBO" assetTypeEnumId="AstTpInventory"
+            productId="MP_MAT_TUBO" facilityId="MP_BOD_GRAL" ownerPartyId="MP_ORG" locationSeqId="GRAL_MP"
+            statusId="AstAvailable" quantityOnHandTotal="180" availableToPromiseTotal="180"
+            acquireCost="9.75" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+    <mantle.product.asset.Asset assetId="MP_AST_LAM" assetTypeEnumId="AstTpInventory"
+            productId="MP_MAT_LAM" facilityId="MP_BOD_GRAL" ownerPartyId="MP_ORG" locationSeqId="GRAL_MP"
+            statusId="AstAvailable" quantityOnHandTotal="45" availableToPromiseTotal="45"
+            acquireCost="38.00" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+    <mantle.product.asset.Asset assetId="MP_AST_ANGULO" assetTypeEnumId="AstTpInventory"
+            productId="MP_MAT_ANGULO" facilityId="MP_BOD_GRAL" ownerPartyId="MP_ORG" locationSeqId="GRAL_MP"
+            statusId="AstAvailable" quantityOnHandTotal="120" availableToPromiseTotal="120"
+            acquireCost="6.20" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+    <mantle.product.asset.Asset assetId="MP_AST_PLAT" assetTypeEnumId="AstTpInventory"
+            productId="MP_MAT_PLAT" facilityId="MP_BOD_GRAL" ownerPartyId="MP_ORG" locationSeqId="GRAL_MP"
+            statusId="AstAvailable" quantityOnHandTotal="260" availableToPromiseTotal="260"
+            acquireCost="3.10" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+    <mantle.product.asset.Asset assetId="MP_AST_VARILLA" assetTypeEnumId="AstTpInventory"
+            productId="MP_MAT_VARILLA" facilityId="MP_BOD_GRAL" ownerPartyId="MP_ORG" locationSeqId="GRAL_MP"
+            statusId="AstAvailable" quantityOnHandTotal="300" availableToPromiseTotal="300"
+            acquireCost="2.40" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+    <mantle.product.asset.Asset assetId="MP_AST_ELECTRODO" assetTypeEnumId="AstTpInventory"
+            productId="MP_INS_ELECTRODO" facilityId="MP_BOD_INSUMOS" ownerPartyId="MP_ORG" locationSeqId="INS_PICK"
+            statusId="AstAvailable" quantityOnHandTotal="150" availableToPromiseTotal="150"
+            acquireCost="1.35" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+    <mantle.product.asset.Asset assetId="MP_AST_DISCO" assetTypeEnumId="AstTpInventory"
+            productId="MP_INS_DISCO" facilityId="MP_BOD_INSUMOS" ownerPartyId="MP_ORG" locationSeqId="INS_PICK"
+            statusId="AstAvailable" quantityOnHandTotal="40" availableToPromiseTotal="40"
+            acquireCost="1.10" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+    <mantle.product.asset.Asset assetId="MP_AST_PINTURA" assetTypeEnumId="AstTpInventory"
+            productId="MP_INS_PINTURA" facilityId="MP_BOD_INSUMOS" ownerPartyId="MP_ORG" locationSeqId="INS_PICK"
+            statusId="AstAvailable" quantityOnHandTotal="25" availableToPromiseTotal="25"
+            acquireCost="22.50" acquireCostUomId="USD" receivedDate="2026-06-01 08:00:00"/>
+
+    <!-- ================================================================ -->
+    <!-- ESTADO DE SALUD DE LA CONEXIÓN MH (mock: en línea)              -->
+    <!-- ================================================================ -->
+
+    <sv.localization.dte.SvDteSystemHealth healthId="DEFAULT" statusEnumId="SvHealthUp"
+            consecutiveFailures="0" lastCheckAt="2026-07-14 08:30:00"
+            lastSuccessAt="2026-07-14 08:30:00"/>
+
+    <!-- ================================================================ -->
+    <!-- FACTURACIÓN — ~2 semanas de operación (julio 2026)               -->
+    <!-- Cada DTE: Invoice + InvoiceItem(s) + DteEmision (modo mock).     -->
+    <!-- jsonOriginal.resumen.totalPagar alimenta los KPIs del dashboard. -->
+    <!-- ================================================================ -->
+
+    <!-- 2026-07-01 · CCF a Constructora Horizonte (aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0001" invoiceTypeEnumId="InvSvCcf"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_HORIZ" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-01 09:15:00" currencyUomId="USD"
+            description="2 portones corredizos según diseño" tipoDteCode="03"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0001" invoiceItemSeqId="01"
+            productId="MP_PROD_PORTON" quantity="2" amount="450.00" description="Portón corredizo 3x2 mt acabado anticorrosivo"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0001"
+            codigoGeneracion="A1B2C3D4-0001-4E5F-8A1B-000000000001" tipoDteCode="03" versionDte="3"
+            numeroControl="DTE-03-00010001-000000000000001" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000001AB" intentos="1"
+            fechaGeneracion="2026-07-01 09:15:00" fechaTransmision="2026-07-01 09:15:42"
+            fechaProcesamientoMh="2026-07-01 09:15:44">
+        <jsonOriginal>{"identificacion":{"version":3,"ambiente":"00","tipoDte":"03","numeroControl":"DTE-03-00010001-000000000000001","codigoGeneracion":"A1B2C3D4-0001-4E5F-8A1B-000000000001"},"resumen":{"totalGravada":900.00,"totalIva":117.00,"montoTotalOperacion":900.00,"totalPagar":1017.00}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-01 · FC a consumidor final (aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0002" invoiceTypeEnumId="InvSvFc"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_CF" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-01 14:40:00" currencyUomId="USD"
+            description="Baranda inoxidable 3 mt" tipoDteCode="01"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0002" invoiceItemSeqId="01"
+            productId="MP_PROD_BARANDA" quantity="3" amount="56.50" description="Baranda de acero inoxidable, 3 metros lineales"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0002"
+            codigoGeneracion="A1B2C3D4-0002-4E5F-8A1B-000000000002" tipoDteCode="01" versionDte="1"
+            numeroControl="DTE-01-00010001-000000000000001" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000002CD" intentos="1"
+            fechaGeneracion="2026-07-01 14:40:00" fechaTransmision="2026-07-01 14:40:31"
+            fechaProcesamientoMh="2026-07-01 14:40:33">
+        <jsonOriginal>{"identificacion":{"version":1,"ambiente":"00","tipoDte":"01","numeroControl":"DTE-01-00010001-000000000000001","codigoGeneracion":"A1B2C3D4-0002-4E5F-8A1B-000000000002"},"resumen":{"totalGravada":150.00,"totalIva":19.50,"montoTotalOperacion":169.50,"totalPagar":169.50}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-02 · CCF a Ferretería La Bodega (aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0003" invoiceTypeEnumId="InvSvCcf"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_FERRE" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-02 10:05:00" currencyUomId="USD"
+            description="Estructura metálica y platinas" tipoDteCode="03"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0003" invoiceItemSeqId="01"
+            productId="MP_MAT_ANGULO" quantity="60" amount="8.50" description="Ángulo 1½ x 1/8 cortado a medida"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0003" invoiceItemSeqId="02"
+            productId="MP_MAT_PLAT" quantity="30" amount="3.50" description="Platina 1 x 1/8"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0003"
+            codigoGeneracion="A1B2C3D4-0003-4E5F-8A1B-000000000003" tipoDteCode="03" versionDte="3"
+            numeroControl="DTE-03-00010001-000000000000002" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000003EF" intentos="1"
+            fechaGeneracion="2026-07-02 10:05:00" fechaTransmision="2026-07-02 10:05:20"
+            fechaProcesamientoMh="2026-07-02 10:05:22">
+        <jsonOriginal>{"identificacion":{"version":3,"ambiente":"00","tipoDte":"03","numeroControl":"DTE-03-00010001-000000000000002","codigoGeneracion":"A1B2C3D4-0003-4E5F-8A1B-000000000003"},"resumen":{"totalGravada":615.00,"totalIva":79.95,"montoTotalOperacion":615.00,"totalPagar":694.95}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-04 · FC a consumidor final (aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0004" invoiceTypeEnumId="InvSvFc"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_CF" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-04 11:20:00" currencyUomId="USD"
+            description="Baranda inoxidable 1.5 mt" tipoDteCode="01"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0004" invoiceItemSeqId="01"
+            productId="MP_PROD_BARANDA" quantity="1.5" amount="56.50" description="Baranda de acero inoxidable, 1.5 metros"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0004"
+            codigoGeneracion="A1B2C3D4-0004-4E5F-8A1B-000000000004" tipoDteCode="01" versionDte="1"
+            numeroControl="DTE-01-00010001-000000000000002" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000004GH" intentos="1"
+            fechaGeneracion="2026-07-04 11:20:00" fechaTransmision="2026-07-04 11:20:18"
+            fechaProcesamientoMh="2026-07-04 11:20:20">
+        <jsonOriginal>{"identificacion":{"version":1,"ambiente":"00","tipoDte":"01","numeroControl":"DTE-01-00010001-000000000000002","codigoGeneracion":"A1B2C3D4-0004-4E5F-8A1B-000000000004"},"resumen":{"totalGravada":75.00,"totalIva":9.75,"montoTotalOperacion":84.75,"totalPagar":84.75}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-07 · CCF a Constructora Horizonte (aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0005" invoiceTypeEnumId="InvSvCcf"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_HORIZ" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-07 09:00:00" currencyUomId="USD"
+            description="Portones y baranda para proyecto residencial" tipoDteCode="03"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0005" invoiceItemSeqId="01"
+            productId="MP_PROD_PORTON" quantity="2" amount="450.00" description="Portón corredizo 3x2 mt"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0005" invoiceItemSeqId="02"
+            productId="MP_PROD_BARANDA" quantity="5" amount="56.50" description="Baranda inoxidable, 5 metros"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0005"
+            codigoGeneracion="A1B2C3D4-0005-4E5F-8A1B-000000000005" tipoDteCode="03" versionDte="3"
+            numeroControl="DTE-03-00010001-000000000000003" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000005IJ" intentos="1"
+            fechaGeneracion="2026-07-07 09:00:00" fechaTransmision="2026-07-07 09:00:25"
+            fechaProcesamientoMh="2026-07-07 09:00:27">
+        <jsonOriginal>{"identificacion":{"version":3,"ambiente":"00","tipoDte":"03","numeroControl":"DTE-03-00010001-000000000000003","codigoGeneracion":"A1B2C3D4-0005-4E5F-8A1B-000000000005"},"resumen":{"totalGravada":1182.50,"totalIva":153.73,"montoTotalOperacion":1182.50,"totalPagar":1336.23}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-07 · FC a consumidor final (aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0006" invoiceTypeEnumId="InvSvFc"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_CF" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-07 16:10:00" currencyUomId="USD"
+            description="Baranda inoxidable 1 mt" tipoDteCode="01"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0006" invoiceItemSeqId="01"
+            productId="MP_PROD_BARANDA" quantity="1" amount="56.50" description="Baranda de acero inoxidable, 1 metro"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0006"
+            codigoGeneracion="A1B2C3D4-0006-4E5F-8A1B-000000000006" tipoDteCode="01" versionDte="1"
+            numeroControl="DTE-01-00010001-000000000000003" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000006KL" intentos="1"
+            fechaGeneracion="2026-07-07 16:10:00" fechaTransmision="2026-07-07 16:10:15"
+            fechaProcesamientoMh="2026-07-07 16:10:17">
+        <jsonOriginal>{"identificacion":{"version":1,"ambiente":"00","tipoDte":"01","numeroControl":"DTE-01-00010001-000000000000003","codigoGeneracion":"A1B2C3D4-0006-4E5F-8A1B-000000000006"},"resumen":{"totalGravada":50.00,"totalIva":6.50,"montoTotalOperacion":56.50,"totalPagar":56.50}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-08 · FSE (compra a sujeto excluido, aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0007" invoiceTypeEnumId="InvSvFse"
+            fromPartyId="MP_ORG" toPartyId="MP_SUJ_EXCL" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-08 08:45:00" currencyUomId="USD"
+            description="Servicio de pintura y acabado (sujeto excluido)" tipoDteCode="14"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0007" invoiceItemSeqId="01"
+            amount="120.00" quantity="1" description="Servicio de pintura anticorrosiva de estructuras"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0007"
+            codigoGeneracion="A1B2C3D4-0007-4E5F-8A1B-000000000007" tipoDteCode="14" versionDte="1"
+            numeroControl="DTE-14-00010001-000000000000001" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000007MN" intentos="1"
+            fechaGeneracion="2026-07-08 08:45:00" fechaTransmision="2026-07-08 08:45:19"
+            fechaProcesamientoMh="2026-07-08 08:45:21">
+        <jsonOriginal>{"identificacion":{"version":1,"ambiente":"00","tipoDte":"14","numeroControl":"DTE-14-00010001-000000000000001","codigoGeneracion":"A1B2C3D4-0007-4E5F-8A1B-000000000007"},"resumen":{"totalCompra":120.00,"ivaRete1":0.00,"montoTotalOperacion":120.00,"totalPagar":120.00}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-09 · CCF a Ferretería (RECHAZADO por MH) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0008" invoiceTypeEnumId="InvSvCcf"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_FERRE" statusId="InvoiceInProcess"
+            invoiceDate="2026-07-09 15:30:00" currencyUomId="USD"
+            description="Materia prima (rechazado, requiere corrección)" tipoDteCode="03"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0008" invoiceItemSeqId="01"
+            productId="MP_MAT_TUBO" quantity="30" amount="15.00" description="Tubo estructural 2x2 CH.16"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0008"
+            codigoGeneracion="A1B2C3D4-0008-4E5F-8A1B-000000000008" tipoDteCode="03" versionDte="3"
+            numeroControl="DTE-03-00010001-000000000000004" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteRejected"
+            errorCode="004" errorMessage="Receptor: NRC no válido para el tipo de documento" intentos="2"
+            fechaGeneracion="2026-07-09 15:30:00" fechaTransmision="2026-07-09 15:30:22"
+            fechaProcesamientoMh="2026-07-09 15:30:24" observacionesMh="Rechazado por MH: corregir NRC del receptor y reenviar.">
+        <jsonOriginal>{"identificacion":{"version":3,"ambiente":"00","tipoDte":"03","numeroControl":"DTE-03-00010001-000000000000004","codigoGeneracion":"A1B2C3D4-0008-4E5F-8A1B-000000000008"},"resumen":{"totalGravada":450.00,"totalIva":58.50,"montoTotalOperacion":450.00,"totalPagar":508.50}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-11 · CCF a Constructora Horizonte (aceptado) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0009" invoiceTypeEnumId="InvSvCcf"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_HORIZ" statusId="InvoiceFinalized"
+            invoiceDate="2026-07-11 10:50:00" currencyUomId="USD"
+            description="Estructura metálica a medida" tipoDteCode="03"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0009" invoiceItemSeqId="01"
+            productId="MP_MAT_TUBO" quantity="40" amount="15.00" description="Tubo estructural 2x2 CH.16"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0009" invoiceItemSeqId="02"
+            productId="MP_MAT_LAM" quantity="3" amount="60.00" description="Lámina negra 1/8 4x8"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0009"
+            codigoGeneracion="A1B2C3D4-0009-4E5F-8A1B-000000000009" tipoDteCode="03" versionDte="3"
+            numeroControl="DTE-03-00010001-000000000000005" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteAccepted"
+            selloRecepcion="2026S3LL0RECEPCI0N00000000000000000009OP" intentos="1"
+            fechaGeneracion="2026-07-11 10:50:00" fechaTransmision="2026-07-11 10:50:27"
+            fechaProcesamientoMh="2026-07-11 10:50:29">
+        <jsonOriginal>{"identificacion":{"version":3,"ambiente":"00","tipoDte":"03","numeroControl":"DTE-03-00010001-000000000000005","codigoGeneracion":"A1B2C3D4-0009-4E5F-8A1B-000000000009"},"resumen":{"totalGravada":780.00,"totalIva":101.40,"montoTotalOperacion":780.00,"totalPagar":881.40}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- 2026-07-14 · FC a consumidor final (transmitido, pendiente) -->
+    <mantle.account.invoice.Invoice invoiceId="MP_INV_0010" invoiceTypeEnumId="InvSvFc"
+            fromPartyId="MP_ORG" toPartyId="MP_CLI_CF" statusId="InvoiceInProcess"
+            invoiceDate="2026-07-14 08:20:00" currencyUomId="USD"
+            description="Baranda inoxidable 4 mt" tipoDteCode="01"/>
+    <mantle.account.invoice.InvoiceItem invoiceId="MP_INV_0010" invoiceItemSeqId="01"
+            productId="MP_PROD_BARANDA" quantity="4" amount="56.50" description="Baranda de acero inoxidable, 4 metros"/>
+    <sv.localization.dte.DteEmision invoiceId="MP_INV_0010"
+            codigoGeneracion="A1B2C3D4-0010-4E5F-8A1B-000000000010" tipoDteCode="01" versionDte="1"
+            numeroControl="DTE-01-00010001-000000000000004" ambienteEnumId="SvAmbTest"
+            tipoTransmisionEnumId="SvTransNormal" statusId="DteTransmitted" intentos="1"
+            fechaGeneracion="2026-07-14 08:20:00" fechaTransmision="2026-07-14 08:20:16">
+        <jsonOriginal>{"identificacion":{"version":1,"ambiente":"00","tipoDte":"01","numeroControl":"DTE-01-00010001-000000000000004","codigoGeneracion":"A1B2C3D4-0010-4E5F-8A1B-000000000010"},"resumen":{"totalGravada":200.00,"totalIva":26.00,"montoTotalOperacion":226.00,"totalPagar":226.00}}</jsonOriginal>
+    </sv.localization.dte.DteEmision>
+
+    <!-- ================================================================ -->
+    <!-- CORRIDAS DE PRODUCCIÓN                                           -->
+    <!-- ================================================================ -->
+
+    <!-- Corrida en proceso: portones para Constructora Horizonte -->
+    <mantle.work.effort.WorkEffort workEffortId="MP_RUN_001" workEffortTypeEnumId="WetEvent"
+            purposeEnumId="WepProductionRun" workEffortName="Fabricación 2 portones corredizos - Horizonte"
+            description="Fabricación de 2 portones corredizos de acero estructural 3x2 mt con acabado anticorrosivo, según diseño del cliente Constructora Horizonte."
+            statusId="WeInProgress" facilityId="MP_BOD_PROCESO" ownerPartyId="MP_ORG"
+            estimatedStartDate="2026-07-02 07:00:00" estimatedCompletionDate="2026-07-06 17:00:00" priority="5"/>
+    <mantle.work.effort.WorkEffortProduct workEffortId="MP_RUN_001" productId="MP_PROD_PORTON"
+            typeEnumId="WeptProduce" estimatedQuantity="2" fromDate="2026-07-02 07:00:00"/>
+    <mantle.work.effort.WorkEffortProduct workEffortId="MP_RUN_001" productId="MP_MAT_TUBO"
+            typeEnumId="WeptConsume" estimatedQuantity="24" fromDate="2026-07-02 07:00:00"/>
+    <mantle.work.effort.WorkEffortProduct workEffortId="MP_RUN_001" productId="MP_MAT_LAM"
+            typeEnumId="WeptConsume" estimatedQuantity="2" fromDate="2026-07-02 07:00:00"/>
+    <mantle.work.effort.WorkEffortProduct workEffortId="MP_RUN_001" productId="MP_INS_ELECTRODO"
+            typeEnumId="WeptConsume" estimatedQuantity="18" fromDate="2026-07-02 07:00:00"/>
+    <mantle.work.effort.WorkEffortParty workEffortId="MP_RUN_001" partyId="MP_EMP_CARLOS"
+            roleTypeId="Worker" fromDate="2026-07-02 07:00:00" statusId="WeptAssigned"/>
+    <mantle.work.effort.WorkEffortParty workEffortId="MP_RUN_001" partyId="MP_EMP_LUIS"
+            roleTypeId="Worker" fromDate="2026-07-02 07:00:00" statusId="WeptAssigned"/>
+
+    <!-- Corrida completada: barandas -->
+    <mantle.work.effort.WorkEffort workEffortId="MP_RUN_002" workEffortTypeEnumId="WetEvent"
+            purposeEnumId="WepProductionRun" workEffortName="Fabricación baranda inoxidable - stock"
+            description="Corrida de barandas de acero inoxidable para inventario de producto terminado."
+            statusId="WeComplete" facilityId="MP_BOD_PROCESO" ownerPartyId="MP_ORG"
+            estimatedStartDate="2026-06-24 07:00:00" estimatedCompletionDate="2026-06-27 17:00:00"
+            actualStartDate="2026-06-24 07:10:00" actualCompletionDate="2026-06-27 15:30:00" priority="4"/>
+    <mantle.work.effort.WorkEffortProduct workEffortId="MP_RUN_002" productId="MP_PROD_BARANDA"
+            typeEnumId="WeptProduce" estimatedQuantity="20" fromDate="2026-06-24 07:00:00"/>
+    <mantle.work.effort.WorkEffortProduct workEffortId="MP_RUN_002" productId="MP_MAT_VARILLA"
+            typeEnumId="WeptConsume" estimatedQuantity="40" fromDate="2026-06-24 07:00:00"/>
+    <mantle.work.effort.WorkEffortProduct workEffortId="MP_RUN_002" productId="MP_MAT_PLAT"
+            typeEnumId="WeptConsume" estimatedQuantity="20" fromDate="2026-06-24 07:00:00"/>
+    <mantle.work.effort.WorkEffortParty workEffortId="MP_RUN_002" partyId="MP_EMP_LUIS"
+            roleTypeId="Worker" fromDate="2026-06-24 07:00:00" statusId="WeptAssigned"/>
+    <mantle.work.effort.WorkEffortParty workEffortId="MP_RUN_002" partyId="MP_EMP_JOSE"
+            roleTypeId="Worker" fromDate="2026-06-24 07:00:00" statusId="WeptAssigned"/>
+
+    <!-- ================================================================ -->
+    <!-- NÓMINA — corrida cerrada de junio 2026 (contabilizada)          -->
+    <!-- ================================================================ -->
+
+    <sv.localization.payroll.SvPayrollRun svPayrollRunId="MP_PAY_202606" organizationPartyId="MP_ORG"
+            periodYearMonth="2026-06" statusId="SvPayPosted"
+            runDate="2026-06-30 16:00:00" asOfDate="2026-06-30 00:00:00" currencyUomId="USD"
+            totalGross="4050.00" totalNet="3483.34" totalEmployerCost="4693.14"
+            totalIsssEmployee="115.50" totalAfpEmployee="293.64" totalRenta="157.52"
+            totalIsssEmployer="288.75" totalAfpEmployer="354.39" employeeCount="6"
+            approvedDate="2026-06-30 16:30:00" notes="Corrida de nómina mensual junio 2026 — 6 empleados."/>
+
+    <sv.localization.payroll.SvPayrollRunEmployee svPayrollRunId="MP_PAY_202606" employeePartyId="MP_EMP_ANDREA"
+            positionDescription="Gerente General" grossMonthlyAmount="1200.00"
+            isssEmployee="30.00" isssEmployer="75.00" afpEmployee="87.00" afpEmployer="105.00"
+            rentaBase="1083.00" rentaTaxableBase="1083.00" rentaMonthly="97.55"
+            totalEmployeeDeductions="214.55" totalEmployerContributions="180.00"
+            netPay="985.45" employerCost="1380.00" statusId="SvPayLinePaid"/>
+    <sv.localization.payroll.SvPayrollRunEmployee svPayrollRunId="MP_PAY_202606" employeePartyId="MP_EMP_CARLOS"
+            positionDescription="Jefe de Producción" grossMonthlyAmount="850.00"
+            isssEmployee="25.50" isssEmployer="63.75" afpEmployee="61.63" afpEmployer="74.38"
+            rentaBase="762.87" rentaTaxableBase="762.87" rentaMonthly="38.96"
+            totalEmployeeDeductions="126.09" totalEmployerContributions="138.13"
+            netPay="723.91" employerCost="988.13" statusId="SvPayLinePaid"/>
+    <sv.localization.payroll.SvPayrollRunEmployee svPayrollRunId="MP_PAY_202606" employeePartyId="MP_EMP_SOFIA"
+            positionDescription="Digitadora / Elaboradora" grossMonthlyAmount="650.00"
+            isssEmployee="19.50" isssEmployer="48.75" afpEmployee="47.13" afpEmployer="56.88"
+            rentaBase="583.37" rentaTaxableBase="583.37" rentaMonthly="21.01"
+            totalEmployeeDeductions="87.64" totalEmployerContributions="105.63"
+            netPay="562.36" employerCost="755.63" statusId="SvPayLinePaid"/>
+    <sv.localization.payroll.SvPayrollRunEmployee svPayrollRunId="MP_PAY_202606" employeePartyId="MP_EMP_LUIS"
+            positionDescription="Operario soldador" grossMonthlyAmount="500.00"
+            isssEmployee="15.00" isssEmployer="37.50" afpEmployee="36.25" afpEmployer="43.75"
+            rentaBase="448.75" rentaTaxableBase="448.75" rentaMonthly="0.00"
+            totalEmployeeDeductions="51.25" totalEmployerContributions="81.25"
+            netPay="448.75" employerCost="581.25" statusId="SvPayLinePaid"/>
+    <sv.localization.payroll.SvPayrollRunEmployee svPayrollRunId="MP_PAY_202606" employeePartyId="MP_EMP_JOSE"
+            positionDescription="Operario" grossMonthlyAmount="420.00"
+            isssEmployee="12.60" isssEmployer="31.50" afpEmployee="30.45" afpEmployer="36.75"
+            rentaBase="376.95" rentaTaxableBase="376.95" rentaMonthly="0.00"
+            totalEmployeeDeductions="43.05" totalEmployerContributions="68.25"
+            netPay="376.95" employerCost="488.25" statusId="SvPayLinePaid"/>
+    <sv.localization.payroll.SvPayrollRunEmployee svPayrollRunId="MP_PAY_202606" employeePartyId="MP_EMP_MARIA"
+            positionDescription="Bodeguera" grossMonthlyAmount="430.00"
+            isssEmployee="12.90" isssEmployer="32.25" afpEmployee="31.18" afpEmployer="37.63"
+            rentaBase="385.92" rentaTaxableBase="385.92" rentaMonthly="0.00"
+            totalEmployeeDeductions="44.08" totalEmployerContributions="69.88"
+            netPay="385.92" employerCost="499.88" statusId="SvPayLinePaid"/>
+
+</entity-facade-xml>

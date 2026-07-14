@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <!--
+        post#DteAcctgTrans
+
+        Genera un AcctgTrans + AcctgTransEntry desde un DteEmision aceptado,
+        usando SvDteAccountMapping para resolver las cuentas.
+
+        Es idempotente: si ya existe AcctgTrans con invoiceId del DTE y
+        groupStatusId=AtsPosted, no genera nuevo asiento (devuelve el existente).
+
+        Reglas:
+          - Solo procesa DteEmision en status DteAccepted o DteMockAccepted.
+          - Solo procesa tipos DTE mapeables: 01, 03, 05, 06, 11, 14.
+          - El asiento se vincula al invoiceId y dteEmisionId.
+          - amounts en moneda local de la org (PartyAcctgPreference).
+    -->
+    <service verb="post" noun="DteAcctgTrans" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/AcctgPostingServices.groovy"
+             method="postDteAcctgTrans">
+        <description>Postea un DTE aceptado al libro mayor (AcctgTrans + entries).</description>
+        <in-parameters>
+            <parameter name="dteEmisionId" required="true"/>
+            <parameter name="direction" default-value="O">
+                <description>O=venta (emision propia), I=compra (DTE recibido)</description>
+            </parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="acctgTransId"/>
+            <parameter name="entriesCreated" type="Integer"/>
+            <parameter name="alreadyPosted" type="Boolean"/>
+            <parameter name="totalDebit"/>
+            <parameter name="totalCredit"/>
+        </out-parameters>
+    </service>
+
+    <!--
+        post#PayrollAcctgTrans
+
+        Genera un AcctgTrans agregado desde una corrida de nomina aprobada,
+        usando SvPayrollAccountMapping para resolver las cuentas.
+
+        Toma los totales de la cabecera (totalGross, totalIsssEmployee,
+        totalAfpEmployee, totalRenta, totalIsssEmployer, totalAfpEmployer,
+        totalNet) y construye un asiento balanceado.
+
+        Estado: SvPayApproved -> SvPayPosted. Vincula postedAcctgTransId
+        en la corrida.
+
+        Es idempotente.
+    -->
+    <service verb="post" noun="PayrollAcctgTrans" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/AcctgPostingServices.groovy"
+             method="postPayrollAcctgTrans">
+        <description>Postea una corrida de nomina aprobada al libro mayor.</description>
+        <in-parameters>
+            <parameter name="svPayrollRunId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svPayrollRunId"/>
+            <parameter name="acctgTransId"/>
+            <parameter name="entriesCreated" type="Integer"/>
+            <parameter name="alreadyPosted" type="Boolean"/>
+            <parameter name="totalDebit"/>
+            <parameter name="totalCredit"/>
+            <parameter name="statusId"/>
+        </out-parameters>
+    </service>
+
+</services>

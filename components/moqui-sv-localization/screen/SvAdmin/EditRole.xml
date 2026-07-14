@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Edicion de rol SV con checklist funcional. La tabla no inventa un modelo
+    paralelo: cada fila activa/desactiva moqui.security.ArtifactAuthz para el
+    UserGroup del rol y un ArtifactGroup existente.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Editar Rol" default-menu-index="3" menu-include="false">
+
+    <parameter name="userGroupId" required="true"/>
+
+    <transition name="updateRole">
+        <service-call name="sv.localization.UserAdminServices.update#SvRole"/>
+        <default-response url="."><parameter name="userGroupId"/></default-response>
+    </transition>
+    <transition name="savePermissions">
+        <service-call name="sv.localization.UserAdminServices.set#SvRolePermissions"/>
+        <default-response url="."><parameter name="userGroupId"/></default-response>
+    </transition>
+    <transition name="backToRoles"><default-response url="../Roles"/></transition>
+
+    <actions>
+        <entity-find-one entity-name="moqui.security.UserGroup" value-field="roleGroup"/>
+        <if condition="roleGroup == null"><return error="true" message="Rol no encontrado: ${userGroupId}"/></if>
+        <service-call name="sv.localization.UserAdminServices.get#SvRolePermissionCatalog"
+                      in-map="[userGroupId:userGroupId]" out-map="permissionCatalogOut"/>
+        <set field="permissionList" from="permissionCatalogOut.permissionList ?: []"/>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Rol ${userGroupId}"/>
+            <box-toolbar>
+                <link url="backToRoles" text="Volver a roles" btn-type="default"/>
+            </box-toolbar>
+            <box-body>
+                <form-single name="RoleForm" transition="updateRole" map="roleGroup">
+                    <field name="userGroupId"><default-field title="Codigo de rol"
+                            tooltip="UserGroup de Moqui. Los usuarios reciben este rol por UserGroupMember."><display/></default-field></field>
+                    <field name="description"><default-field title="Descripcion"
+                            tooltip="Nombre funcional del rol para que administracion lo pueda reconocer al asignarlo.">
+                        <text-line size="72"/></default-field></field>
+                    <field name="ipAllowed"><default-field title="IPs permitidas"
+                            tooltip="Opcional. Patron de IPs permitidas para usuarios de este rol; dejar vacio si no se restringira por red.">
+                        <text-line size="60"/></default-field></field>
+                    <field name="requireAuthcFactor"><default-field title="Requiere factor adicional"
+                            tooltip="Si se activa, Moqui exigira un factor de autenticacion adicional cuando la instalacion lo tenga configurado.">
+                        <radio no-current-selected-key="N"><option key="Y" text="Si"/><option key="N" text="No"/></radio></default-field></field>
+                    <field name="submitButton"><default-field title="Guardar datos"><submit/></default-field></field>
+                    <field-layout>
+                        <field-ref name="userGroupId"/>
+                        <field-ref name="description"/>
+                        <field-row><field-ref name="ipAllowed"/><field-ref name="requireAuthcFactor"/></field-row>
+                        <field-ref name="submitButton"/>
+                    </field-layout>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Checklist de permisos"/>
+            <box-body>
+                <form-list name="RolePermissionList" list="permissionList" transition="savePermissions" multi="true">
+                    <field name="userGroupId" from="userGroupId"><default-field><hidden/></default-field></field>
+                    <field name="artifactGroupId"><default-field><hidden/></default-field></field>
+                    <field name="authzActionEnumId"><default-field><hidden/></default-field></field>
+                    <field name="permissionEnabled" from="permissionEnabled"><default-field title="Activo" tooltip="${tooltip}">
+                        <check all-checked="${enabled ? 'true' : 'false'}"><option key="Y" text=" "/></check>
+                    </default-field></field>
+                    <field name="category"><default-field title="Area" tooltip="${tooltip}"><display/></default-field></field>
+                    <field name="label"><default-field title="Permiso" tooltip="${tooltip}"><display/></default-field></field>
+                    <field name="actionLabel"><default-field title="Alcance" tooltip="${tooltip}"><display/></default-field></field>
+                    <field name="sensitiveLabel"><default-field title="Riesgo" tooltip="${tooltip}"><display/></default-field></field>
+                    <field name="description"><default-field title="Que habilita" tooltip="${tooltip}"><display/></default-field></field>
+                    <field name="submitButton"><default-field title="Guardar permisos"><submit/></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

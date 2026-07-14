@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="get" noun="OrderPrintContext" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/OrderPdfServices.groovy"
+             method="getOrderPrintContext">
+        <description>Prepara contexto Mantle para PDF operativo de una orden o parte de orden.</description>
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+            <parameter name="orderPartSeqId"/>
+            <parameter name="documentType"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="orderHeader" type="EntityValue"/>
+            <parameter name="orderStatusLabel"/>
+            <parameter name="documentTypeLabel"/>
+            <parameter name="parts" type="List"/>
+            <parameter name="generatedAt"/>
+            <parameter name="currencyUomId"/>
+            <parameter name="total" type="BigDecimal"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="OrderPdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/OrderPdfServices.groovy"
+             method="renderOrderPdf">
+        <description>Renderiza PDF operativo FOP para ordenes de venta/compra usando OrderHeader, OrderPart y OrderItem de Mantle.</description>
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+            <parameter name="orderPartSeqId"/>
+            <parameter name="documentType"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+</services>

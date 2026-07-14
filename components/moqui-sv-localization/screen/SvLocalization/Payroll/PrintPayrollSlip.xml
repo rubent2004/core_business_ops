@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-include="false" standalone="true">
+    <parameter name="svPayrollRunId" required="true"/>
+    <parameter name="employeePartyId" required="true"/>
+    <actions>
+        <service-call name="sv.localization.PayrollSvServices.get#PayrollSlipContext" in-map="context" out-map="context"/>
+        <set field="templateLocation" value="component://moqui-sv-localization/template/payroll/BoletaPago.xsl-fo.ftl"/>
+    </actions>
+    <widgets>
+        <render-mode>
+            <text type="xsl-fo" location="${templateLocation}" template="true" encode="false" no-boundary-comment="true"/>
+        </render-mode>
+    </widgets>
+</screen>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="install">
+    <moqui.basic.Geo geoId="SV01_M13" geoName="AHUACHAPÁN NORTE" geoNameLocal="Ahuachapán Norte" geoCodeAlpha2="13" geoCodeAlpha3="0113" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV01" toGeoId="SV01_M13" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M14" geoName="AHUACHAPÁN CENTRO" geoNameLocal="Ahuachapán Centro" geoCodeAlpha2="14" geoCodeAlpha3="0114" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV01" toGeoId="SV01_M14" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV01_M15" geoName="AHUACHAPÁN SUR" geoNameLocal="Ahuachapán Sur" geoCodeAlpha2="15" geoCodeAlpha3="0115" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV01" toGeoId="SV01_M15" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M14" geoName="SANTA ANA NORTE" geoNameLocal="Santa Ana Norte" geoCodeAlpha2="14" geoCodeAlpha3="0214" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV02" toGeoId="SV02_M14" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M15" geoName="SANTA ANA CENTRO" geoNameLocal="Santa Ana Centro" geoCodeAlpha2="15" geoCodeAlpha3="0215" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV02" toGeoId="SV02_M15" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M16" geoName="SANTA ANA ESTE" geoNameLocal="Santa Ana Este" geoCodeAlpha2="16" geoCodeAlpha3="0216" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV02" toGeoId="SV02_M16" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV02_M17" geoName="SANTA ANA OESTE" geoNameLocal="Santa Ana Oeste" geoCodeAlpha2="17" geoCodeAlpha3="0217" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV02" toGeoId="SV02_M17" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M17" geoName="SONSONATE NORTE" geoNameLocal="Sonsonate Norte" geoCodeAlpha2="17" geoCodeAlpha3="0317" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV03" toGeoId="SV03_M17" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M18" geoName="SONSONATE CENTRO" geoNameLocal="Sonsonate Centro" geoCodeAlpha2="18" geoCodeAlpha3="0318" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV03" toGeoId="SV03_M18" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M19" geoName="SONSONATE ESTE" geoNameLocal="Sonsonate Este" geoCodeAlpha2="19" geoCodeAlpha3="0319" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV03" toGeoId="SV03_M19" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV03_M20" geoName="SONSONATE OESTE" geoNameLocal="Sonsonate Oeste" geoCodeAlpha2="20" geoCodeAlpha3="0320" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV03" toGeoId="SV03_M20" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M34" geoName="CHALATENANGO NORTE" geoNameLocal="Chalatenango Norte" geoCodeAlpha2="34" geoCodeAlpha3="0434" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV04" toGeoId="SV04_M34" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M35" geoName="CHALATENANGO CENTRO" geoNameLocal="Chalatenango Centro" geoCodeAlpha2="35" geoCodeAlpha3="0435" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV04" toGeoId="SV04_M35" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV04_M36" geoName="CHALATENANGO SUR" geoNameLocal="Chalatenango Sur" geoCodeAlpha2="36" geoCodeAlpha3="0436" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV04" toGeoId="SV04_M36" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M23" geoName="LA LIBERTAD NORTE" geoNameLocal="La Libertad Norte" geoCodeAlpha2="23" geoCodeAlpha3="0523" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV05" toGeoId="SV05_M23" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M24" geoName="LA LIBERTAD CENTRO" geoNameLocal="La Libertad Centro" geoCodeAlpha2="24" geoCodeAlpha3="0524" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV05" toGeoId="SV05_M24" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M25" geoName="LA LIBERTAD OESTE" geoNameLocal="La Libertad Oeste" geoCodeAlpha2="25" geoCodeAlpha3="0525" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV05" toGeoId="SV05_M25" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M26" geoName="LA LIBERTAD ESTE" geoNameLocal="La Libertad Este" geoCodeAlpha2="26" geoCodeAlpha3="0526" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV05" toGeoId="SV05_M26" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M27" geoName="LA LIBERTAD COSTA" geoNameLocal="La Libertad Costa" geoCodeAlpha2="27" geoCodeAlpha3="0527" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV05" toGeoId="SV05_M27" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV05_M28" geoName="LA LIBERTAD SUR" geoNameLocal="La Libertad Sur" geoCodeAlpha2="28" geoCodeAlpha3="0528" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV05" toGeoId="SV05_M28" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M20" geoName="SAN SALVADOR NORTE" geoNameLocal="San Salvador Norte" geoCodeAlpha2="20" geoCodeAlpha3="0620" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV06" toGeoId="SV06_M20" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M21" geoName="SAN SALVADOR OESTE" geoNameLocal="San Salvador Oeste" geoCodeAlpha2="21" geoCodeAlpha3="0621" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV06" toGeoId="SV06_M21" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M22" geoName="SAN SALVADOR ESTE" geoNameLocal="San Salvador Este" geoCodeAlpha2="22" geoCodeAlpha3="0622" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV06" toGeoId="SV06_M22" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M23" geoName="SAN SALVADOR CENTRO" geoNameLocal="San Salvador Centro" geoCodeAlpha2="23" geoCodeAlpha3="0623" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV06" toGeoId="SV06_M23" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV06_M24" geoName="SAN SALVADOR SUR" geoNameLocal="San Salvador Sur" geoCodeAlpha2="24" geoCodeAlpha3="0624" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV06" toGeoId="SV06_M24" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M17" geoName="CUSCATLÁN NORTE" geoNameLocal="Cuscatlán Norte" geoCodeAlpha2="17" geoCodeAlpha3="0717" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV07" toGeoId="SV07_M17" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV07_M18" geoName="CUSCATLÁN SUR" geoNameLocal="Cuscatlán Sur" geoCodeAlpha2="18" geoCodeAlpha3="0718" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV07" toGeoId="SV07_M18" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M23" geoName="LA PAZ OESTE" geoNameLocal="La Paz Oeste" geoCodeAlpha2="23" geoCodeAlpha3="0823" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV08" toGeoId="SV08_M23" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M24" geoName="LA PAZ CENTRO" geoNameLocal="La Paz Centro" geoCodeAlpha2="24" geoCodeAlpha3="0824" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV08" toGeoId="SV08_M24" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV08_M25" geoName="LA PAZ ESTE" geoNameLocal="La Paz Este" geoCodeAlpha2="25" geoCodeAlpha3="0825" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV08" toGeoId="SV08_M25" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M10" geoName="CABAÑAS OESTE" geoNameLocal="Cabañas Oeste" geoCodeAlpha2="10" geoCodeAlpha3="0910" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV09" toGeoId="SV09_M10" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV09_M11" geoName="CABAÑAS ESTE" geoNameLocal="Cabañas Este" geoCodeAlpha2="11" geoCodeAlpha3="0911" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV09" toGeoId="SV09_M11" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M14" geoName="SAN VICENTE NORTE" geoNameLocal="San Vicente Norte" geoCodeAlpha2="14" geoCodeAlpha3="1014" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV10" toGeoId="SV10_M14" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV10_M15" geoName="SAN VICENTE SUR" geoNameLocal="San Vicente Sur" geoCodeAlpha2="15" geoCodeAlpha3="1015" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV10" toGeoId="SV10_M15" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M24" geoName="USULUTÁN NORTE" geoNameLocal="Usulután Norte" geoCodeAlpha2="24" geoCodeAlpha3="1124" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV11" toGeoId="SV11_M24" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M25" geoName="USULUTÁN ESTE" geoNameLocal="Usulután Este" geoCodeAlpha2="25" geoCodeAlpha3="1125" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV11" toGeoId="SV11_M25" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV11_M26" geoName="USULUTÁN OESTE" geoNameLocal="Usulután Oeste" geoCodeAlpha2="26" geoCodeAlpha3="1126" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV11" toGeoId="SV11_M26" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M21" geoName="SAN MIGUEL NORTE" geoNameLocal="San Miguel Norte" geoCodeAlpha2="21" geoCodeAlpha3="1221" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV12" toGeoId="SV12_M21" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M22" geoName="SAN MIGUEL CENTRO" geoNameLocal="San Miguel Centro" geoCodeAlpha2="22" geoCodeAlpha3="1222" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV12" toGeoId="SV12_M22" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV12_M23" geoName="SAN MIGUEL OESTE" geoNameLocal="San Miguel Oeste" geoCodeAlpha2="23" geoCodeAlpha3="1223" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV12" toGeoId="SV12_M23" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M27" geoName="MORAZÁN NORTE" geoNameLocal="Morazán Norte" geoCodeAlpha2="27" geoCodeAlpha3="1327" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV13" toGeoId="SV13_M27" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV13_M28" geoName="MORAZÁN SUR" geoNameLocal="Morazán Sur" geoCodeAlpha2="28" geoCodeAlpha3="1328" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV13" toGeoId="SV13_M28" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M19" geoName="LA UNIÓN NORTE" geoNameLocal="La Unión Norte" geoCodeAlpha2="19" geoCodeAlpha3="1419" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV14" toGeoId="SV14_M19" geoAssocTypeEnumId="GAT_REGIONS"/>
+    <moqui.basic.Geo geoId="SV14_M20" geoName="LA UNIÓN SUR" geoNameLocal="La Unión Sur" geoCodeAlpha2="20" geoCodeAlpha3="1420" geoTypeEnumId="GEOT_MUNICIPALITY"/>
+    <moqui.basic.GeoAssoc geoId="SV14" toGeoId="SV14_M20" geoAssocTypeEnumId="GAT_REGIONS"/>
+</entity-facade-xml>

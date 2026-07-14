@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ServiceJobs de resiliencia DTE. Quartz cron: "segundos minutos horas dia-mes mes dia-semana".
+
+Para PAUSAR un job en runtime: usar el screen Tools → Scheduler o setear paused='Y'
+en moqui.service.job.ServiceJob para el jobName correspondiente.
+-->
+<entity-facade-xml type="seed">
+
+    <!-- Health check del MH cada 2 minutos. En modo mock no hace nada efectivo. -->
+    <moqui.service.job.ServiceJob jobName="sv_dte_checkMhHealth"
+            description="SV DTE - Health check del Ministerio de Hacienda"
+            serviceName="sv.localization.DteServices.check#MhHealth"
+            cronExpression="0 */2 * * * ?" paused="N"/>
+
+    <!-- Reintento de DTEs fallidos cada 5 minutos con backoff exponencial. -->
+    <moqui.service.job.ServiceJob jobName="sv_dte_retryFailedDtes"
+            description="SV DTE - Reintento de DTEs fallidos con backoff exponencial"
+            serviceName="sv.localization.DteServices.retry#FailedDtes"
+            cronExpression="0 */5 * * * ?" paused="N"/>
+
+    <!-- Rebuild libros IVA del periodo actual diario a las 02:00 (zona del servidor).
+         Idempotente: cada build hace upsert por (invoice, book), tolera fallos por
+         organizacion. Asegura que dashboards/reportes vean el mes corriente al dia. -->
+    <moqui.service.job.ServiceJob jobName="sv_iva_rebuildCurrentPeriod"
+            description="SV Libros IVA - Rebuild diario del periodo actual para todas las organizaciones"
+            serviceName="sv.localization.IvaBookServices.rebuild#CurrentPeriodIvaBooks"
+            cronExpression="0 0 2 * * ?" paused="N"/>
+
+</entity-facade-xml>

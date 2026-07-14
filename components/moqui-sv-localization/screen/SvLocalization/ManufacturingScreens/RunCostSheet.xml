@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Hoja de Costeo" default-menu-index="6">
+
+    <parameter name="workEffortId" required="true"/>
+
+    <transition name="editProduct"><default-response url="//${appRoot}/Catalog/Product/EditProduct"/></transition>
+    <transition name="editRun"><default-response url="//${appRoot}/Manufacturing/Run/EditRun"/></transition>
+
+    <actions>
+        <service-call name="mantle.work.ManufacturingServices.get#ProductionRunDisplayInfo"
+                      in-map="[workEffortId:workEffortId]" out-map="context"/>
+
+        <if condition="workEffort == null"><return error="true" message="Orden de producción no encontrada"/></if>
+
+        <!-- Products to produce -->
+        <entity-find entity-name="mantle.work.effort.WorkEffortProductDetail" list="produceList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <econdition field-name="typeEnumId" value="WeptProduce"/>
+        </entity-find>
+
+        <!-- Products to consume (BOM) with cost -->
+        <entity-find entity-name="mantle.work.effort.WorkEffortProductDetail" list="consumeList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <econdition field-name="typeEnumId" value="WeptConsume"/>
+            <order-by field-name="pseudoId"/>
+        </entity-find>
+
+        <!-- Actual issuances (what was really consumed) -->
+        <entity-find entity-name="mantle.product.issuance.AssetIssuance" list="issuanceList">
+            <econdition field-name="workEffortId"/>
+        </entity-find>
+
+        <!-- Actual receipts (what was produced) -->
+        <entity-find entity-name="mantle.product.receipt.AssetReceipt" list="receiptList">
+            <econdition field-name="workEffortId"/>
+        </entity-find>
+
+        <!-- Calculate totals -->
+        <set field="totalMaterialCost" from="0.0" type="BigDecimal"/>
+        <set field="totalMaterialCostReal" from="0.0" type="BigDecimal"/>
+
+        <script><![CDATA[
+            def consumeCostMap = [:]
+            consumeList.each { item ->
+                // Costo estimado por costo promedio ponderado del inventario disponible.
+                def avgCost = ec.service.sync().name('sv.localization.InventorySvServices.calculate#AverageCost')
+                    .parameters([productId: item.productId, ownerPartyId: workEffort.ownerPartyId]).call()
+                def unitCost = (avgCost?.averageCost && (avgCost.averageCost as BigDecimal) > 0) ?
+                    avgCost.averageCost : (item.estimatedCost ?: 0)
+                def qty = item.estimatedQuantity ?: 0
+                def lineCost = (unitCost as BigDecimal) * (qty as BigDecimal)
+                consumeCostMap[item.productId] = [
+                    productId: item.productId,
+                    pseudoId: item.pseudoId,
+                    productName: item.productName,
+                    estimatedQuantity: qty,
+                    unitCost: unitCost,
+                    lineCost: lineCost
+                ]
+                totalMaterialCost = totalMaterialCost + lineCost
+            }
+
+            issuanceList.each { iss ->
+                def asset = ec.entity.find('mantle.product.asset.Asset')
+                    .condition('assetId', iss.assetId).one()
+                def unitCost = asset?.acquireCost ?: 0
+                totalMaterialCostReal = totalMaterialCostReal + ((unitCost as BigDecimal) * (iss.quantity as BigDecimal))
+            }
+
+            context.consumeCostMap = consumeCostMap
+        ]]></script>
+    </actions>
+
+    <widgets>
+        <!-- Header -->
+        <container-box>
+            <box-header title="Hoja de Costeo — Orden ${workEffortId}"/>
+            <box-body>
+                <container-row>
+                    <row-col lg="3">
+                        <label text="Orden:" type="strong"/>
+                        <link url="editRun" text="${workEffortId}" link-type="anchor"
+                              parameter-map="[workEffortId:workEffortId]"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Fecha:" type="strong"/>
+                        <label text=" ${ec.l10n.format(workEffort.estimatedStartDate, 'dd/MM/yyyy')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Entrega:" type="strong"/>
+                        <label text=" ${ec.l10n.format(workEffort.estimatedCompletionDate, 'dd/MM/yyyy')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Estado:" type="strong"/>
+                        <label text=" ${workEffort.statusId}"/>
+                    </row-col>
+                </container-row>
+                <section name="DescSection" condition="workEffort.description"><widgets>
+                    <label text="Descripción:" type="strong"/>
+                    <label text="${workEffort.description}" type="p"/>
+                </widgets></section>
+            </box-body>
+        </container-box>
+
+        <!-- Producto a fabricar -->
+        <container-box>
+            <box-header title="Producto a Fabricar"/>
+            <box-body-nopad>
+                <form-list name="ProduceListForm" list="produceList" skip-form="true">
+                    <field name="pseudoId"><default-field title="Código">
+                        <link url="editProduct" text="${pseudoId}" link-type="anchor" parameter-map="[productId:productId]"/>
+                    </default-field></field>
+                    <field name="productName"><default-field title="Producto"><display/></default-field></field>
+                    <field name="estimatedQuantity"><default-field title="Cantidad"><display format="#.##"/></default-field></field>
+                </form-list>
+            </box-body-nopad>
+        </container-box>
+
+        <!-- Materiales (BOM con costo) -->
+        <container-box>
+            <box-header title="Corte de Material"/>
+            <box-body-nopad>
+                <form-list name="MaterialCostList" list="consumeCostMap.values().toList()" skip-form="true">
+                    <field name="pseudoId"><default-field title="Código">
+                        <link url="editProduct" text="${pseudoId}" link-type="anchor" parameter-map="[productId:productId]"/>
+                    </default-field></field>
+                    <field name="productName"><default-field title="Descripción"><display/></default-field></field>
+                    <field name="estimatedQuantity"><default-field title="Cantidad"><display format="#.##"/></default-field></field>
+                    <field name="unitCost"><default-field title="C.U."><display format="$ #,##0.00"/></default-field></field>
+                    <field name="lineCost"><default-field title="Costo Total"><display format="$ #,##0.00"/></default-field></field>
+                </form-list>
+            </box-body-nopad>
+        </container-box>
+
+        <!-- Resumen de costeo -->
+        <container-box>
+            <box-header title="Resumen de Costos"/>
+            <box-body>
+                <container-row>
+                    <row-col lg="4">
+                        <label text="Materiales (estimado):" type="strong"/>
+                        <label text=" ${ec.l10n.format(totalMaterialCost, '$ #,##0.00')}"/>
+                    </row-col>
+                    <row-col lg="4">
+                        <label text="Materiales (real):" type="strong"/>
+                        <label text=" ${ec.l10n.format(totalMaterialCostReal, '$ #,##0.00')}"
+                               style="${totalMaterialCostReal > 0 ? '' : 'text-muted'}"/>
+                        <label text=" (sin consumo registrado)" condition="totalMaterialCostReal == 0"
+                               style="text-muted"/>
+                    </row-col>
+                    <row-col lg="4">
+                        <label text="Mano de obra:" type="strong"/>
+                        <label text=" ${ec.l10n.format(workEffort.actualCost ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                </container-row>
+                <container-row>
+                    <row-col lg="4">
+                        <label text="COSTO TOTAL DE LA ORDEN:" type="strong"/>
+                        <label text=" ${ec.l10n.format((totalMaterialCostReal > 0 ? totalMaterialCostReal : totalMaterialCost) + (workEffort.actualCost ?: 0), '$ #,##0.00')}"
+                               type="strong"/>
+                    </row-col>
+                </container-row>
+            </box-body>
+        </container-box>
+
+        <!-- Consumo real (si hay issuances) -->
+        <section name="IssuanceSection" condition="issuanceList"><widgets>
+            <container-box>
+                <box-header title="Despachos Reales de Bodega"/>
+                <box-body-nopad>
+                    <form-list name="IssuanceListForm" list="issuanceList" skip-form="true">
+                        <row-actions>
+                            <entity-find-one entity-name="mantle.product.Product" value-field="issProd">
+                                <field-map field-name="productId"/></entity-find-one>
+                            <entity-find-one entity-name="mantle.product.asset.Asset" value-field="issAsset">
+                                <field-map field-name="assetId"/></entity-find-one>
+                        </row-actions>
+                        <field name="issuedDate"><default-field title="Fecha"><display format="dd/MM/yyyy"/></default-field></field>
+                        <field name="productId"><default-field title="Producto"><display text="${issProd?.productName ?: productId}"/></default-field></field>
+                        <field name="quantity"><default-field title="Cantidad"><display format="#.##"/></default-field></field>
+                        <field name="unitCost" from="issAsset?.acquireCost"><default-field title="C.U."><display format="$ #,##0.00"/></default-field></field>
+                    </form-list>
+                </box-body-nopad>
+            </container-box>
+        </widgets></section>
+
+        <!-- Producción real (si hay receipts) -->
+        <section name="ReceiptSection" condition="receiptList"><widgets>
+            <container-box>
+                <box-header title="Producto Terminado Recibido"/>
+                <box-body-nopad>
+                    <form-list name="ReceiptListForm" list="receiptList" skip-form="true">
+                        <row-actions>
+                            <entity-find-one entity-name="mantle.product.Product" value-field="rcpProd">
+                                <field-map field-name="productId"/></entity-find-one>
+                        </row-actions>
+                        <field name="receivedDate"><default-field title="Fecha"><display format="dd/MM/yyyy"/></default-field></field>
+                        <field name="productId"><default-field title="Producto"><display text="${rcpProd?.productName ?: productId}"/></default-field></field>
+                        <field name="quantityAccepted"><default-field title="Aceptada"><display format="#.##"/></default-field></field>
+                        <field name="quantityRejected"><default-field title="Rechazada"><display format="#.##"/></default-field></field>
+                    </form-list>
+                </box-body-nopad>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>

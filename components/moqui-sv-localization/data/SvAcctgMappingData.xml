@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Mapeo contable por defecto para DTE y nómina.
+    Apunta al plan de cuentas SV (data/SvChartOfAccountsData.xml).
+
+    Si una organización requiere variaciones, se pueden agregar filas con
+    organizationPartyId (extensión futura). Por ahora el mapeo es global.
+-->
+<entity-facade-xml type="seed">
+
+    <!-- ============================================================== -->
+    <!-- DTE 01 — Factura Consumidor Final (venta)                      -->
+    <!-- IVA incluido en precio; débito a CxC, crédito a Ventas + IVA   -->
+    <!-- ============================================================== -->
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="01" direction="O" rubro="MAIN"
+        debitCreditFlag="D" glAccountId="SV_1102"
+        description="FC venta: débito a cuentas por cobrar"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="01" direction="O" rubro="VENTAS"
+        debitCreditFlag="C" glAccountId="SV_4100"
+        description="FC venta: crédito a ventas gravadas"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="01" direction="O" rubro="IVA"
+        debitCreditFlag="C" glAccountId="SV_2102"
+        description="FC venta: IVA débito fiscal"/>
+
+    <!-- ============================================================== -->
+    <!-- DTE 03 — CCF venta                                             -->
+    <!-- ============================================================== -->
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="03" direction="O" rubro="MAIN"
+        debitCreditFlag="D" glAccountId="SV_1102"
+        description="CCF venta: débito a cuentas por cobrar"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="03" direction="O" rubro="VENTAS"
+        debitCreditFlag="C" glAccountId="SV_4100"
+        description="CCF venta: crédito a ventas gravadas"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="03" direction="O" rubro="IVA"
+        debitCreditFlag="C" glAccountId="SV_2102"
+        description="CCF venta: IVA débito fiscal"/>
+
+    <!-- ============================================================== -->
+    <!-- DTE 03 — CCF compra                                            -->
+    <!-- Débito a Costo o Inventario + IVA CF; crédito a CxP            -->
+    <!-- ============================================================== -->
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="03" direction="I" rubro="MAIN"
+        debitCreditFlag="D" glAccountId="SV_1104"
+        description="CCF compra: débito a inventario de materia prima"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="03" direction="I" rubro="IVA"
+        debitCreditFlag="D" glAccountId="SV_1103"
+        description="CCF compra: IVA crédito fiscal"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="03" direction="I" rubro="COMPRA"
+        debitCreditFlag="C" glAccountId="SV_2101"
+        description="CCF compra: crédito a cuentas por pagar"/>
+
+    <!-- ============================================================== -->
+    <!-- DTE 05 — Nota de Crédito (venta — disminuye CxC y Ventas)      -->
+    <!-- Reversa parcial de CCF                                          -->
+    <!-- ============================================================== -->
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="05" direction="O" rubro="MAIN"
+        debitCreditFlag="C" glAccountId="SV_1102"
+        description="NC venta: crédito a CxC (disminuye saldo)"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="05" direction="O" rubro="VENTAS"
+        debitCreditFlag="D" glAccountId="SV_4500"
+        description="NC venta: débito a devoluciones sobre ventas"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="05" direction="O" rubro="IVA"
+        debitCreditFlag="D" glAccountId="SV_2102"
+        description="NC venta: reversa de IVA débito fiscal"/>
+
+    <!-- ============================================================== -->
+    <!-- DTE 06 — Nota de Débito (venta — aumenta CxC y Ventas)         -->
+    <!-- ============================================================== -->
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="06" direction="O" rubro="MAIN"
+        debitCreditFlag="D" glAccountId="SV_1102"
+        description="ND venta: débito a CxC (aumenta saldo)"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="06" direction="O" rubro="VENTAS"
+        debitCreditFlag="C" glAccountId="SV_4100"
+        description="ND venta: crédito a ventas gravadas"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="06" direction="O" rubro="IVA"
+        debitCreditFlag="C" glAccountId="SV_2102"
+        description="ND venta: IVA débito fiscal adicional"/>
+
+    <!-- ============================================================== -->
+    <!-- DTE 11 — FEX Factura Exportación (sin IVA, tasa 0%)            -->
+    <!-- ============================================================== -->
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="11" direction="O" rubro="MAIN"
+        debitCreditFlag="D" glAccountId="SV_1102"
+        description="FEX venta: débito a CxC"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="11" direction="O" rubro="VENTAS"
+        debitCreditFlag="C" glAccountId="SV_4400"
+        description="FEX venta: crédito a ventas exportación"/>
+
+    <!-- ============================================================== -->
+    <!-- DTE 14 — FSE compra a sujeto excluido                          -->
+    <!-- Débito a Costo + Renta retenida; crédito a CxP o Caja          -->
+    <!-- ============================================================== -->
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="14" direction="I" rubro="MAIN"
+        debitCreditFlag="D" glAccountId="SV_5100"
+        description="FSE compra: débito a costo de ventas (servicio)"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="14" direction="I" rubro="RENTA_RETE"
+        debitCreditFlag="C" glAccountId="SV_2104"
+        description="FSE compra: retención renta 10% por pagar"/>
+    <sv.localization.accounting.SvDteAccountMapping
+        tipoDteCode="14" direction="I" rubro="COMPRA"
+        debitCreditFlag="C" glAccountId="SV_2101"
+        description="FSE compra: crédito a CxP (neto)"/>
+
+    <!-- ============================================================== -->
+    <!-- NOMINA — mapeo de rubros                                       -->
+    <!-- ============================================================== -->
+
+    <!-- Gasto: sueldo bruto (asume gasto admin por defecto; las orgs    -->
+    <!-- pueden overridear para usar 5300 mano de obra directa)         -->
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="SUELDOS_GASTO" debitCreditFlag="D" glAccountId="SV_6101"
+        description="Sueldos admin (gasto)"/>
+
+    <!-- ISSS empleado (descuento al empleado, queda como pasivo) -->
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="ISSS_EMP_PASIVO" debitCreditFlag="C" glAccountId="SV_2105"
+        description="ISSS empleado por pagar"/>
+
+    <!-- AFP empleado -->
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="AFP_EMP_PASIVO" debitCreditFlag="C" glAccountId="SV_2106"
+        description="AFP empleado por pagar"/>
+
+    <!-- ISR retenido al empleado -->
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="RENTA_PASIVO" debitCreditFlag="C" glAccountId="SV_2109"
+        description="ISR retenido a empleados"/>
+
+    <!-- ISSS patronal: gasto + pasivo -->
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="ISSS_PATR_GASTO" debitCreditFlag="D" glAccountId="SV_6102"
+        description="ISSS patronal (gasto)"/>
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="ISSS_PATR_PASIVO" debitCreditFlag="C" glAccountId="SV_2105"
+        description="ISSS patronal por pagar"/>
+
+    <!-- AFP patronal: gasto + pasivo -->
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="AFP_PATR_GASTO" debitCreditFlag="D" glAccountId="SV_6103"
+        description="AFP patronal (gasto)"/>
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="AFP_PATR_PASIVO" debitCreditFlag="C" glAccountId="SV_2106"
+        description="AFP patronal por pagar"/>
+
+    <!-- Neto a pagar al empleado -->
+    <sv.localization.accounting.SvPayrollAccountMapping
+        rubro="NETO_PAGAR" debitCreditFlag="C" glAccountId="SV_2108"
+        description="Sueldos por pagar (neto)"/>
+
+</entity-facade-xml>

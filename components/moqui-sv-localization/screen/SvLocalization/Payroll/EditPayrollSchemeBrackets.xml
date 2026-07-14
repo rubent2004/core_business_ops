@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Tramos de Esquema" default-menu-include="false">
+
+    <parameter name="svPayrollSchemeId" required="true"/>
+
+    <transition name="storeBracket">
+        <service-call name="store#sv.localization.payroll.SvPayrollSchemeBracket"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="deleteBracket">
+        <service-call name="delete#sv.localization.payroll.SvPayrollSchemeBracket"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="back"><default-response url="PayrollSchemes"/></transition>
+
+    <actions>
+        <entity-find-one entity-name="sv.localization.payroll.SvPayrollScheme" value-field="scheme">
+            <field-map field-name="svPayrollSchemeId"/>
+        </entity-find-one>
+        <if condition="scheme == null"><return error="true" message="Esquema ${svPayrollSchemeId} no encontrado"/></if>
+
+        <entity-find entity-name="sv.localization.payroll.SvPayrollSchemeBracket" list="bracketList">
+            <econdition field-name="svPayrollSchemeId"/>
+            <order-by field-name="bracketSeq"/>
+        </entity-find>
+
+        <!-- Detectar corridas que dependen de este esquema (riesgo de recalculo) -->
+        <entity-find entity-name="sv.localization.payroll.SvPayrollRun" list="dependentRuns">
+            <econdition field-name="statusId" operator="in" value="SvPayCalculated,SvPayApproved"/>
+        </entity-find>
+        <set field="affectedRuns" from="[]"/>
+        <script><![CDATA[
+            def from = scheme?.fromDate
+            def thru = scheme?.thruDate
+            dependentRuns.each { r ->
+                def asOf = r.asOfDate
+                if (asOf == null) return
+                def afterFrom = (from == null) || !asOf.before(from)
+                def beforeThru = (thru == null) || asOf.before(thru)
+                if (afterFrom && beforeThru) affectedRuns.add(r)
+            }
+            context.affectedRuns = affectedRuns
+            context.hasAffected = !affectedRuns.isEmpty()
+        ]]></script>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Tramos de ${svPayrollSchemeId} (${scheme.description ?: scheme.schemeTypeEnumId})"/>
+            <box-toolbar>
+                <link url="back" text="Volver" link-type="anchor-button"/>
+            </box-toolbar>
+            <box-body>
+                <container-row>
+                    <row-col lg="3">
+                        <label text="Vigente desde:" type="strong"/>
+                        <label text=" ${ec.l10n.format(scheme.fromDate, 'dd/MM/yyyy')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Hasta:" type="strong"/>
+                        <label text=" ${scheme.thruDate ? ec.l10n.format(scheme.thruDate, 'dd/MM/yyyy') : 'Vigente'}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Tipo:" type="strong"/>
+                        <display-entity entity-name="moqui.basic.Enumeration"
+                                key-map="[enumId:scheme.schemeTypeEnumId]" text="${description}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Moneda:" type="strong"/>
+                        <label text=" ${scheme.currencyUomId}"/>
+                    </row-col>
+                </container-row>
+            </box-body>
+        </container-box>
+
+        <!-- Alerta de corridas dependientes -->
+        <section name="WarningSection" condition="hasAffected"><widgets>
+            <container-box type="danger">
+                <box-header title="Atención: Corridas dependientes detectadas"/>
+                <box-body>
+                    <label type="p" text="Existen ${affectedRuns.size()} corrida(s) en estado Calculada/Aprobada cuya fecha cae dentro de la vigencia de este esquema. Modificar los tramos NO actualizará automáticamente esos cálculos (los snapshots quedan congelados al momento del cálculo)."/>
+                    <label type="p" text="Si los tramos cambian por error de captura y necesita recalcular las corridas, debe:"/>
+                    <label type="p" text="1. Editar los tramos aquí (use 'Forzar guardado'). 2. Recalcular cada corrida afectada desde su pantalla."/>
+                    <label type="p" text="Si los cambios son por una nueva ley con efecto desde una fecha futura, use 'Nueva vigencia' en la pantalla de Reglas en vez de modificar este esquema."/>
+                    <label type="div" text="Corridas afectadas:" style="text-strong"/>
+                    <section-iterate name="AffectedIter" list="affectedRuns" entry="run"><widgets>
+                        <label type="div" text="• ${run.svPayrollRunId} (${run.periodYearMonth}, estado ${run.statusId})"/>
+                    </widgets></section-iterate>
+                </box-body>
+            </container-box>
+        </widgets></section>
+
+        <!-- Tramos existentes (editables) -->
+        <container-box>
+            <box-header title="Tramos del esquema"/>
+            <box-body-nopad>
+                <form-list name="BracketList" list="bracketList" transition="storeBracket" multi="true">
+                    <field name="svPayrollSchemeId"><default-field><hidden/></default-field></field>
+                    <field name="bracketSeq">
+                        <header-field title="Seq"/>
+                        <default-field><display also-hidden="true"/></default-field>
+                    </field>
+                    <field name="bracketFromAmount">
+                        <header-field title="Desde monto"/>
+                        <default-field><text-line size="10"/></default-field>
+                    </field>
+                    <field name="bracketThruAmount">
+                        <header-field title="Hasta monto"/>
+                        <default-field><text-line size="10"/></default-field>
+                    </field>
+                    <field name="percentage">
+                        <header-field title="%"/>
+                        <default-field><text-line size="7"/></default-field>
+                    </field>
+                    <field name="fixedAmount">
+                        <header-field title="Cuota fija"/>
+                        <default-field><text-line size="10"/></default-field>
+                    </field>
+                    <field name="cap">
+                        <header-field title="Techo"/>
+                        <default-field><text-line size="10"/></default-field>
+                    </field>
+                    <field name="deductionAmount">
+                        <header-field title="Deducción"/>
+                        <default-field><text-line size="10"/></default-field>
+                    </field>
+                    <field name="deductionAnnualMaxAmount">
+                        <header-field title="Máx anual"/>
+                        <default-field><text-line size="12"/></default-field>
+                    </field>
+                    <field name="actions" align="right">
+                        <header-field title=""/>
+                        <default-field>
+                            <link url="deleteBracket" text="Eliminar" icon="fa fa-trash"
+                                  parameter-map="[svPayrollSchemeId:svPayrollSchemeId, bracketSeq:bracketSeq]"
+                                  confirmation="¿Eliminar tramo ${bracketSeq}?"/>
+                        </default-field>
+                    </field>
+                    <field name="submitButton" align="right">
+                        <header-field title=""/>
+                        <default-field title="Guardar cambios"><submit/></default-field>
+                    </field>
+                </form-list>
+            </box-body-nopad>
+        </container-box>
+
+        <!-- Agregar nuevo tramo -->
+        <container-box>
+            <box-header title="Agregar nuevo tramo"/>
+            <box-body>
+                <form-single name="NewBracketForm" transition="storeBracket">
+                    <field name="svPayrollSchemeId" from="svPayrollSchemeId"><default-field><hidden/></default-field></field>
+                    <field name="bracketSeq"><default-field title="Secuencia">
+                        <text-line size="4" default-value="${(bracketList*.bracketSeq.max() ?: 0) + 1}"/>
+                    </default-field></field>
+                    <field name="bracketFromAmount"><default-field title="Desde">
+                        <text-line size="10"/>
+                    </default-field></field>
+                    <field name="bracketThruAmount"><default-field title="Hasta">
+                        <text-line size="10"/>
+                    </default-field></field>
+                    <field name="percentage"><default-field title="Porcentaje">
+                        <text-line size="8"/>
+                    </default-field></field>
+                    <field name="fixedAmount"><default-field title="Cuota fija">
+                        <text-line size="10"/>
+                    </default-field></field>
+                    <field name="cap"><default-field title="Techo">
+                        <text-line size="10"/>
+                    </default-field></field>
+                    <field name="deductionAmount"><default-field title="Deducción">
+                        <text-line size="10"/>
+                    </default-field></field>
+                    <field name="deductionAnnualMaxAmount"><default-field title="Máx anual">
+                        <text-line size="12"/>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Agregar tramo"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

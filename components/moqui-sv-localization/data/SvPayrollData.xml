@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+    <!-- ISSS: trabajador 3%, patronal 7.5%, salario maximo cotizable USD 1,000. -->
+    <sv.localization.payroll.SvPayrollScheme svPayrollSchemeId="SvPayrollIsssEmp2015" schemeTypeEnumId="PstIsssEmp"
+            description="ISSS trabajador 3% hasta USD 1,000" fromDate="2015-08-01 00:00:00" currencyUomId="USD"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollIsssEmp2015" bracketSeq="1"
+            bracketFromAmount="0" percentage="3.00" fixedAmount="0" cap="1000.00"/>
+
+    <sv.localization.payroll.SvPayrollScheme svPayrollSchemeId="SvPayrollIsssEmpr2015" schemeTypeEnumId="PstIsssEmpr"
+            description="ISSS patronal 7.5% hasta USD 1,000" fromDate="2015-08-01 00:00:00" currencyUomId="USD"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollIsssEmpr2015" bracketSeq="1"
+            bracketFromAmount="0" percentage="7.50" fixedAmount="0" cap="1000.00"/>
+
+    <!-- Pensiones: 16% total desde el sistema vigente, sin techo local en seed. -->
+    <sv.localization.payroll.SvPayrollScheme svPayrollSchemeId="SvPayrollAfpEmp2023" schemeTypeEnumId="PstAfpEmp"
+            description="AFP trabajador 7.25% sin techo local" fromDate="2023-01-01 00:00:00" currencyUomId="USD"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollAfpEmp2023" bracketSeq="1"
+            bracketFromAmount="0" percentage="7.25" fixedAmount="0"/>
+
+    <sv.localization.payroll.SvPayrollScheme svPayrollSchemeId="SvPayrollAfpEmpr2023" schemeTypeEnumId="PstAfpEmpr"
+            description="AFP patronal 8.75% sin techo local" fromDate="2023-01-01 00:00:00" currencyUomId="USD"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollAfpEmpr2023" bracketSeq="1"
+            bracketFromAmount="0" percentage="8.75" fixedAmount="0"/>
+
+    <!-- Renta mensual: Decreto Ejecutivo No. 10 de 2025, vigente desde mayo 2025. -->
+    <sv.localization.payroll.SvPayrollScheme svPayrollSchemeId="SvPayrollRentaMensual2025" schemeTypeEnumId="PstRentaMensual"
+            description="Retencion renta mensual 2025 Decreto Ejecutivo No. 10" fromDate="2025-05-01 00:00:00" currencyUomId="USD"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollRentaMensual2025" bracketSeq="1"
+            bracketFromAmount="0" bracketThruAmount="550.00" percentage="0" fixedAmount="0"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollRentaMensual2025" bracketSeq="2"
+            bracketFromAmount="550.00" bracketThruAmount="895.24" percentage="10.00" fixedAmount="17.67"
+            deductionAmount="133.33" deductionAnnualMaxAmount="9100.00"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollRentaMensual2025" bracketSeq="3"
+            bracketFromAmount="895.24" bracketThruAmount="2038.10" percentage="20.00" fixedAmount="60.00"/>
+    <sv.localization.payroll.SvPayrollSchemeBracket svPayrollSchemeId="SvPayrollRentaMensual2025" bracketSeq="4"
+            bracketFromAmount="2038.10" percentage="30.00" fixedAmount="288.57"/>
+
+    <!-- Salarios minimos vigentes desde 2025-06-01. -->
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsCommerce" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="408.80" dailyAmount="13.63" description="Comercio y servicios"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsIndustry" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="408.80" dailyAmount="13.63" description="Industria"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsSugarCoffee" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="408.80" dailyAmount="13.63" description="Ingenios azucareros y beneficios de cafe"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsMaquila" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="402.32" dailyAmount="13.41" description="Maquila textil y confeccion"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsCaneCoffee" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="305.23" dailyAmount="10.17" description="Recoleccion de cana de azucar y beneficios de cafe"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsAgro" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="272.53" dailyAmount="9.08" description="Sector agropecuario"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsCoffeeHarvest" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="272.53" dailyAmount="9.08" description="Recoleccion de cafe"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsFishing" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="272.53" dailyAmount="9.08" description="Pesca"/>
+    <sv.localization.payroll.SvMinimumWageSector sectorEnumId="MwsOtherAgri" fromDate="2025-06-01 00:00:00"
+            monthlyAmount="272.53" dailyAmount="9.08" description="Otras actividades agricolas"/>
+
+    <!-- Mapeos locales para deducciones/aportes. -->
+    <sv.localization.payroll.SvDeductionRate deductionTypeEnumId="DtIsssEmp" fromDate="2015-08-01 00:00:00"
+            svPayrollSchemeId="SvPayrollIsssEmp2015"/>
+    <sv.localization.payroll.SvDeductionRate deductionTypeEnumId="DtIsssEmpr" fromDate="2015-08-01 00:00:00"
+            svPayrollSchemeId="SvPayrollIsssEmpr2015"/>
+    <sv.localization.payroll.SvDeductionRate deductionTypeEnumId="DtAfpCrecerEmp" fromDate="2023-01-01 00:00:00"
+            svPayrollSchemeId="SvPayrollAfpEmp2023"/>
+    <sv.localization.payroll.SvDeductionRate deductionTypeEnumId="DtAfpCrecerEmpr" fromDate="2023-01-01 00:00:00"
+            svPayrollSchemeId="SvPayrollAfpEmpr2023"/>
+    <sv.localization.payroll.SvDeductionRate deductionTypeEnumId="DtAfpConfiaEmp" fromDate="2023-01-01 00:00:00"
+            svPayrollSchemeId="SvPayrollAfpEmp2023"/>
+    <sv.localization.payroll.SvDeductionRate deductionTypeEnumId="DtAfpConfiaEmpr" fromDate="2023-01-01 00:00:00"
+            svPayrollSchemeId="SvPayrollAfpEmpr2023"/>
+    <sv.localization.payroll.SvDeductionRate deductionTypeEnumId="DtRentaMensual" fromDate="2025-05-01 00:00:00"
+            svPayrollSchemeId="SvPayrollRentaMensual2025"/>
+</entity-facade-xml>

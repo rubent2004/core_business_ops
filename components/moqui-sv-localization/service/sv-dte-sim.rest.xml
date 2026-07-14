@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/rest-api-3.xsd"
+        name="sv-dte-sim" displayName="Simulador local del MH (SV DTE)" version="1.0.0"
+        require-authentication="anonymous-all"
+        description="Reproduce los endpoints públicos del Ministerio de Hacienda de El Salvador
+            para Transmisión DTE (auth + recepción + anulación + contingencia + consulta).
+            Activo mientras no hay credenciales para apitest.dtes.mh.gob.sv. URL base local:
+            http://localhost:8080/rest/s1/sv-dte-sim/...
+            require-authentication=anonymous-all: este simulador imita endpoints públicos MH
+            que tampoco requieren login Moqui. En producción no se monta (sv.dte.test.local=false).">
+
+    <!-- POST /rest/s1/sv-dte-sim/seguridad/auth -->
+    <resource name="seguridad" require-authentication="anonymous-all">
+        <resource name="auth" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.DteMhSimulatorServices.auth#Token"/>
+        </method></resource>
+    </resource>
+
+    <!-- POST /rest/s1/sv-dte-sim/fesv/recepciondte -->
+    <!-- POST /rest/s1/sv-dte-sim/fesv/anulardte -->
+    <!-- POST /rest/s1/sv-dte-sim/fesv/contingencia -->
+    <!-- POST /rest/s1/sv-dte-sim/fesv/contingenciadte (alias histórico local) -->
+    <!-- GET  /rest/s1/sv-dte-sim/fesv/recepcion/consultadte/{codigoGeneracion} -->
+    <resource name="fesv" require-authentication="anonymous-all">
+        <resource name="recepciondte" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.DteMhSimulatorServices.recepcion#Dte"/>
+        </method></resource>
+        <resource name="anulardte" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.DteMhSimulatorServices.anular#Dte"/>
+        </method></resource>
+        <resource name="contingenciadte" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.DteMhSimulatorServices.contingencia#Dte"/>
+        </method></resource>
+        <resource name="contingencia" require-authentication="anonymous-all"><method type="post" require-authentication="anonymous-all">
+            <service name="sv.localization.DteMhSimulatorServices.contingencia#Dte"/>
+        </method></resource>
+        <resource name="recepcion" require-authentication="anonymous-all">
+            <resource name="consultadte" require-authentication="anonymous-all">
+                <id name="codigoGeneracion" require-authentication="anonymous-all">
+                    <method type="get" require-authentication="anonymous-all"><service name="sv.localization.DteMhSimulatorServices.consultar#Dte"/></method>
+                </id>
+            </resource>
+        </resource>
+    </resource>
+
+</resource>

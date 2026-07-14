@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+    <moqui.basic.Enumeration description="DUI El Salvador" enumId="PitDui" enumTypeId="PartyIdType" optionValue="########-#" sequenceNum="100"/>
+    <moqui.basic.Enumeration description="NIT El Salvador" enumId="PitNit" enumTypeId="PartyIdType" optionValue="####-######-###-#" sequenceNum="101"/>
+    <moqui.basic.Enumeration description="NRC El Salvador" enumId="PitNrc" enumTypeId="PartyIdType" sequenceNum="102"/>
+    <moqui.basic.Enumeration description="Pasaporte receptor SV" enumId="PitPassportSv" enumTypeId="PartyIdType" sequenceNum="103"/>
+</entity-facade-xml>

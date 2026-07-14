@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Resumen" default-menu-index="1">
+
+    <transition name="refresh"><default-response url="."/></transition>
+
+    <actions>
+        <set field="periodYearMonth" from="periodYearMonth"/>
+        <set field="organizationPartyId" from="organizationPartyId"/>
+        <service-call name="sv.localization.SvDashboardServices.get#SvDashboardData"
+                      in-map="[periodYearMonth: periodYearMonth, organizationPartyId: organizationPartyId, includeMockAccepted: true]"
+                      out-map="dash"/>
+        <set field="dteKpis" from="dash.dteKpis ?: [:]"/>
+        <set field="mhHealth" from="dash.mhHealth ?: [:]"/>
+        <set field="cert" from="dash.certificate ?: [:]"/>
+        <set field="alerts" from="dash.alerts ?: []"/>
+        <set field="recentDtes" from="dash.recentDtes ?: []"/>
+        <set field="counters" from="dash.counters ?: [:]"/>
+        <set field="dteByTipoList" from="(dteKpis.byTipo ?: [:]).entrySet().collect { [tipo: it.key, count: it.value] }"/>
+
+        <set field="healthStyle" from="mhHealth.statusEnumId in ['SvHealthUp', 'DteHealthUp'] ? 'text-success' :
+                (mhHealth.statusEnumId in ['SvHealthDegraded', 'DteHealthDegraded'] ? 'text-warning' : 'text-danger')"/>
+        <set field="certStyle" from="cert.status == 'Vigente' ? 'text-success' :
+                (cert.status == 'PorVencer' ? 'text-warning' : 'text-danger')"/>
+    </actions>
+
+    <widgets>
+        <!-- ====================================================== -->
+        <!-- HEADER: Selector de organización y período             -->
+        <!-- ====================================================== -->
+        <container-box>
+            <box-header title="Resumen Operativo — ${dash.periodLabel ?: ''}"/>
+            <box-toolbar>
+                <link url="refresh" text="Actualizar" link-type="anchor-button" btn-type="default"/>
+            </box-toolbar>
+            <box-body>
+                <form-single name="DashFilter" transition=".">
+                    <field name="organizationPartyId"><default-field title="Organización">
+                        <drop-down allow-empty="true">
+                            <entity-options key="${partyId}" text="${organizationName ?: partyId}">
+                                <entity-find entity-name="mantle.party.PartyDetailAndRole">
+                                    <econdition field-name="roleTypeId" value="OrgInternal"/>
+                                    <econdition field-name="disabled" value="N" or-null="true"/>
+                                    <order-by field-name="organizationName"/>
+                                </entity-find>
+                            </entity-options>
+                        </drop-down>
+                    </default-field></field>
+                    <field name="periodYearMonth"><default-field title="Período (YYYY-MM)">
+                        <text-line size="8"/>
+                    </default-field></field>
+                    <field name="submitBtn"><default-field title="Aplicar"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <!-- ====================================================== -->
+        <!-- ALERTAS OPERATIVAS                                     -->
+        <!-- ====================================================== -->
+        <section name="AlertsSection" condition="alerts &amp;&amp; alerts.size() &gt; 0"><widgets>
+            <container-box>
+                <box-header title="Alertas (${alerts.size()})"/>
+                <box-body>
+                    <section-iterate name="AlertItem" list="alerts" entry="alert"><widgets>
+                        <container style="alert alert-${alert.level == 'danger' ? 'danger' : 'warning'}">
+                            <label text="${alert.level == 'danger' ? '⚠' : 'ℹ'} ${alert.message}"
+                                   style="${alert.level == 'danger' ? 'text-danger' : 'text-warning'}"
+                                   type="strong"/>
+                        </container>
+                    </widgets></section-iterate>
+                </box-body>
+            </container-box>
+        </widgets></section>
+
+        <!-- ====================================================== -->
+        <!-- KPI ROW: DTE del período                               -->
+        <!-- ====================================================== -->
+        <container-row>
+            <row-col lg="2" md="4" sm="6">
+                <container-box>
+                    <box-header title="DTEs Emitidos"/>
+                    <box-body><label text="${dteKpis.total ?: 0}" type="h2" style="text-center"/></box-body>
+                </container-box>
+            </row-col>
+            <row-col lg="2" md="4" sm="6">
+                <container-box>
+                    <box-header title="Aceptados ✓"/>
+                    <box-body><label text="${dteKpis.accepted ?: 0}" type="h2" style="text-center text-success"/></box-body>
+                </container-box>
+            </row-col>
+            <row-col lg="2" md="4" sm="6">
+                <container-box>
+                    <box-header title="Pendientes"/>
+                    <box-body><label text="${dteKpis.pending ?: 0}" type="h2" style="text-center text-warning"/></box-body>
+                </container-box>
+            </row-col>
+            <row-col lg="2" md="4" sm="6">
+                <container-box>
+                    <box-header title="Rechazados ✗"/>
+                    <box-body><label text="${(dteKpis.rejected ?: 0) + (dteKpis.error ?: 0)}" type="h2" style="text-center text-danger"/></box-body>
+                </container-box>
+            </row-col>
+            <row-col lg="4" md="8" sm="12">
+                <container-box>
+                    <box-header title="Monto aceptado del período"/>
+                    <box-body>
+                        <label text="${ec.l10n.format(dteKpis.totalAcceptedAmount ?: 0, '$ #,##0.00')} ${dteKpis.currencyUomId ?: 'USD'}"
+                               type="h2" style="text-center text-success"/>
+                    </box-body>
+                </container-box>
+            </row-col>
+        </container-row>
+
+        <!-- ====================================================== -->
+        <!-- ROW 2: Estado MH | Certificado | Contadores ops        -->
+        <!-- ====================================================== -->
+        <container-row>
+            <row-col lg="4">
+                <container-box>
+                    <box-header title="Estado Ministerio de Hacienda"/>
+                    <box-body>
+                        <container-row>
+                            <row-col lg="6">
+                                <label text="Estado: " type="strong"/>
+                                <label text="${mhHealth.statusLabel ?: 'SIN DATOS'}" style="${healthStyle}" type="strong"/>
+                            </row-col>
+                            <row-col lg="6">
+                                <label text="Fallos consec.: " type="strong"/>
+                                <label text="${mhHealth.consecutiveFailures ?: 0}"/>
+                            </row-col>
+                        </container-row>
+                        <section name="LastCheck" condition="mhHealth.lastCheckAt"><widgets>
+                            <label text="Último chequeo: ${mhHealth.lastCheckAt}" style="text-muted" type="div"/>
+                        </widgets></section>
+                        <section name="ContingencyBox" condition="mhHealth.contingencyActive"><widgets>
+                            <label text="Contingencia ACTIVA: ${mhHealth.contingenciaId}" style="text-danger" type="strong"/>
+                        </widgets></section>
+                    </box-body>
+                </container-box>
+            </row-col>
+
+            <row-col lg="4">
+                <container-box>
+                    <box-header title="Certificado MH"/>
+                    <box-body>
+                        <section name="HasCert" condition="cert.status != 'NoConfigurado'"><widgets>
+                            <label text="Estado: " type="strong"/>
+                            <label text="${cert.statusLabel}" style="${certStyle}" type="strong"/>
+                            <container-row>
+                                <row-col lg="12">
+                                    <label text="NIT: " type="strong"/><label text="${cert.nit ?: '—'}"/>
+                                </row-col>
+                            </container-row>
+                            <section name="ThruDate" condition="cert.thruDate"><widgets>
+                                <label text="Vence: ${cert.thruDate}" type="div"/>
+                            </widgets></section>
+                            <section name="CommonName" condition="cert.commonName"><widgets>
+                                <label text="${cert.commonName}" style="text-muted" type="div"/>
+                            </widgets></section>
+                        </widgets><fail-widgets>
+                            <label text="No hay certificado configurado" style="text-warning" type="strong"/>
+                            <link url="../Dte/DteCertificates" text="Configurar certificado" link-type="anchor"/>
+                        </fail-widgets></section>
+                    </box-body>
+                </container-box>
+            </row-col>
+
+            <row-col lg="4">
+                <container-box>
+                    <box-header title="Operación"/>
+                    <box-body>
+                        <container-row>
+                            <row-col lg="6">
+                                <label text="Clientes:" type="strong"/>
+                                <label text=" ${counters.customers ?: 0}"/>
+                            </row-col>
+                            <row-col lg="6">
+                                <label text="Proveedores:" type="strong"/>
+                                <label text=" ${counters.suppliers ?: 0}"/>
+                            </row-col>
+                        </container-row>
+                        <container-row>
+                            <row-col lg="6">
+                                <label text="Órdenes prod.:" type="strong"/>
+                                <label text=" ${counters.runsInProgress ?: 0}"/>
+                            </row-col>
+                            <row-col lg="6">
+                                <label text="Nóminas pend.:" type="strong"/>
+                                <label text=" ${counters.payrollRunsPending ?: 0}"/>
+                            </row-col>
+                        </container-row>
+                        <container-row>
+                            <row-col lg="12">
+                                <label text="Libro IVA mes:" type="strong"/>
+                                <label text=" ${counters.ivaBookEntries ?: 0} entradas"/>
+                            </row-col>
+                        </container-row>
+                    </box-body>
+                </container-box>
+            </row-col>
+        </container-row>
+
+        <!-- ====================================================== -->
+        <!-- ROW 3: Últimos DTEs | Accesos rápidos                  -->
+        <!-- ====================================================== -->
+        <container-row>
+            <row-col lg="9">
+                <container-box>
+                    <box-header title="Últimos DTEs del Período"/>
+                    <box-body-nopad>
+                        <section name="HasDtes" condition="recentDtes &amp;&amp; recentDtes.size() &gt; 0"><widgets>
+                            <form-list name="RecentDteList" list="recentDtes" skip-form="true">
+                                <field name="tipoDteCode">
+                                    <header-field title="Tipo"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                                <field name="numeroControl">
+                                    <header-field title="No. Control"/>
+                                    <default-field><display/></default-field>
+                                </field>
+                                <field name="statusId">
+                                    <header-field title="Estado"/>
+                                    <default-field>
+                                        <display-entity entity-name="moqui.basic.StatusItem" text="${description}"/>
+                                    </default-field>
+                                </field>
+                                <field name="fechaGeneracion">
+                                    <header-field title="Fecha"/>
+                                    <default-field><display format="dd/MM/yyyy HH:mm"/></default-field>
+                                </field>
+                                <field name="selloRecepcion">
+                                    <header-field title="Sello (truncado)"/>
+                                    <default-field>
+                                        <display text="${selloRecepcion ? (selloRecepcion.toString().take(16) + '…') : '—'}"/>
+                                    </default-field>
+                                </field>
+                                <field name="detail">
+                                    <header-field title=""/>
+                                    <default-field>
+                                        <link url="../Dte/DteDetail" text="Ver" link-type="anchor"
+                                              parameter-map="[dteEmisionId:dteEmisionId]"/>
+                                    </default-field>
+                                </field>
+                            </form-list>
+                        </widgets><fail-widgets>
+                            <container>
+                                <label text="No hay DTEs en este período" style="text-muted" type="p"/>
+                            </container>
+                        </fail-widgets></section>
+                    </box-body-nopad>
+                </container-box>
+            </row-col>
+
+            <row-col lg="3">
+                <container-box>
+                    <box-header title="Accesos Rápidos"/>
+                    <box-body>
+                        <link url="//${appRoot}/Customer/EditCustomer" text="Nuevo Cliente" link-type="anchor-button" btn-type="success"/>
+                        <label text=" " type="span"/>
+                        <link url="//${appRoot}/Order/FindOrder" text="Nueva Orden" link-type="anchor-button" btn-type="primary"/>
+                        <label text=" " type="span"/>
+                        <link url="../Dte/DteDashboard" text="DTEs" link-type="anchor-button"/>
+                        <label text=" " type="span"/>
+                        <link url="../Books/IvaSalesBook" text="Libro IVA Ventas" link-type="anchor-button"/>
+                        <label text=" " type="span"/>
+                        <link url="../Books/IvaPurchasesBook" text="Libro IVA Compras" link-type="anchor-button"/>
+                        <label text=" " type="span"/>
+                        <link url="../Payroll/PayrollRuns" text="Corridas Nómina" link-type="anchor-button"/>
+                        <label text=" " type="span"/>
+                        <link url="../Acctg/TrialBalance" text="Balance Comprob." link-type="anchor-button"/>
+                        <label text=" " type="span"/>
+                        <link url="../Dte/DteContingencias" text="Contingencias" link-type="anchor-button"/>
+                    </box-body>
+                </container-box>
+
+                <!-- DTEs por tipo (mini-tabla) -->
+                <section name="ByTipoSection" condition="dteByTipoList &amp;&amp; dteByTipoList.size() &gt; 0"><widgets>
+                    <container-box>
+                        <box-header title="Por Tipo (período)"/>
+                        <box-body>
+                            <section-iterate name="TipoItem" list="dteByTipoList" entry="entry"><widgets>
+                                <container-row>
+                                    <row-col lg="8">
+                                        <label text="Tipo ${entry.tipo}:"/>
+                                    </row-col>
+                                    <row-col lg="4">
+                                        <label text="${entry.count}" type="strong" style="text-right"/>
+                                    </row-col>
+                                </container-row>
+                            </widgets></section-iterate>
+                        </box-body>
+                    </container-box>
+                </widgets></section>
+            </row-col>
+        </container-row>
+    </widgets>
+</screen>

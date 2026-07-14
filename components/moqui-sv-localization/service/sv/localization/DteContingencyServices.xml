@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="open" noun="Contingencia" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteContingencyServices.groovy"
+             method="openContingencia">
+        <description>Abre manualmente una ventana de contingencia. Usado cuando el operador
+            sabe que MH estará caído (mantenimiento programado) o quiere forzar contingencia.</description>
+        <in-parameters>
+            <parameter name="tipoContingencia" default-value="1"/>
+            <parameter name="motivoTexto"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="dteContingenciaId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="generate" noun="ContingenciaJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteContingencyServices.groovy"
+             method="generateContingenciaJson">
+        <in-parameters>
+            <parameter name="dteContingenciaId" required="true"/>
+            <parameter name="reason"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="contingenciaJson" type="Map"/>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="schemaName"/>
+            <parameter name="errors" type="List"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="validate" noun="ContingenciaJson" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteContingencyServices.groovy"
+             method="validateContingenciaJson">
+        <in-parameters>
+            <parameter name="contingenciaJson" type="Map"/>
+            <parameter name="contingenciaJsonText"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="schemaName"/>
+            <parameter name="errors" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="close" noun="Contingencia" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/DteContingencyServices.groovy"
+             method="closeContingencia" transaction="force-new">
+        <description>Cierra una ventana de contingencia: genera JSON contingencia-v3,
+            firma, transmite el reporte al MH y luego retransmite los DTEs individuales.
+            Lo invoca el health check al detectar recuperación del MH.</description>
+        <in-parameters>
+            <parameter name="dteContingenciaId" required="true"/>
+            <parameter name="reason"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="statusId"/>
+            <parameter name="selloContingencia"/>
+            <parameter name="dtesRetransmitidos" type="Integer"/>
+            <parameter name="dtesAceptados" type="Integer"/>
+            <parameter name="message"/>
+            <parameter name="errors" type="List"/>
+        </out-parameters>
+    </service>
+
+</services>

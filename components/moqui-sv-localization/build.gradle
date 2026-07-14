@@ -1,0 +1,66 @@
+apply plugin: 'groovy'
+
+def moquiDir = file(projectDir.absolutePath + '/../../..')
+def frameworkDir = file(moquiDir.absolutePath + '/framework')
+
+repositories {
+    flatDir name: 'localLib', dirs: frameworkDir.absolutePath + '/lib'
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) { options.compilerArgs << "-proc:none" }
+tasks.withType(GroovyCompile) { options.compilerArgs << "-proc:none" }
+
+dependencies {
+    implementation project(':framework')
+    testImplementation project(':framework').configurations.testImplementation.allDependencies
+}
+
+configurations {
+    jsonSchemaRuntime
+}
+
+dependencies {
+    jsonSchemaRuntime 'com.networknt:json-schema-validator:1.5.1'
+    jsonSchemaRuntime 'com.google.zxing:core:3.5.3'
+}
+
+check.dependsOn.clear()
+
+tasks.register('copyRuntimeLibs', Copy) {
+    from configurations.jsonSchemaRuntime
+    into "${projectDir}/lib"
+}
+
+test {
+    useJUnitPlatform()
+    testLogging { events "passed", "skipped", "failed" }
+    testLogging.showStandardStreams = true
+    testLogging.showExceptions = true
+    maxParallelForks = 1
+
+    dependsOn cleanTest
+    dependsOn copyRuntimeLibs
+
+    systemProperty 'moqui.runtime', moquiDir.absolutePath + '/runtime'
+    systemProperty 'moqui.conf', 'conf/MoquiDevConf.xml'
+    systemProperty 'moqui.init.static', 'true'
+    systemProperty 'sv.dte.firmador.url', System.getProperty('sv.dte.firmador.url', 'http://127.0.0.1:9')
+    systemProperty 'sv.dte.sign.mock.enabled', 'false'
+    systemProperty 'sv.dte.mh.mock.enabled', 'true'
+    systemProperty 'sv.dte.real.signer.test.enabled', System.getProperty('sv.dte.real.signer.test.enabled', 'false')
+    // Propagar URL del firmador real al test worker. SvDteMvpTest.cleanup() sobrescribe
+    // sv.dte.firmador.url a un puerto cerrado intencionalmente, por eso SvDteRealSignerTest
+    // usa este flag dedicado para no ser afectado por la contaminación cruzada.
+    if (System.getProperty('sv.dte.real.signer.url') != null) {
+        systemProperty 'sv.dte.real.signer.url', System.getProperty('sv.dte.real.signer.url')
+    }
+    if (System.getProperty('sv.dte.demo.cert.password') != null) {
+        systemProperty 'sv.dte.demo.cert.password', System.getProperty('sv.dte.demo.cert.password')
+    }
+
+    classpath += files(sourceSets.main.output.classesDirs)
+    classpath = classpath.filter { it.exists() }
+
+    beforeTest { descriptor -> logger.lifecycle("Running test: ${descriptor}") }
+}

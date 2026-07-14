@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+
+    <!--
+        SvAssetAcquireCost — Costo de adquisición histórico (inmutable) por activo.
+
+        Bajo costeo a promedio ponderado móvil, el servicio recost#ProductToAverage
+        re-estampa Asset.acquireCost de todos los lotes disponibles al promedio
+        vigente, para que el valor físico del inventario coincida con la valuación
+        a promedio. Ese re-estampado sobrescribe el único lugar donde Mantle guarda
+        el costo real de compra de cada lote (AssetReceipt no tiene campo de costo y
+        AssetDetail.unitCost viene vacío en recepciones).
+
+        Esta tabla preserva el costo REAL de cada lote en el momento de la recepción,
+        de modo que el Kardex (get#ProductKardex) puede seguir reconstruyendo las
+        entradas con su costo histórico aunque Asset.acquireCost ya valga el promedio.
+    -->
+    <entity entity-name="SvAssetAcquireCost" package="sv.localization.inventory" cache="true">
+        <field name="assetId" type="id" is-pk="true"/>
+        <field name="productId" type="id"/>
+        <field name="originalAcquireCost" type="number-decimal"/>
+        <field name="acquireCostUomId" type="id"/>
+        <field name="receivedDate" type="date-time"/>
+        <relationship type="one" related="mantle.product.asset.Asset" short-alias="asset"/>
+        <relationship type="one" related="mantle.product.Product" short-alias="product"/>
+    </entity>
+
+</entities>

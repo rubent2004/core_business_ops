@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+
+    <!-- ========================================================= -->
+    <!-- Esquemas de nómina versionados (ISSS, AFP, Renta)         -->
+    <!-- Todas las tablas son adaptables sin cambios de código:    -->
+    <!-- basta crear un nuevo scheme con fromDate distinto y       -->
+    <!-- cerrar el viejo con thruDate.                             -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvPayrollScheme" package="sv.localization.payroll" cache="true">
+        <description>Esquema de cálculo de deducción/aporte salarial vigente por rango de fechas.
+            Tipos: PstIsssEmp, PstIsssEmpr, PstAfpEmp, PstAfpEmpr, PstRentaMensual.</description>
+        <field name="svPayrollSchemeId" type="id" is-pk="true"/>
+        <field name="schemeTypeEnumId" type="id"/>
+        <field name="description" type="text-medium"/>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="currencyUomId" type="id" default="'USD'"/>
+
+        <relationship type="one" title="SvPayrollSchemeType" related="moqui.basic.Enumeration">
+            <key-map field-name="schemeTypeEnumId"/>
+        </relationship>
+        <relationship type="one" title="CurrencyUom" related="moqui.basic.Uom">
+            <key-map field-name="currencyUomId" related="uomId"/>
+        </relationship>
+
+        <index name="SvPayrollSchemeTypeIdx"><index-field name="schemeTypeEnumId"/><index-field name="fromDate"/></index>
+    </entity>
+
+    <entity entity-name="SvPayrollSchemeBracket" package="sv.localization.payroll" cache="true">
+        <description>Tramo de cálculo. Para ISSS/AFP basta un tramo con percentage y cap.
+            Para Renta mensual cada tramo lleva from/thru, percentage y fixedAmount.</description>
+        <field name="svPayrollSchemeId" type="id" is-pk="true"/>
+        <field name="bracketSeq" type="number-integer" is-pk="true"/>
+        <field name="bracketFromAmount" type="currency-amount" default="0"/>
+        <field name="bracketThruAmount" type="currency-amount">
+            <description>Cota superior del tramo. Null = sin tope superior.</description>
+        </field>
+        <field name="percentage" type="number-decimal">
+            <description>Porcentaje aplicado al exceso sobre bracketFromAmount</description>
+        </field>
+        <field name="fixedAmount" type="currency-amount" default="0">
+            <description>Cuota fija del tramo (usado en tabla de renta)</description>
+        </field>
+        <field name="cap" type="currency-amount">
+            <description>Techo del salario imponible. Null = sin techo.</description>
+        </field>
+        <field name="deductionAmount" type="currency-amount">
+            <description>Deducción aplicable al tramo antes de calcular el impuesto.</description>
+        </field>
+        <field name="deductionAnnualMaxAmount" type="currency-amount">
+            <description>Máximo anual para aplicar deductionAmount. Null = siempre aplica.</description>
+        </field>
+
+        <relationship type="one" related="sv.localization.payroll.SvPayrollScheme"/>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Salario mínimo por sector con vigencia                    -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvMinimumWageSector" package="sv.localization.payroll" cache="true">
+        <description>Salario mínimo por sector con fecha de vigencia. Sectores:
+            MwsCommerce, MwsIndustry, MwsAgro, MwsMaquila.</description>
+        <field name="sectorEnumId" type="id" is-pk="true"/>
+        <field name="fromDate" type="date-time" is-pk="true"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="monthlyAmount" type="currency-amount"/>
+        <field name="dailyAmount" type="currency-amount"/>
+        <field name="description" type="text-medium"/>
+
+        <relationship type="one" title="MwSector" related="moqui.basic.Enumeration">
+            <key-map field-name="sectorEnumId"/>
+        </relationship>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Mapeo DeductionType → SvPayrollScheme vigente             -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvDeductionRate" package="sv.localization.payroll" cache="true">
+        <description>Mapea un DeductionType (catálogo mantle.account.method.DeductionType,
+            ej. DtIsssEmp) al SvPayrollScheme vigente que define cómo calcularlo.</description>
+        <field name="deductionTypeEnumId" type="id" is-pk="true"/>
+        <field name="fromDate" type="date-time" is-pk="true"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="svPayrollSchemeId" type="id"/>
+
+        <relationship type="one" title="DeductionType" related="moqui.basic.Enumeration">
+            <key-map field-name="deductionTypeEnumId"/>
+        </relationship>
+        <relationship type="one" related="sv.localization.payroll.SvPayrollScheme"/>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Corrida de nómina mensual (cabecera)                       -->
+    <!-- Operativa: agrupa los cálculos de los empleados de una     -->
+    <!-- organización para un período YYYY-MM con estados:          -->
+    <!--   SvPayCreated → SvPayCalculated → SvPayApproved → SvPayPosted -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvPayrollRun" package="sv.localization.payroll">
+        <description>Cabecera de la corrida de nómina mensual para una organización.
+            Una corrida agrupa el cálculo de todos los empleados activos en un período.</description>
+        <field name="svPayrollRunId" type="id" is-pk="true"/>
+        <field name="organizationPartyId" type="id">
+            <description>Party de la organización emisora (rol OrgInternal).</description>
+        </field>
+        <field name="periodYearMonth" type="text-short">
+            <description>Período de la corrida en formato YYYY-MM (ej. 2026-05).</description>
+        </field>
+        <field name="statusId" type="id">
+            <description>SvPayCreated, SvPayCalculated, SvPayApproved, SvPayPosted.</description>
+        </field>
+        <field name="runDate" type="date-time"/>
+        <field name="asOfDate" type="date-time">
+            <description>Fecha para seleccionar esquemas vigentes (default fin de mes del período).</description>
+        </field>
+        <field name="currencyUomId" type="id" default="'USD'"/>
+        <field name="totalGross" type="currency-amount" default="0"/>
+        <field name="totalNet" type="currency-amount" default="0"/>
+        <field name="totalEmployerCost" type="currency-amount" default="0"/>
+        <field name="totalIsssEmployee" type="currency-amount" default="0"/>
+        <field name="totalAfpEmployee" type="currency-amount" default="0"/>
+        <field name="totalRenta" type="currency-amount" default="0"/>
+        <field name="totalIsssEmployer" type="currency-amount" default="0"/>
+        <field name="totalAfpEmployer" type="currency-amount" default="0"/>
+        <field name="employeeCount" type="number-integer" default="0"/>
+        <field name="createdByUserId" type="id"/>
+        <field name="approvedByUserId" type="id"/>
+        <field name="approvedDate" type="date-time"/>
+        <field name="postedAcctgTransId" type="id">
+            <description>FK al AcctgTrans generado cuando se contabiliza la corrida.</description>
+        </field>
+        <field name="notes" type="text-long"/>
+
+        <relationship type="one" title="Organization" related="mantle.party.Party">
+            <key-map field-name="organizationPartyId" related="partyId"/>
+        </relationship>
+        <relationship type="one" title="SvPayrollStatus" related="moqui.basic.StatusItem">
+            <key-map field-name="statusId"/>
+        </relationship>
+        <relationship type="one" title="CurrencyUom" related="moqui.basic.Uom">
+            <key-map field-name="currencyUomId" related="uomId"/>
+        </relationship>
+        <relationship type="one" title="CreatedByUser" related="moqui.security.UserAccount">
+            <key-map field-name="createdByUserId" related="userId"/>
+        </relationship>
+        <relationship type="one" title="ApprovedByUser" related="moqui.security.UserAccount">
+            <key-map field-name="approvedByUserId" related="userId"/>
+        </relationship>
+
+        <index name="SvPayrollRunOrgPeriodIdx">
+            <index-field name="organizationPartyId"/>
+            <index-field name="periodYearMonth"/>
+        </index>
+        <index name="SvPayrollRunStatusIdx"><index-field name="statusId"/></index>
+    </entity>
+
+    <!-- ========================================================= -->
+    <!-- Línea de corrida: snapshot por empleado                    -->
+    <!-- Cada empleado activo en el período tiene una fila con el  -->
+    <!-- desglose completo de su cálculo.                          -->
+    <!-- ========================================================= -->
+
+    <entity entity-name="SvPayrollRunEmployee" package="sv.localization.payroll">
+        <description>Detalle de cálculo de nómina para un empleado dentro de una corrida.
+            Persiste el snapshot con los valores aplicados (no se recalcula al cerrar).</description>
+        <field name="svPayrollRunId" type="id" is-pk="true"/>
+        <field name="employeePartyId" type="id" is-pk="true"/>
+        <field name="positionDescription" type="text-medium">
+            <description>Descripción del puesto al momento de la corrida.</description>
+        </field>
+        <field name="grossMonthlyAmount" type="currency-amount"/>
+        <field name="isssEmployee" type="currency-amount" default="0"/>
+        <field name="isssEmployer" type="currency-amount" default="0"/>
+        <field name="afpEmployee" type="currency-amount" default="0"/>
+        <field name="afpEmployer" type="currency-amount" default="0"/>
+        <field name="rentaBase" type="currency-amount" default="0"/>
+        <field name="rentaTaxableBase" type="currency-amount" default="0"/>
+        <field name="rentaMonthly" type="currency-amount" default="0"/>
+        <field name="totalEmployeeDeductions" type="currency-amount" default="0"/>
+        <field name="totalEmployerContributions" type="currency-amount" default="0"/>
+        <field name="netPay" type="currency-amount" default="0"/>
+        <field name="employerCost" type="currency-amount" default="0"/>
+        <field name="vacationDays" type="number-decimal"/>
+        <field name="vacationPay" type="currency-amount" default="0"/>
+        <field name="aguinaldoDays" type="number-decimal"/>
+        <field name="aguinaldoAmount" type="currency-amount" default="0"/>
+        <field name="statusId" type="id">
+            <description>Per-employee status: SvPayLineCalculated, SvPayLineSkipped,
+                SvPayLineApproved, SvPayLinePaid.</description>
+        </field>
+        <field name="skipReason" type="text-medium"/>
+        <field name="notes" type="text-long"/>
+
+        <relationship type="one" related="sv.localization.payroll.SvPayrollRun"/>
+        <relationship type="one" title="Employee" related="mantle.party.Party">
+            <key-map field-name="employeePartyId" related="partyId"/>
+        </relationship>
+        <relationship type="one" title="SvPayrollRunEmployeeStatus" related="moqui.basic.StatusItem">
+            <key-map field-name="statusId"/>
+        </relationship>
+
+        <index name="SvPayRunEmpPartyIdx"><index-field name="employeePartyId"/></index>
+    </entity>
+
+</entities>

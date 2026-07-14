@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-include="false" standalone="true">
+    <parameter name="eventoTipo" required="true"/>
+    <parameter name="dteFiscalEventId"/>
+    <parameter name="dteAnulacionId"/>
+    <actions>
+        <service-call name="sv.localization.DteEntregaServices.render#DteEventPdf"
+                      in-map="[eventoTipo:eventoTipo, dteFiscalEventId:dteFiscalEventId, dteAnulacionId:dteAnulacionId]" out-map="rr"/>
+        <script><![CDATA[
+            if (!rr?.rendered || !rr?.pdfBytes) {
+                ec.web.response.sendError(500, rr?.message ?: 'Error renderizando PDF del evento DTE')
+                return
+            }
+            String sourceId = dteFiscalEventId ?: dteAnulacionId ?: 'evento'
+            ec.web.response.setContentType('application/pdf')
+            ec.web.response.setHeader('Content-Disposition', "inline; filename=\"DTE-evento-${sourceId}.pdf\"")
+            ec.web.response.setContentLength(((byte[]) rr.pdfBytes).length)
+            ec.web.response.outputStream.write((byte[]) rr.pdfBytes)
+        ]]></script>
+    </actions>
+    <widgets>
+        <!-- Sin widgets: la respuesta se sirve desde el script de actions -->
+    </widgets>
+</screen>

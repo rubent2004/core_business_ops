@@ -1,0 +1,1057 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Roles y autorización SV — modelo declarativo Moqui sobre
+    moqui.security.UserGroup / ArtifactGroup / ArtifactGroupMember /
+    ArtifactAuthz.
+
+    Matriz de roles (de plan/07-fase-seguridad-operacion.md):
+      SvAdmin       — Todo (override ALWAYS sobre todos los grupos SV)
+      SvFacturacion — Emisión DTE, anulación, contingencia
+      SvContador    — Posting GL, cierre/reapertura período, libros IVA, posting nómina
+      SvCompras     — (cubre flujos mantle; sin servicios sensibles SV propios)
+      SvProduccion  — Producción: corridas, emisión BOM, recepción
+      SvBodega      — (cubre flujos mantle; sin servicios sensibles SV propios)
+      SvRRHH        — Operación nómina + versionado seguro de esquemas
+      SvVentas      — Emisión DTE (sin anulación)
+      SvAuditor     — Solo lectura sobre todo lo anterior
+
+    Modelo Moqui: por defecto, una vez que un artefacto está en un
+    ArtifactGroup con al menos una ArtifactAuthz, los usuarios que NO
+    están en ningún UserGroup con AUTHZT_ALLOW para ese grupo son
+    DENEGADOS. Por eso agrupamos los servicios sensibles aquí y
+    explicitamos cada permiso por rol.
+
+    Para producción, asegurarse que en MoquiConf de runtime no esté
+    deshabilitado authz (default es habilitado). El framework ADMIN
+    siempre puede; SvAdmin tiene AUTHZT_ALWAYS sobre todos los grupos
+    SV para no depender de ADMIN.
+-->
+<entity-facade-xml type="seed">
+
+    <!-- =================================================================== -->
+    <!-- 1. UserGroups SV                                                    -->
+    <!-- =================================================================== -->
+
+    <moqui.security.UserGroup userGroupId="SvAdmin" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Administrador (acceso total a todos los flujos SV)"/>
+    <moqui.security.UserGroup userGroupId="SvFacturacion" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Facturación (emisión DTE, anulación, contingencia, ventas)"/>
+    <moqui.security.UserGroup userGroupId="SvContador" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Contador (posting GL, cierre fiscal, libros IVA, posting nómina)"/>
+    <moqui.security.UserGroup userGroupId="SvCompras" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Compras (proveedores, órdenes de compra, recepción de inventario)"/>
+    <moqui.security.UserGroup userGroupId="SvProduccion" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Producción (corridas de manufactura, emisión BOM, recepción)"/>
+    <moqui.security.UserGroup userGroupId="SvBodega" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Bodega (traslados, recepciones, conteos de inventario)"/>
+    <moqui.security.UserGroup userGroupId="SvRRHH" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Recursos Humanos (corridas nómina, versionado de esquemas)"/>
+    <moqui.security.UserGroup userGroupId="SvVentas" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Ventas (clientes, cotizaciones, órdenes, emisión DTE de venta)"/>
+    <moqui.security.UserGroup userGroupId="SvAuditor" groupTypeEnumId="UgtMarbleErp"
+            description="SV — Auditor fiscal (solo lectura sobre todos los flujos SV)"/>
+
+    <!-- =================================================================== -->
+    <!-- 2. ArtifactGroups por familia de operación SV                       -->
+    <!--                                                                     -->
+    <!-- Cada grupo contiene servicios y/o pantallas relacionadas. Usamos    -->
+    <!-- nameIsPattern=Y con regex para cubrir familias por verbo/noun sin   -->
+    <!-- duplicar cada miembro.                                              -->
+    <!-- =================================================================== -->
+
+    <!-- GRUPO DTE EMISIÓN: emit, anular, contingencia, retry, mockAccept -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvDteEmission"
+            description="SV DTE — Servicios de emisión y anulación de documentos electrónicos"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvDteEmission"
+            artifactName="sv\.localization\.DteServices\.(emit|sign|transmit|cancel|retry|mockAccept)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvDteEmission"
+            artifactName="sv\.localization\.DteAnulationServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvDteEmission"
+            artifactName="sv\.localization\.DteContingencyServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvDteEmission"
+            artifactName="sv\.localization\.DteEventServices\.(generate|sign|transmit|emit|build)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvDteEmission"
+            artifactName="sv\.localization\.DteEntregaServices\.(deliver|record)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO DTE LECTURA/RENDER: render#DtePdf, get#DtePrintContext, etc. -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvDteReports"
+            description="SV DTE — Renderizado de PDFs y lectura de DTEs emitidos"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvDteReports"
+            artifactName="sv\.localization\.DteServices\.(render|get|view)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvDteReports"
+            artifactName="sv\.localization\.DteEntregaServices\.render#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO DTE POSTING CONTABLE: post#DteAcctgTrans, reopen#FiscalPeriod -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvAcctgPosting"
+            description="SV Contabilidad — Posting contable, cierre y reapertura de período"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvAcctgPosting"
+            artifactName="sv\.localization\.AcctgPostingServices\.post#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvAcctgPosting"
+            artifactName="sv\.localization\.PeriodCloseServices\.(close|reopen|ensure)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO LIBROS IVA: rebuild, export, render -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvIvaBooks"
+            description="SV Contabilidad — Libros IVA ventas y compras"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvIvaBooks"
+            artifactName="sv\.localization\.IvaBookServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO REPORTES CONTABLES read-only: TrialBalance, reconcile, etc. -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvAcctgReports"
+            description="SV Contabilidad — Reportes de solo lectura (balance, conciliación)"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvAcctgReports"
+            artifactName="sv\.localization\.PeriodCloseServices\.(compute|reconcile|check)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO NÓMINA ADMIN: version, update, salarios mínimos -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvPayrollAdmin"
+            description="SV Nómina — Versionado de esquemas y salarios mínimos (alto impacto)"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvPayrollAdmin"
+            artifactName="sv\.localization\.PayrollSvServices\.(version|update)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO NÓMINA OPERACIÓN: corridas y aprobación -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvPayrollOps"
+            description="SV Nómina — Operación: crear/calcular/aprobar corridas, cálculos"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvPayrollOps"
+            artifactName="sv\.localization\.PayrollSvServices\.(create|calculate|approve)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO NÓMINA POSTING: post#PayrollAcctgTrans -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvPayrollPosting"
+            description="SV Nómina — Contabilización de corridas aprobadas"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvPayrollPosting"
+            artifactName="sv\.localization\.AcctgPostingServices\.post#PayrollAcctgTrans"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO NÓMINA REPORTES: boletas PDF, exportes CSV -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvPayrollReports"
+            description="SV Nómina — Boletas PDF y exportes ISSS/AFP/Renta (read-only)"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvPayrollReports"
+            artifactName="sv\.localization\.PayrollSvServices\.(render|export|get)#(PayrollSlip|PayrollSlipContext|IsssReport|AfpReport|RentaReport)"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO MANUFACTURA -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvManufacturing"
+            description="SV Manufactura — Producción: corridas, BOM, recepción de output"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvManufacturing"
+            artifactName="sv\.localization\.ManufacturingSvServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO MANUFACTURA REPORTS: PDFs de Producción (read-only) -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvManufacturingReports"
+            description="SV Manufactura — PDFs (Orden de Producción, Requisición, Hoja de Costeo, Producto Terminado)"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvManufacturingReports"
+            artifactName="sv\.localization\.ManufacturingSvServices\.(render|get)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO SERVICIOS DE LECTURA OPERATIVA: servicios read-only usados al renderizar pantallas -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvOperationalReadServices"
+            description="SV Servicios — Lectura operativa común para render de pantallas ERP"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="sv.localization.PartyFiscalServices.check#DteReadiness"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="mantle.party.DuplicateServices.find#PartyHasDuplicates"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="mantle.account.PaymentMethodServices.get#PartyPaymentMethodInfoList"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="sv.localization.SvDashboardServices.get#SvDashboardData"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="sv.localization.ManufacturingSvServices.calculate#RunCost"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="org.moqui.search.SearchServices.search#DataDocuments"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="org.moqui.search.SearchServices.search#CountBySource"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="sv.localization.PartyFiscalServices.suggest#TipoDte"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="sv.localization.PartyFiscalServices.get#SvMunicipiosForDepartamento"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadServices"
+            artifactName="sv.localization.PartyFiscalServices.get#SvDistritosForMunicipio"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+
+    <!-- GRUPO ORDENES DE VENTA: acciones base usadas por presupuesto/ventas desde UI SV -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvSalesOrderOps"
+            description="SV Comercial — Crear y mantener órdenes de venta operativas"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvSalesOrderOps"
+            artifactName="mantle\.order\.OrderServices\.(create|update)#(Order|OrderHeader|OrderPart|OrderItem)"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvSalesOrderOps"
+            artifactName="mantle.order.OrderServices.add#OrderProductQuantity"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvSalesOrderOps"
+            artifactName="mantle.order.OrderServices.set#OrderBillingShippingInfo"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="N" inheritAuthz="Y"/>
+
+    <!-- GRUPO REPORTES DE ORDEN: PDFs operativos de venta/compra basados en Mantle -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvOrderReports"
+            description="SV Comercial/Compras — Reportes PDF operativos de órdenes Mantle"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOrderReports"
+            artifactName="sv\.localization\.OrderPdfServices\.(get|render)#.*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO INVENTARIO OPERATIVO: recepción y traslados desde pantallas SV -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvInventoryOps"
+            description="SV Inventario — Recepción y traslado operativo de materiales (SvBodega/Producción)"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvInventoryOps"
+            artifactName="sv\.localization\.InventorySvServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO ENTIDADES DE BÚSQUEDA: vistas read-only usadas por pantallas SV -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvFiscalSearchEntities"
+            description="SV Entidades — Vistas read-only para búsqueda fiscal de clientes, órdenes y facturas"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvFiscalSearchEntities"
+            artifactName="sv\.localization\.search\..*"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvOperationalReadEntities"
+            description="SV Entidades — Lectura operativa común para render de pantallas ERP"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadEntities"
+            artifactName="moqui\.basic\..*"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadEntities"
+            artifactName="moqui\.screen\.form\..*"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadEntities"
+            artifactName="moqui.security.UserAccount"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadEntities"
+            artifactName="moqui.security.UserGroup"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadEntities"
+            artifactName="moqui.security.UserGroupMember"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadEntities"
+            artifactName="mantle\..*"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvOperationalReadEntities"
+            artifactName="sv\.localization\..*"
+            artifactTypeEnumId="AT_ENTITY" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- La app Marble autoriza su dashboard original, pero en la empresa lo
+         reemplazamos vía MoquiConf por SvDashboard.xml. Sin este miembro los
+         roles SV entran a /vapps, pero /vapps/marble queda "View not permitted". -->
+    <moqui.security.ArtifactGroupMember artifactGroupId="MarbleErpApp"
+            artifactName="component://moqui-sv-localization/screen/SvDashboard.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" inheritAuthz="Y"/>
+
+    <!-- GRUPOS DE PANTALLAS SV: complementan Marble/SimpleScreens sin dar ADMIN -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenRoot"
+            description="SV Pantallas — Raíz de localización fiscal usada por módulos transversales"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenRoot"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" inheritAuthz="N"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenFiscal"
+            description="SV Pantallas — DTE, configuración y pestaña DTE de factura"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenFiscal"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Overview.xml"
+            artifactTypeEnumId="AT_XML_SCREEN"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenFiscal"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Dte.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenFiscal"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Dte/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenFiscal"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/InvoiceTabs/Dte.xml"
+            artifactTypeEnumId="AT_XML_SCREEN"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenFiscal"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindInvoiceSv.xml"
+            artifactTypeEnumId="AT_XML_SCREEN"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenFiscal"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/OrgSettingsTabs/SvEmisor.xml"
+            artifactTypeEnumId="AT_XML_SCREEN"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenBooks"
+            description="SV Pantallas — Libros IVA, cierre y conciliación contable"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenBooks"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Books.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenBooks"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Books/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenBooks"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Acctg.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenBooks"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Acctg/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenPayroll"
+            description="SV Pantallas — Nómina, esquemas, corridas, boletas y reportes"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenPayroll"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Payroll.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenPayroll"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Payroll/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenManufacturing"
+            description="SV Pantallas — Producción: búsqueda, orden, hoja de costeo e impresión"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenManufacturing"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/ManufacturingScreens/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenInventory"
+            description="SV Pantallas — Bodega: recepción y traslado operativo de materiales"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenInventory"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/Inventory/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenCommercial"
+            description="SV Pantallas — Clientes, órdenes, proveedores y pestañas fiscales operativas"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenCommercial"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/FindScreens/Find(Customer|Order)Sv\.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenCommercial"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/(EditCustomerSv|EditSupplierSv|EditVendorSv)\.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenCommercial"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/(PartyTabs/SvFiscal|OrderTabs/SvOrden|ProductTabs/SvProducto)\.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenCommercial"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/EditCustomerSv\.xml/(getPartyClassificationList|getPartySettingList|getSvMunicipios|getSvDistritos)"
+            artifactTypeEnumId="AT_XML_SCREEN_TRANS" nameIsPattern="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenCommercial"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindOrderSv.xml/searchPartyList"
+            artifactTypeEnumId="AT_XML_SCREEN_TRANS" nameIsPattern="N"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenCommercial"
+            artifactName="component://moqui-sv-localization/screen/SvLocalization/FindScreens/FindOrderSv.xml/createSvOrder"
+            artifactTypeEnumId="AT_XML_SCREEN_TRANS" nameIsPattern="N"/>
+
+    <!-- GRUPO PLANEACIÓN CONTABLE: Time Periods + Budgets (presupuestos
+         financieros). Necesarios para que presupuesto/ventas/contador puedan
+         definir años fiscales y crear presupuestos. -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvAcctgPlanning"
+            description="SV — Planeación contable: períodos fiscales y presupuestos"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvAcctgPlanning"
+            artifactName="mantle\.party\.TimeServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvAcctgPlanning"
+            artifactName="mantle\.other\.BudgetServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvAcctgPlanning"
+            artifactName="mantle\.other\.BudgetReportServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- GRUPO MI CUENTA: pantallas /apps/my (Notifications, Calendar, Tasks,
+         Messages) usadas por los iconos del footer del sidebar. -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvMyAccount"
+            description="SV — Mi Cuenta: notificaciones, calendario, tareas, mensajes (apps/my)"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvMyAccount"
+            artifactName="component://SimpleScreens/screen/MyAccount.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="N" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvMyAccount"
+            artifactName="component://SimpleScreens/screen/MyAccount/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <!-- =================================================================== -->
+    <!-- 3. ArtifactAuthz — matriz role × artifact-group                     -->
+    <!--                                                                     -->
+    <!-- Convención: ID = "${userGroupId}_${artifactGroupId}".               -->
+    <!-- AUTHZT_ALWAYS = override (gana sobre cualquier deny).               -->
+    <!-- AUTHZT_ALLOW  = permiso normal.                                     -->
+    <!-- AUTHZA_ALL    = todas las acciones.                                 -->
+    <!-- AUTHZA_VIEW   = solo lectura.                                       -->
+    <!-- =================================================================== -->
+
+    <!-- Mi Cuenta: todos los roles SV tienen acceso -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_MyAccount"
+            userGroupId="SvAdmin" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_MyAccount"
+            userGroupId="SvFacturacion" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_MyAccount"
+            userGroupId="SvContador" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_MyAccount"
+            userGroupId="SvCompras" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_MyAccount"
+            userGroupId="SvProduccion" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_MyAccount"
+            userGroupId="SvBodega" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_MyAccount"
+            userGroupId="SvRRHH" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_MyAccount"
+            userGroupId="SvVentas" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_MyAccount"
+            userGroupId="SvAuditor" artifactGroupId="SvMyAccount"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- Planeación contable: Admin/Contador/Facturación/Ventas (presupuesto)
+         pueden crear periodos fiscales y presupuestos. Auditor solo lectura. -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_AcctgPlanning"
+            userGroupId="SvAdmin" artifactGroupId="SvAcctgPlanning"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_AcctgPlanning"
+            userGroupId="SvContador" artifactGroupId="SvAcctgPlanning"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_AcctgPlanning"
+            userGroupId="SvFacturacion" artifactGroupId="SvAcctgPlanning"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_AcctgPlanning"
+            userGroupId="SvVentas" artifactGroupId="SvAcctgPlanning"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_AcctgPlanning"
+            userGroupId="SvAuditor" artifactGroupId="SvAcctgPlanning"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- SvAdmin: override total sobre TODOS los grupos SV -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_DteEmission"
+            userGroupId="SvAdmin" artifactGroupId="SvDteEmission"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+
+    <!-- SvDteReports: render/get DTE PDF disponible para todos los roles SV (read-only) -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_DteReports"
+            userGroupId="SvAdmin" artifactGroupId="SvDteReports"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_DteReports"
+            userGroupId="SvFacturacion" artifactGroupId="SvDteReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_DteReports"
+            userGroupId="SvContador" artifactGroupId="SvDteReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_DteReports"
+            userGroupId="SvVentas" artifactGroupId="SvDteReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_DteReports"
+            userGroupId="SvAuditor" artifactGroupId="SvDteReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+
+    <!-- SvOrderReports: PDFs operativos de orden disponibles para roles comerciales, compras y auditoria -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_OrderReports"
+            userGroupId="SvAdmin" artifactGroupId="SvOrderReports"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_OrderReports"
+            userGroupId="SvFacturacion" artifactGroupId="SvOrderReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_OrderReports"
+            userGroupId="SvContador" artifactGroupId="SvOrderReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_OrderReports"
+            userGroupId="SvCompras" artifactGroupId="SvOrderReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_OrderReports"
+            userGroupId="SvVentas" artifactGroupId="SvOrderReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_OrderReports"
+            userGroupId="SvAuditor" artifactGroupId="SvOrderReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- SvManufacturingReports: PDFs de manufactura disponibles para todos los roles SV -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_MfgReports"
+            userGroupId="SvAdmin" artifactGroupId="SvManufacturingReports"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_MfgReports"
+            userGroupId="SvProduccion" artifactGroupId="SvManufacturingReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_MfgReports"
+            userGroupId="SvBodega" artifactGroupId="SvManufacturingReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_MfgReports"
+            userGroupId="SvContador" artifactGroupId="SvManufacturingReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_MfgReports"
+            userGroupId="SvVentas" artifactGroupId="SvManufacturingReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_MfgReports"
+            userGroupId="SvFacturacion" artifactGroupId="SvManufacturingReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_MfgReports"
+            userGroupId="SvAuditor" artifactGroupId="SvManufacturingReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_AcctgPosting"
+            userGroupId="SvAdmin" artifactGroupId="SvAcctgPosting"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_IvaBooks"
+            userGroupId="SvAdmin" artifactGroupId="SvIvaBooks"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_AcctgReports"
+            userGroupId="SvAdmin" artifactGroupId="SvAcctgReports"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_PayrollAdmin"
+            userGroupId="SvAdmin" artifactGroupId="SvPayrollAdmin"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_PayrollOps"
+            userGroupId="SvAdmin" artifactGroupId="SvPayrollOps"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_PayrollPosting"
+            userGroupId="SvAdmin" artifactGroupId="SvPayrollPosting"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_PayrollReports"
+            userGroupId="SvAdmin" artifactGroupId="SvPayrollReports"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_Manufacturing"
+            userGroupId="SvAdmin" artifactGroupId="SvManufacturing"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_InventoryOps"
+            userGroupId="SvAdmin" artifactGroupId="SvInventoryOps"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_OperationalReadSvc"
+            userGroupId="SvAdmin" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SvSalesOrderOps"
+            userGroupId="SvAdmin" artifactGroupId="SvSalesOrderOps"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_FiscalSearchEnt"
+            userGroupId="SvAdmin" artifactGroupId="SvFiscalSearchEntities"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_OperationalReadEnt"
+            userGroupId="SvAdmin" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_MarbleErpApp"
+            userGroupId="SvAdmin" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenFiscal"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenFiscal"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenRoot"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenRoot"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenBooks"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenBooks"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenPayroll"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenPayroll"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenMfg"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenManufacturing"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenInventory"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenInventory"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenCommercial"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenCommercial"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSAccounting"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensAccounting"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSAsset"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensAsset"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSCatalog"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensCatalog"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSCustomer"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensCustomer"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSFacility"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensFacility"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSHumanRes"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensHumanRes"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSMfg"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensManufacturing"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSOrder"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensOrder"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSParty"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensParty"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+
+    <!-- SvFacturacion: emite DTE; ve libros IVA y reportes contables -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_DteEmission"
+            userGroupId="SvFacturacion" artifactGroupId="SvDteEmission"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_IvaBooks"
+            userGroupId="SvFacturacion" artifactGroupId="SvIvaBooks"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_AcctgReports"
+            userGroupId="SvFacturacion" artifactGroupId="SvAcctgReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_FiscalSearchEnt"
+            userGroupId="SvFacturacion" artifactGroupId="SvFiscalSearchEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_OperationalReadEnt"
+            userGroupId="SvFacturacion" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_OperationalReadSvc"
+            userGroupId="SvFacturacion" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_Marble"
+            userGroupId="SvFacturacion" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_ScreenFiscal"
+            userGroupId="SvFacturacion" artifactGroupId="SvScreenFiscal"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_ScreenRoot"
+            userGroupId="SvFacturacion" artifactGroupId="SvScreenRoot"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_SSAccounting"
+            userGroupId="SvFacturacion" artifactGroupId="SimpleScreensAccounting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_SSCustomer"
+            userGroupId="SvFacturacion" artifactGroupId="SimpleScreensCustomer"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_SSOrder"
+            userGroupId="SvFacturacion" artifactGroupId="SimpleScreensOrder"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- SvContador: posting contable, cierre fiscal, libros IVA, posting nómina,
+         reportes contables. NO emite DTE (solo lectura). -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_AcctgPosting"
+            userGroupId="SvContador" artifactGroupId="SvAcctgPosting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_IvaBooks"
+            userGroupId="SvContador" artifactGroupId="SvIvaBooks"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_AcctgReports"
+            userGroupId="SvContador" artifactGroupId="SvAcctgReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_PayrollPosting"
+            userGroupId="SvContador" artifactGroupId="SvPayrollPosting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_PayrollReports"
+            userGroupId="SvContador" artifactGroupId="SvPayrollReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_DteEmission"
+            userGroupId="SvContador" artifactGroupId="SvDteEmission"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_FiscalSearchEnt"
+            userGroupId="SvContador" artifactGroupId="SvFiscalSearchEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_OperationalReadEnt"
+            userGroupId="SvContador" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_OperationalReadSvc"
+            userGroupId="SvContador" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_Marble"
+            userGroupId="SvContador" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_ScreenFiscal"
+            userGroupId="SvContador" artifactGroupId="SvScreenFiscal"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_ScreenRoot"
+            userGroupId="SvContador" artifactGroupId="SvScreenRoot"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_ScreenBooks"
+            userGroupId="SvContador" artifactGroupId="SvScreenBooks"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_SSAccounting"
+            userGroupId="SvContador" artifactGroupId="SimpleScreensAccounting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+
+    <!-- SvProduccion: solo manufactura -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_Manufacturing"
+            userGroupId="SvProduccion" artifactGroupId="SvManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_InventoryOps"
+            userGroupId="SvProduccion" artifactGroupId="SvInventoryOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_OperationalReadEnt"
+            userGroupId="SvProduccion" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_OperationalReadSvc"
+            userGroupId="SvProduccion" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_Marble"
+            userGroupId="SvProduccion" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_ScreenMfg"
+            userGroupId="SvProduccion" artifactGroupId="SvScreenManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_SSManufacturing"
+            userGroupId="SvProduccion" artifactGroupId="SimpleScreensManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvProduccion_SSCatalog"
+            userGroupId="SvProduccion" artifactGroupId="SimpleScreensCatalog"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- SvRRHH: nómina operación + admin (versionado seguro). Boletas read-only. -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_PayrollOps"
+            userGroupId="SvRRHH" artifactGroupId="SvPayrollOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_PayrollAdmin"
+            userGroupId="SvRRHH" artifactGroupId="SvPayrollAdmin"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_PayrollReports"
+            userGroupId="SvRRHH" artifactGroupId="SvPayrollReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_OperationalReadEnt"
+            userGroupId="SvRRHH" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_OperationalReadSvc"
+            userGroupId="SvRRHH" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_Marble"
+            userGroupId="SvRRHH" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_ScreenPayroll"
+            userGroupId="SvRRHH" artifactGroupId="SvScreenPayroll"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_ScreenRoot"
+            userGroupId="SvRRHH" artifactGroupId="SvScreenRoot"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_SSHumanRes"
+            userGroupId="SvRRHH" artifactGroupId="SimpleScreensHumanRes"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvRRHH_SSParty"
+            userGroupId="SvRRHH" artifactGroupId="SimpleScreensParty"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+
+    <!-- SvVentas: solo emite DTE (sin reapertura ni anulación administrativa) -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_DteEmission"
+            userGroupId="SvVentas" artifactGroupId="SvDteEmission"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_FiscalSearchEnt"
+            userGroupId="SvVentas" artifactGroupId="SvFiscalSearchEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_OperationalReadEnt"
+            userGroupId="SvVentas" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_OperationalReadSvc"
+            userGroupId="SvVentas" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SvSalesOrderOps"
+            userGroupId="SvVentas" artifactGroupId="SvSalesOrderOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_Marble"
+            userGroupId="SvVentas" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_ScreenFiscal"
+            userGroupId="SvVentas" artifactGroupId="SvScreenFiscal"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_ScreenRoot"
+            userGroupId="SvVentas" artifactGroupId="SvScreenRoot"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_ScreenCommercial"
+            userGroupId="SvVentas" artifactGroupId="SvScreenCommercial"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SSCustomer"
+            userGroupId="SvVentas" artifactGroupId="SimpleScreensCustomer"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SSOrder"
+            userGroupId="SvVentas" artifactGroupId="SimpleScreensOrder"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SSParty"
+            userGroupId="SvVentas" artifactGroupId="SimpleScreensParty"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SSCatalog"
+            userGroupId="SvVentas" artifactGroupId="SimpleScreensCatalog"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <!-- Ventas necesita ver la factura para acceder a la pestaña Factura
+         Electrónica (DTE). VIEW basta porque la emisión usa SvDteEmission. -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SSAccounting"
+            userGroupId="SvVentas" artifactGroupId="SimpleScreensAccounting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- SvBodega: inventario operativo, bodegas y vista de producción asociada -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_Marble"
+            userGroupId="SvBodega" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_OperationalReadEnt"
+            userGroupId="SvBodega" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_OperationalReadSvc"
+            userGroupId="SvBodega" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_InventoryOps"
+            userGroupId="SvBodega" artifactGroupId="SvInventoryOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_ScreenInventory"
+            userGroupId="SvBodega" artifactGroupId="SvScreenInventory"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_ScreenMfg"
+            userGroupId="SvBodega" artifactGroupId="SvScreenManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_SSAsset"
+            userGroupId="SvBodega" artifactGroupId="SimpleScreensAsset"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_SSFacility"
+            userGroupId="SvBodega" artifactGroupId="SimpleScreensFacility"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_SSMfg"
+            userGroupId="SvBodega" artifactGroupId="SimpleScreensManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- SvAuditor: solo lectura sobre TODOS los grupos SV -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_DteEmission"
+            userGroupId="SvAuditor" artifactGroupId="SvDteEmission"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_AcctgPosting"
+            userGroupId="SvAuditor" artifactGroupId="SvAcctgPosting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_IvaBooks"
+            userGroupId="SvAuditor" artifactGroupId="SvIvaBooks"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_AcctgReports"
+            userGroupId="SvAuditor" artifactGroupId="SvAcctgReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_PayrollAdmin"
+            userGroupId="SvAuditor" artifactGroupId="SvPayrollAdmin"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_PayrollOps"
+            userGroupId="SvAuditor" artifactGroupId="SvPayrollOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_PayrollPosting"
+            userGroupId="SvAuditor" artifactGroupId="SvPayrollPosting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_PayrollReports"
+            userGroupId="SvAuditor" artifactGroupId="SvPayrollReports"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_Manufacturing"
+            userGroupId="SvAuditor" artifactGroupId="SvManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_InventoryOps"
+            userGroupId="SvAuditor" artifactGroupId="SvInventoryOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_FiscalSearchEnt"
+            userGroupId="SvAuditor" artifactGroupId="SvFiscalSearchEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_OperationalReadEnt"
+            userGroupId="SvAuditor" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_OperationalReadSvc"
+            userGroupId="SvAuditor" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_Marble"
+            userGroupId="SvAuditor" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_ScreenFiscal"
+            userGroupId="SvAuditor" artifactGroupId="SvScreenFiscal"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_ScreenRoot"
+            userGroupId="SvAuditor" artifactGroupId="SvScreenRoot"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_ScreenBooks"
+            userGroupId="SvAuditor" artifactGroupId="SvScreenBooks"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_ScreenPayroll"
+            userGroupId="SvAuditor" artifactGroupId="SvScreenPayroll"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_ScreenMfg"
+            userGroupId="SvAuditor" artifactGroupId="SvScreenManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <!-- Contador, Ventas, Facturacion necesitan VIEW para ver/descargar PDFs de produccion -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_ScreenMfg"
+            userGroupId="SvContador" artifactGroupId="SvScreenManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_ScreenMfg"
+            userGroupId="SvVentas" artifactGroupId="SvScreenManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvFacturacion_ScreenMfg"
+            userGroupId="SvFacturacion" artifactGroupId="SvScreenManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_ScreenInventory"
+            userGroupId="SvAuditor" artifactGroupId="SvScreenInventory"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_ScreenCommercial"
+            userGroupId="SvAuditor" artifactGroupId="SvScreenCommercial"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSAccounting"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensAccounting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSAsset"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensAsset"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSCatalog"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensCatalog"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSCustomer"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensCustomer"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSFacility"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensFacility"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSHumanRes"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensHumanRes"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSMfg"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensManufacturing"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSOrder"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensOrder"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSParty"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensParty"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- =================================================================== -->
+    <!-- 3b. SvCompras — provisionamiento completo del rol                   -->
+    <!--                                                                     -->
+    <!-- El rol existía pero sólo tenía MyAccount + OrderReports: un usuario -->
+    <!-- únicamente en SvCompras no accedía ni a la shell del ERP. Aquí se   -->
+    <!-- completa con: shell Marble, lecturas operativas, proveedores,       -->
+    <!-- órdenes de compra, recepción de inventario, facturas de proveedor  -->
+    <!-- y Libro de Compras (solo lectura).                                  -->
+    <!-- =================================================================== -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_Marble"
+            userGroupId="SvCompras" artifactGroupId="MarbleErpApp"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_OperationalReadEnt"
+            userGroupId="SvCompras" artifactGroupId="SvOperationalReadEntities"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_OperationalReadSvc"
+            userGroupId="SvCompras" artifactGroupId="SvOperationalReadServices"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SvSalesOrderOps"
+            userGroupId="SvCompras" artifactGroupId="SvSalesOrderOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_InventoryOps"
+            userGroupId="SvCompras" artifactGroupId="SvInventoryOps"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_ScreenInventory"
+            userGroupId="SvCompras" artifactGroupId="SvScreenInventory"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_ScreenCommercial"
+            userGroupId="SvCompras" artifactGroupId="SvScreenCommercial"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_IvaBooks"
+            userGroupId="SvCompras" artifactGroupId="SvIvaBooks"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_ScreenBooks"
+            userGroupId="SvCompras" artifactGroupId="SvScreenBooks"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <!-- Acceso a la raíz fiscal para poder abrir Fiscal → Libros → Libro de Compras -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_ScreenRoot"
+            userGroupId="SvCompras" artifactGroupId="SvScreenRoot"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SSOrder"
+            userGroupId="SvCompras" artifactGroupId="SimpleScreensOrder"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SSAsset"
+            userGroupId="SvCompras" artifactGroupId="SimpleScreensAsset"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SSAccounting"
+            userGroupId="SvCompras" artifactGroupId="SimpleScreensAccounting"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SSParty"
+            userGroupId="SvCompras" artifactGroupId="SimpleScreensParty"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- =================================================================== -->
+    <!-- 3c. Módulos logística/compras antes sin authz (fugaban a todo rol)  -->
+    <!--                                                                     -->
+    <!-- Proveedores, Devoluciones, Remisiones y Despachos no tenían ninguna -->
+    <!-- ArtifactAuthz, por lo que Moqui los mostraba a TODOS los roles      -->
+    <!-- (incl. Bodega/RRHH). Al añadir authz quedan restringidos a los      -->
+    <!-- roles que realmente los usan; el resto deja de verlos en el menú.   -->
+    <!-- =================================================================== -->
+    <!-- Proveedores -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSSupplier"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensSupplier"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SSSupplier"
+            userGroupId="SvCompras" artifactGroupId="SimpleScreensSupplier"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvContador_SSSupplier"
+            userGroupId="SvContador" artifactGroupId="SimpleScreensSupplier"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSSupplier"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensSupplier"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <!-- Devoluciones -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSReturn"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensReturn"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SSReturn"
+            userGroupId="SvVentas" artifactGroupId="SimpleScreensReturn"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SSReturn"
+            userGroupId="SvCompras" artifactGroupId="SimpleScreensReturn"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSReturn"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensReturn"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <!-- Remisiones -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSShipment"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensShipment"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_SSShipment"
+            userGroupId="SvBodega" artifactGroupId="SimpleScreensShipment"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvVentas_SSShipment"
+            userGroupId="SvVentas" artifactGroupId="SimpleScreensShipment"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvCompras_SSShipment"
+            userGroupId="SvCompras" artifactGroupId="SimpleScreensShipment"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSShipment"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensShipment"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+    <!-- Despachos -->
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_SSShipping"
+            userGroupId="SvAdmin" artifactGroupId="SimpleScreensShipping"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvBodega_SSShipping"
+            userGroupId="SvBodega" artifactGroupId="SimpleScreensShipping"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAuditor_SSShipping"
+            userGroupId="SvAuditor" artifactGroupId="SimpleScreensShipping"
+            authzTypeEnumId="AUTHZT_ALLOW" authzActionEnumId="AUTHZA_VIEW"/>
+
+    <!-- =================================================================== -->
+    <!-- 3d. Administración SV — Usuarios y Permisos (sólo SvAdmin)          -->
+    <!--                                                                     -->
+    <!-- Pantalla en español para ligar empleado→usuario→rol y resetear     -->
+    <!-- contraseñas, más los servicios privilegiados que la respaldan. Se  -->
+    <!-- restringen exclusivamente a SvAdmin. El permiso ADMIN_PASSWORD      -->
+    <!-- permite a SvAdmin fijar la contraseña de otros usuarios sin la      -->
+    <!-- contraseña anterior (update#Password lo ignora con ese permiso).    -->
+    <!-- =================================================================== -->
+    <moqui.security.ArtifactGroup artifactGroupId="SvScreenAdmin"
+            description="SV Pantallas — Administración: Usuarios y Permisos"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenAdmin"
+            artifactName="component://moqui-sv-localization/screen/SvAdmin.xml"
+            artifactTypeEnumId="AT_XML_SCREEN" inheritAuthz="Y"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvScreenAdmin"
+            artifactName="component://moqui-sv-localization/screen/SvAdmin/.*"
+            artifactTypeEnumId="AT_XML_SCREEN" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <moqui.security.ArtifactGroup artifactGroupId="SvUserAdminServices"
+            description="SV Servicios — Alta/edición de usuarios y asignación de roles (privilegiado)"/>
+    <moqui.security.ArtifactGroupMember artifactGroupId="SvUserAdminServices"
+            artifactName="sv\.localization\.UserAdminServices\..*"
+            artifactTypeEnumId="AT_SERVICE" nameIsPattern="Y" inheritAuthz="Y"/>
+
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_ScreenAdmin"
+            userGroupId="SvAdmin" artifactGroupId="SvScreenAdmin"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+    <moqui.security.ArtifactAuthz artifactAuthzId="SvAdmin_UserAdminServices"
+            userGroupId="SvAdmin" artifactGroupId="SvUserAdminServices"
+            authzTypeEnumId="AUTHZT_ALWAYS" authzActionEnumId="AUTHZA_ALL"/>
+
+    <!-- Permiso para resetear contraseñas de otros usuarios desde la pantalla SV -->
+    <moqui.security.UserGroupPermission userGroupId="SvAdmin"
+            userPermissionId="ADMIN_PASSWORD" fromDate="1704067200000"/>
+
+    <!-- =================================================================== -->
+    <!-- 4. Tarpit defensivo                                                 -->
+    <!--                                                                     -->
+    <!-- Throttle de servicios de emisión: si un usuario dispara más de      -->
+    <!-- 30 emisiones DTE en 60 segundos, se bloquea por 5 minutos. Mitiga  -->
+    <!-- abuso accidental (loop) o intencional.                              -->
+    <!-- =================================================================== -->
+
+    <moqui.security.ArtifactTarpit userGroupId="ALL_USERS" artifactGroupId="SvDteEmission"
+            maxHitsCount="30" maxHitsDuration="60" tarpitDuration="300"/>
+
+</entity-facade-xml>

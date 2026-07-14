@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Cierre Fiscal" default-menu-index="1">
+
+    <transition name="ensureFiscalMonth">
+        <service-call name="sv.localization.PeriodCloseServices.ensure#FiscalMonth"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="closeFiscalPeriod">
+        <service-call name="sv.localization.PeriodCloseServices.close#FiscalPeriod"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="reopenFiscalPeriod">
+        <service-call name="sv.localization.PeriodCloseServices.reopen#FiscalPeriod"/>
+        <default-response url="."/>
+    </transition>
+
+    <parameter name="organizationPartyId"/>
+
+    <actions>
+        <set field="now" from="ec.user.nowTimestamp"/>
+        <if condition="organizationPartyId">
+            <entity-find entity-name="mantle.party.time.TimePeriod" list="periodList">
+                <econdition field-name="partyId" from="organizationPartyId"/>
+                <econdition field-name="timePeriodTypeId" value="FiscalMonth"/>
+                <order-by field-name="-fromDate"/>
+            </entity-find>
+        </if>
+    </actions>
+
+    <widgets>
+        <container-box type="warning">
+            <box-header title="Cierre Fiscal Mensual"/>
+            <box-body>
+                <label type="p" text="Cerrar un período fiscal BLOQUEA cualquier asiento contable con fecha en ese período. La única forma de postear retroactivamente es reabrir el período (operación auditada)."/>
+                <label type="p" text="Antes de cerrar: verificar la conciliación DTE vs GL y el balance de comprobación."/>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Seleccionar Organización"/>
+            <box-body>
+                <form-single name="SelectOrgForm" transition=".">
+                    <field name="organizationPartyId"><default-field title="Organización">
+                        <drop-down><entity-options key="${partyId}" text="PartyNameTemplate">
+                            <entity-find entity-name="mantle.party.PartyDetailAndRole">
+                                <econdition field-name="roleTypeId" value="OrgInternal"/>
+                                <econdition field-name="disabled" value="N" or-null="true"/>
+                                <order-by field-name="organizationName"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Ver períodos"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <section name="PeriodsSection" condition="organizationPartyId"><widgets>
+            <container-box>
+                <box-header title="Períodos fiscales"/>
+                <box-toolbar>
+                    <container-dialog id="NewPeriodDialog" button-text="Crear nuevo período mensual" type="success">
+                        <form-single name="NewPeriodForm" transition="ensureFiscalMonth">
+                            <field name="organizationPartyId" from="organizationPartyId"><default-field><hidden/></default-field></field>
+                            <field name="periodYearMonth"><default-field title="Período (YYYY-MM)">
+                                <text-line size="10" maxlength="7"/>
+                            </default-field></field>
+                            <field name="submitButton"><default-field title="Crear período"><submit/></default-field></field>
+                        </form-single>
+                    </container-dialog>
+                </box-toolbar>
+                <box-body-nopad>
+                    <form-list name="PeriodList" list="periodList" skip-form="true">
+                        <row-actions>
+                            <set field="isOpen" from="isClosed != 'Y'"/>
+                        </row-actions>
+                        <field name="timePeriodId"><header-field title="ID"/>
+                            <default-field><display/></default-field>
+                        </field>
+                        <field name="periodName"><header-field title="Período"/>
+                            <default-field><display/></default-field>
+                        </field>
+                        <field name="fromDate"><header-field title="Desde"/>
+                            <default-field><display format="dd/MM/yyyy"/></default-field>
+                        </field>
+                        <field name="thruDate"><header-field title="Hasta"/>
+                            <default-field><display format="dd/MM/yyyy"/></default-field>
+                        </field>
+                        <field name="isClosed"><header-field title="Estado"/>
+                            <default-field>
+                                <label text="ABIERTO" style="text-success" condition="isOpen"/>
+                                <label text="CERRADO" style="text-danger" condition="!isOpen"/>
+                            </default-field>
+                        </field>
+                        <field name="actions"><header-field title="Acciones"/>
+                            <default-field>
+                                <section name="OpenActions" condition="isOpen"><widgets>
+                                    <link url="closeFiscalPeriod" text="Cerrar período" link-type="hidden-form"
+                                          btn-type="danger"
+                                          parameter-map="[timePeriodId:timePeriodId]"
+                                          confirmation="¿Cerrar definitivamente el período ${periodName}? Bloqueará todos los asientos retroactivos."/>
+                                </widgets></section>
+                                <section name="ClosedActions" condition="!isOpen"><widgets>
+                                    <container-dialog id="ReopenDlg_${timePeriodId}" button-text="Reabrir (auditado)" type="warning">
+                                        <form-single name="ReopenForm_${timePeriodId}" transition="reopenFiscalPeriod">
+                                            <field name="timePeriodId" from="timePeriodId"><default-field><hidden/></default-field></field>
+                                            <field name="reason"><default-field title="Motivo de reapertura">
+                                                <text-area cols="50" rows="3"/>
+                                            </default-field></field>
+                                            <field name="submitButton"><default-field title="Reabrir período"><submit/></default-field></field>
+                                        </form-single>
+                                    </container-dialog>
+                                </widgets></section>
+                            </default-field>
+                        </field>
+                    </form-list>
+                </box-body-nopad>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>

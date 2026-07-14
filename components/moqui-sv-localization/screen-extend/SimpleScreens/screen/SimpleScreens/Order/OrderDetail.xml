@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen-extend xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd">
+
+    <transition name="invoiceOrderPart">
+        <service-call name="sv.localization.SalesFlowServices.create#SvInvoiceFromOrderPart"/>
+        <default-response url="//${appRoot}/Accounting/Invoice/Dte">
+            <parameter name="invoiceId"/>
+        </default-response>
+    </transition>
+
+    <transition name="saveSvOrderPart">
+        <service-call name="store#mantle.order.OrderPart"/>
+        <default-response url="."/>
+    </transition>
+
+    <actions>
+        <entity-find entity-name="mantle.order.OrderPart" list="svOrderPartList">
+            <econdition field-name="orderId"/>
+            <order-by field-name="orderPartSeqId"/>
+        </entity-find>
+        <set field="svFirstPart" from="svOrderPartList?.first"/>
+        <if condition="svFirstPart?.customerPartyId">
+            <service-call name="sv.localization.PartyFiscalServices.check#DteReadiness"
+                          in-map="[partyId:svFirstPart.customerPartyId]" out-map="svReceptorCheck"/>
+        </if>
+    </actions>
+
+    <widgets>
+        <section name="SvFiscalOrderSection" condition="svFirstPart"><widgets>
+            <container-box>
+                <box-header title="Datos Fiscales"/>
+                <box-body>
+                    <form-single name="SvOrderPartForm" map="svFirstPart" transition="saveSvOrderPart">
+                        <field name="orderId"><default-field><hidden/></default-field></field>
+                        <field name="orderPartSeqId" from="svFirstPart.orderPartSeqId"><default-field><hidden/></default-field></field>
+
+                        <field name="svTipoDteCode"><default-field title="Tipo DTE">
+                            <drop-down allow-empty="true">
+                                <option key="01" text="01 - Factura"/>
+                                <option key="03" text="03 - Crédito Fiscal"/>
+                                <option key="14" text="14 - Sujeto Excluido"/>
+                                <option key="11" text="11 - Exportación"/>
+                            </drop-down>
+                        </default-field></field>
+
+                        <field name="svCondicionOperacionEnumId"><default-field title="Condición">
+                            <drop-down allow-empty="true"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                                <entity-find entity-name="moqui.basic.Enumeration">
+                                    <econdition field-name="enumTypeId" value="SvCondicionOperacion"/>
+                                    <order-by field-name="sequenceNum"/>
+                                </entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+
+                        <field name="svFormaPagoEnumId"><default-field title="Forma de pago">
+                            <drop-down allow-empty="true"><entity-options key="${enumId}" text="${optionValue} - ${description}">
+                                <entity-find entity-name="moqui.basic.Enumeration">
+                                    <econdition field-name="enumTypeId" value="SvFormaPago"/>
+                                    <order-by field-name="sequenceNum"/>
+                                </entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+
+                        <field name="submitButton"><default-field title="Guardar"><submit/></default-field></field>
+
+                        <field-layout>
+                            <field-row><field-ref name="svTipoDteCode"/><field-ref name="svCondicionOperacionEnumId"/><field-ref name="svFormaPagoEnumId"/></field-row>
+                            <field-ref name="submitButton"/>
+                        </field-layout>
+                    </form-single>
+                    <section name="SvReceptorReadiness" condition="svReceptorCheck"><widgets>
+                        <container-row><row-col lg="4">
+                            <label text="FC: " type="strong"/>
+                            <label text="${svReceptorCheck.readyForFc ? 'Listo' : 'Incompleto'}"
+                                   style="${svReceptorCheck.readyForFc ? 'text-success' : 'text-danger'}"/>
+                        </row-col><row-col lg="4">
+                            <label text="CCF: " type="strong"/>
+                            <label text="${svReceptorCheck.readyForCcf ? 'Listo' : 'Incompleto'}"
+                                   style="${svReceptorCheck.readyForCcf ? 'text-success' : 'text-danger'}"/>
+                        </row-col></container-row>
+                    </widgets></section>
+                    <container style="mt-3">
+                        <link url="/fop/apps/SvLocalization/PrintOrderPdf" text="PDF Orden" link-type="anchor-button"
+                              target-window="_blank"
+                              parameter-map="[orderId:orderId, orderPartSeqId:svFirstPart.orderPartSeqId]"/>
+                    </container>
+                </box-body>
+            </container-box>
+        </widgets></section>
+    </widgets>
+
+</screen-extend>

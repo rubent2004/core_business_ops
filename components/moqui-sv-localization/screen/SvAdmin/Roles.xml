@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Roles y Permisos — catalogo de UserGroup SV administrable desde la app.
+    Mantiene la logica de seguridad de Moqui: cada rol es un UserGroup y sus
+    permisos reales se guardan como ArtifactAuthz contra ArtifactGroup.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Roles y Permisos" default-menu-index="2">
+
+    <transition name="createRole">
+        <service-call name="sv.localization.UserAdminServices.create#SvRole"/>
+        <default-response url="../EditRole"><parameter name="userGroupId" from="userGroupId"/></default-response>
+        <error-response url="."/>
+    </transition>
+    <transition name="editRole"><default-response url="../EditRole"/></transition>
+
+    <actions>
+        <entity-find entity-name="moqui.security.UserGroup" list="allGroupList">
+            <order-by field-name="userGroupId"/>
+        </entity-find>
+        <set field="roleList" from="allGroupList.findAll{ (it.userGroupId ?: '').startsWith('Sv') || it.groupTypeEnumId == 'UgtMarbleErp' }"/>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Crear rol"/>
+            <box-body>
+                <form-single name="CreateRoleForm" transition="createRole" focus-field="roleCode">
+                    <field name="roleCode"><default-field title="Codigo corto"
+                            tooltip="Ejemplo: BodegaAux. El sistema lo guardara como UserGroup SvBodegaAux para seguir la convencion Moqui/Mantle.">
+                        <text-line size="24"/></default-field></field>
+                    <field name="description"><default-field title="Descripcion"
+                            tooltip="Nombre funcional que vera el administrador al asignar roles a usuarios.">
+                        <text-line size="60"/></default-field></field>
+                    <field name="submitButton"><default-field title="Crear rol"><submit/></default-field></field>
+                    <field-layout>
+                        <field-row><field-ref name="roleCode"/><field-ref name="description"/><field-ref name="submitButton"/></field-row>
+                    </field-layout>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Roles del sistema"/>
+            <box-body>
+                <form-list name="RoleList" list="roleList" skip-form="true">
+                    <row-actions>
+                        <entity-find entity-name="moqui.security.ArtifactAuthz" list="roleAuthzList">
+                            <econdition field-name="userGroupId"/>
+                        </entity-find>
+                        <entity-find entity-name="moqui.security.UserGroupMember" list="roleMemberList">
+                            <econdition field-name="userGroupId"/>
+                            <date-filter/>
+                        </entity-find>
+                        <set field="permissionCount" from="roleAuthzList ? roleAuthzList.size() : 0"/>
+                        <set field="memberCount" from="roleMemberList ? roleMemberList.size() : 0"/>
+                    </row-actions>
+                    <field name="userGroupId"><default-field title="Rol"
+                            tooltip="Identificador tecnico Moqui del rol. Se usa en UserGroupMember y ArtifactAuthz.">
+                        <link url="editRole" text="${userGroupId}" parameter-map="[userGroupId:userGroupId]"/></default-field></field>
+                    <field name="description"><default-field title="Descripcion"><display/></default-field></field>
+                    <field name="permissionCount"><default-field title="Permisos"><display/></default-field></field>
+                    <field name="memberCount"><default-field title="Usuarios"><display/></default-field></field>
+                    <field name="editBtn"><default-field title="">
+                        <link url="editRole" text="Editar permisos" parameter-map="[userGroupId:userGroupId]" btn-type="info"/></default-field></field>
+                </form-list>
+            </box-body>
+        </container-box>
+    </widgets>
+</screen>

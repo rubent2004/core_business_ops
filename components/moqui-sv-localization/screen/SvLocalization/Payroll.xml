@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Nómina" default-menu-index="3">
+    <subscreens default-item="PayrollDashboard"/>
+    <widgets>
+        <subscreens-panel id="SvPayrollPanel" type="tab"/>
+    </widgets>
+</screen>

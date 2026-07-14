@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="is" noun="BusinessDay" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SvBusinessCalendarServices.groovy"
+             method="isBusinessDay">
+        <description>Indica si una fecha es día hábil en El Salvador (no sábado/domingo ni feriado
+            nacional fijo, Semana Santa, o SvHoliday).</description>
+        <in-parameters><parameter name="date" required="true"/></in-parameters>
+        <out-parameters>
+            <parameter name="businessDay" type="Boolean"/>
+            <parameter name="holiday" type="Boolean"/>
+        </out-parameters>
+    </service>
+
+    <service verb="check" noun="DtePlazo" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/SvBusinessCalendarServices.groovy"
+             method="checkDtePlazo">
+        <description>Calcula el plazo oficial (Normativa DTE v2.0, plan/13) de un evento DTE y dice si
+            la fecha actual lo respeta. No bloquea; devuelve un mensaje de advertencia si está vencido.</description>
+        <in-parameters>
+            <parameter name="eventType" required="true">
+                <description>invalidacion | retorno | operaciones_especiales | diferida | contingencia_dte</description>
+            </parameter>
+            <parameter name="referenceDate" required="true">
+                <description>Fecha base del plazo: sello del documento, fecha de generación o sello del
+                    evento de contingencia, según el evento.</description>
+            </parameter>
+            <parameter name="tipoDteCode"/>
+            <parameter name="esMedicamento" type="Boolean" default-value="false"/>
+            <parameter name="nowOverride"><description>Fecha actual simulada (para pruebas).</description></parameter>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="eventType"/>
+            <parameter name="withinPlazo" type="Boolean"/>
+            <parameter name="deadline"/>
+            <parameter name="plazoDescripcion"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+</services>

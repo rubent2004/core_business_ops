@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-facade-xml type="seed">
+    <!-- DataDocument report visibility for Marble QuickViewReport. -->
+
+    <!-- Full report access for platform and SV administrators/auditors. -->
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleCommunicationEvent" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleEvent" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleFacility" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryAsset" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryOrderItem" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryProdEstimate" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunConsume" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunProduce" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleParty" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProject" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleRequest" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoice" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoiceItem" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderItem" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderPart" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleTask" userGroupId="ADMIN"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleWikiPage" userGroupId="ADMIN"/>
+
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleCommunicationEvent" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleEvent" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleFacility" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryAsset" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryOrderItem" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryProdEstimate" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunConsume" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunProduce" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleParty" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProject" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleRequest" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoice" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoiceItem" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderItem" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderPart" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleTask" userGroupId="MarbleErpAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleWikiPage" userGroupId="MarbleErpAdmin"/>
+
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleCommunicationEvent" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleEvent" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleFacility" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryAsset" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryOrderItem" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryProdEstimate" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunConsume" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunProduce" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleParty" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProject" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleRequest" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoice" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoiceItem" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderItem" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderPart" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleTask" userGroupId="SvAdmin"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleWikiPage" userGroupId="SvAdmin"/>
+
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleCommunicationEvent" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleEvent" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleFacility" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryAsset" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryOrderItem" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryProdEstimate" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunConsume" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunProduce" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleParty" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProject" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleRequest" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoice" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoiceItem" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderItem" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderPart" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleTask" userGroupId="SvAuditor"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleWikiPage" userGroupId="SvAuditor"/>
+
+    <!-- Role-focused report access for daily operations. -->
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleParty" userGroupId="SvVentas"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="SvVentas"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoice" userGroupId="SvVentas"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoiceItem" userGroupId="SvVentas"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderItem" userGroupId="SvVentas"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderPart" userGroupId="SvVentas"/>
+
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleParty" userGroupId="SvContador"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="SvContador"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoice" userGroupId="SvContador"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesInvoiceItem" userGroupId="SvContador"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderItem" userGroupId="SvContador"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleSalesOrderPart" userGroupId="SvContador"/>
+
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleFacility" userGroupId="SvBodega"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryAsset" userGroupId="SvBodega"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryOrderItem" userGroupId="SvBodega"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="SvBodega"/>
+
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleFacility" userGroupId="SvProduccion"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryProdEstimate" userGroupId="SvProduccion"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunConsume" userGroupId="SvProduccion"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleInventoryRunProduce" userGroupId="SvProduccion"/>
+    <moqui.entity.document.DataDocumentUserGroup dataDocumentId="MantleProduct" userGroupId="SvProduccion"/>
+</entity-facade-xml>

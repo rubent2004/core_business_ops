@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Reglas (ISSS/AFP/Renta)" default-menu-index="2">
+
+    <!-- ========================================================== -->
+    <!-- UI SEGURA: workflow de versionado en vez de edicion libre  -->
+    <!-- - Crear nueva vigencia (version#PayrollScheme)              -->
+    <!-- - Editar tramos con safeguard (update#PayrollSchemeBracketsSafe) -->
+    <!-- - No se permite editar fromDate/thruDate de un esquema      -->
+    <!--   directamente (riesgo de corromper auditoria fiscal).      -->
+    <!-- ========================================================== -->
+
+    <transition name="versionScheme">
+        <service-call name="sv.localization.PayrollSvServices.version#PayrollScheme"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="storeBracket">
+        <service-call name="store#sv.localization.payroll.SvPayrollSchemeBracket"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="deleteBracket">
+        <service-call name="delete#sv.localization.payroll.SvPayrollSchemeBracket"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="editBrackets"><default-response url="EditPayrollSchemeBrackets"/></transition>
+
+    <actions>
+        <entity-find entity-name="sv.localization.payroll.SvPayrollScheme" list="payrollSchemeList">
+            <order-by field-name="schemeTypeEnumId"/>
+            <order-by field-name="-fromDate"/>
+        </entity-find>
+
+        <!-- Agrupar por tipo para mostrar version activa + historial -->
+        <set field="schemesByType" from="payrollSchemeList.groupBy { it.schemeTypeEnumId }"/>
+        <set field="now" from="ec.user.nowTimestamp"/>
+    </actions>
+
+    <widgets>
+        <container-box type="warning">
+            <box-header title="Importante"/>
+            <box-body>
+                <label type="p" text="Estos esquemas controlan el cálculo de toda la nómina. NO se editan directamente: cada cambio de ley o corrección debe crear una nueva vigencia (ver botón 'Nueva vigencia' en cada tipo). Esto preserva la trazabilidad fiscal y permite recalculos puntuales."/>
+                <label type="p" text="Si necesita corregir un tramo por error de captura, use 'Editar tramos' del esquema correspondiente — el sistema bloqueará la operación si hay corridas calculadas o aprobadas dependientes."/>
+            </box-body>
+        </container-box>
+
+        <!-- ISSS empleado -->
+        <section name="IsssEmpSection"><actions>
+            <set field="typeId" value="PstIsssEmp"/>
+            <set field="typeLabel" value="ISSS aporte trabajador"/>
+            <set field="typeSchemes" from="schemesByType?.get(typeId) ?: []"/>
+        </actions><widgets>
+            <section-include name="SchemeTypeBlock" location="component://moqui-sv-localization/screen/SvLocalization/Payroll/SchemeTypeBlock.xml"/>
+        </widgets></section>
+
+        <!-- ISSS empleador -->
+        <section name="IsssEmprSection"><actions>
+            <set field="typeId" value="PstIsssEmpr"/>
+            <set field="typeLabel" value="ISSS aporte patronal"/>
+            <set field="typeSchemes" from="schemesByType?.get(typeId) ?: []"/>
+        </actions><widgets>
+            <section-include name="SchemeTypeBlock" location="component://moqui-sv-localization/screen/SvLocalization/Payroll/SchemeTypeBlock.xml"/>
+        </widgets></section>
+
+        <!-- AFP empleado -->
+        <section name="AfpEmpSection"><actions>
+            <set field="typeId" value="PstAfpEmp"/>
+            <set field="typeLabel" value="AFP aporte trabajador"/>
+            <set field="typeSchemes" from="schemesByType?.get(typeId) ?: []"/>
+        </actions><widgets>
+            <section-include name="SchemeTypeBlock" location="component://moqui-sv-localization/screen/SvLocalization/Payroll/SchemeTypeBlock.xml"/>
+        </widgets></section>
+
+        <!-- AFP empleador -->
+        <section name="AfpEmprSection"><actions>
+            <set field="typeId" value="PstAfpEmpr"/>
+            <set field="typeLabel" value="AFP aporte patronal"/>
+            <set field="typeSchemes" from="schemesByType?.get(typeId) ?: []"/>
+        </actions><widgets>
+            <section-include name="SchemeTypeBlock" location="component://moqui-sv-localization/screen/SvLocalization/Payroll/SchemeTypeBlock.xml"/>
+        </widgets></section>
+
+        <!-- Renta mensual -->
+        <section name="RentaSection"><actions>
+            <set field="typeId" value="PstRentaMensual"/>
+            <set field="typeLabel" value="Renta mensual (ISR)"/>
+            <set field="typeSchemes" from="schemesByType?.get(typeId) ?: []"/>
+        </actions><widgets>
+            <section-include name="SchemeTypeBlock" location="component://moqui-sv-localization/screen/SvLocalization/Payroll/SchemeTypeBlock.xml"/>
+        </widgets></section>
+
+    </widgets>
+</screen>

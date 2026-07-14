@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd">
+    <widgets>
+        <section name="SchemeTypeBlock"><widgets>
+            <container-box>
+                <box-header title="${typeLabel}"/>
+                <box-toolbar>
+                    <container-dialog id="NewVersion_${typeId}" button-text="Nueva vigencia" type="primary">
+                        <label type="p" text="Crea una nueva vigencia de ${typeLabel} cerrando la versión vigente. Los tramos se copian del esquema vigente para que pueda ajustarlos."/>
+                        <form-single name="NewVersionForm_${typeId}" transition="versionScheme">
+                            <field name="schemeTypeEnumId" from="typeId"><default-field><hidden/></default-field></field>
+                            <field name="sourceSchemeId"><default-field title="Esquema vigente a cerrar">
+                                <drop-down allow-empty="true">
+                                    <entity-options key="${svPayrollSchemeId}" text="${svPayrollSchemeId} (desde ${ec.l10n.format(fromDate, 'yyyy-MM-dd')})">
+                                        <entity-find entity-name="sv.localization.payroll.SvPayrollScheme">
+                                            <econdition field-name="schemeTypeEnumId" from="typeId"/>
+                                            <econdition field-name="thruDate" operator="is-null"/>
+                                            <order-by field-name="-fromDate"/>
+                                        </entity-find>
+                                    </entity-options>
+                                </drop-down>
+                            </default-field></field>
+                            <field name="newSchemeId"><default-field title="ID nueva vigencia">
+                                <text-line size="40" maxlength="60"/>
+                            </default-field></field>
+                            <field name="effectiveFromDate"><default-field title="Vigente desde">
+                                <date-time/>
+                            </default-field></field>
+                            <field name="description"><default-field title="Descripción">
+                                <text-line size="60"/>
+                            </default-field></field>
+                            <field name="copyBrackets"><default-field title="Copiar tramos de la vigencia anterior">
+                                <drop-down no-current-selected-key="true">
+                                    <option key="true" text="Sí (recomendado)"/>
+                                    <option key="false" text="No, empezar vacío"/>
+                                </drop-down>
+                            </default-field></field>
+                            <field name="submitButton"><default-field title="Crear nueva vigencia"><submit/></default-field></field>
+                        </form-single>
+                    </container-dialog>
+                </box-toolbar>
+                <box-body-nopad>
+                    <container style="table-responsive">
+                        <form-list name="SchemeList_${typeId}" list="typeSchemes" skip-form="true">
+                            <row-actions>
+                                <set field="isActive" from="(fromDate == null || !fromDate.after(now)) &amp;&amp; (thruDate == null || thruDate.after(now))"/>
+                                <entity-find-count entity-name="sv.localization.payroll.SvPayrollSchemeBracket" count-field="bracketCount">
+                                    <econdition field-name="svPayrollSchemeId"/>
+                                </entity-find-count>
+                            </row-actions>
+                            <field name="svPayrollSchemeId">
+                                <header-field title="ID"/>
+                                <default-field><display/></default-field>
+                            </field>
+                            <field name="description">
+                                <header-field title="Descripción"/>
+                                <default-field><display/></default-field>
+                            </field>
+                            <field name="fromDate">
+                                <header-field title="Vigente desde"/>
+                                <default-field><display format="dd/MM/yyyy"/></default-field>
+                            </field>
+                            <field name="thruDate">
+                                <header-field title="Hasta"/>
+                                <default-field>
+                                    <display format="dd/MM/yyyy" text="${thruDate ? ec.l10n.format(thruDate, 'dd/MM/yyyy') : 'Vigente'}"
+                                            style="${thruDate ? 'text-muted' : 'text-success'}"/>
+                                </default-field>
+                            </field>
+                            <field name="isActive">
+                                <header-field title="Estado"/>
+                                <default-field>
+                                    <label text="ACTIVA" style="text-success" condition="isActive"/>
+                                    <label text="cerrada" style="text-muted" condition="!isActive"/>
+                                </default-field>
+                            </field>
+                            <field name="bracketCount">
+                                <header-field title="# Tramos"/>
+                                <default-field><display/></default-field>
+                            </field>
+                            <field name="actions">
+                                <header-field title=""/>
+                                <default-field>
+                                    <link url="/apps/${appRoot}/SvLocalization/Payroll/EditPayrollSchemeBrackets?svPayrollSchemeId=${svPayrollSchemeId}"
+                                          url-type="plain" text="Editar tramos" link-type="anchor"/>
+                                </default-field>
+                            </field>
+                        </form-list>
+                    </container>
+                </box-body-nopad>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>

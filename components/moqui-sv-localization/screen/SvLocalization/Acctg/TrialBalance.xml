@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Balance de Comprobación" default-menu-index="2">
+
+    <parameter name="organizationPartyId"/>
+    <parameter name="periodYearMonth"/>
+
+    <actions>
+        <if condition="organizationPartyId &amp;&amp; periodYearMonth">
+            <service-call name="sv.localization.PeriodCloseServices.compute#TrialBalance"
+                          in-map="[organizationPartyId: organizationPartyId, periodYearMonth: periodYearMonth]"
+                          out-map="balance"/>
+        </if>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Balance de Comprobación"/>
+            <box-body>
+                <form-single name="FilterForm" transition=".">
+                    <field name="organizationPartyId"><default-field title="Organización">
+                        <drop-down><entity-options key="${partyId}" text="PartyNameTemplate">
+                            <entity-find entity-name="mantle.party.PartyDetailAndRole">
+                                <econdition field-name="roleTypeId" value="OrgInternal"/>
+                                <econdition field-name="disabled" value="N" or-null="true"/>
+                                <order-by field-name="organizationName"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="periodYearMonth"><default-field title="Período (YYYY-MM)">
+                        <text-line size="10" maxlength="7"/>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Calcular"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <section name="ResultsSection" condition="balance"><widgets>
+            <container-box type="${balance.balanced ? 'success' : 'danger'}">
+                <box-header title="Resumen del período ${balance.periodYearMonth}"/>
+                <box-body>
+                    <container-row>
+                        <row-col lg="4">
+                            <label text="Total débitos:" type="strong"/>
+                            <label text=" ${ec.l10n.format(balance.grandTotalDebit, '$ #,##0.00')}"/>
+                        </row-col>
+                        <row-col lg="4">
+                            <label text="Total créditos:" type="strong"/>
+                            <label text=" ${ec.l10n.format(balance.grandTotalCredit, '$ #,##0.00')}"/>
+                        </row-col>
+                        <row-col lg="4">
+                            <label text="${balance.balanced ? 'BALANCEADO ✓' : 'DESBALANCEADO ✗'}"
+                                   type="strong"
+                                   style="${balance.balanced ? 'text-success' : 'text-danger'}"/>
+                        </row-col>
+                    </container-row>
+                </box-body>
+            </container-box>
+
+            <container-box>
+                <box-header title="Detalle por cuenta (${balance.lines?.size() ?: 0} cuentas con movimiento)"/>
+                <box-body-nopad>
+                    <form-list name="BalanceLines" list="balance.lines" skip-form="true">
+                        <field name="accountCode"><header-field title="Código"/>
+                            <default-field><display/></default-field>
+                        </field>
+                        <field name="accountName"><header-field title="Cuenta"/>
+                            <default-field><display/></default-field>
+                        </field>
+                        <field name="debitTotal"><header-field title="Débitos"/>
+                            <default-field><display format="$ #,##0.00"/></default-field>
+                        </field>
+                        <field name="creditTotal"><header-field title="Créditos"/>
+                            <default-field><display format="$ #,##0.00"/></default-field>
+                        </field>
+                        <field name="balance"><header-field title="Saldo"/>
+                            <default-field>
+                                <display format="$ #,##0.00"
+                                        style="${balance >= 0 ? 'text-success' : 'text-danger'}"/>
+                            </default-field>
+                        </field>
+                    </form-list>
+                </box-body-nopad>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>

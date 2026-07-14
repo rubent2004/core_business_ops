@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-include="false" standalone="true">
+    <parameter name="bookTypeEnumId" required="true"/>
+    <parameter name="organizationPartyId" required="true"/>
+    <parameter name="periodYearMonth" required="true"/>
+    <actions>
+        <entity-find entity-name="sv.localization.tax.SvIvaBookEntry" list="ivaBookEntryList">
+            <econdition field-name="organizationPartyId" from="organizationPartyId"/>
+            <econdition field-name="bookTypeEnumId" from="bookTypeEnumId"/>
+            <econdition field-name="periodYearMonth" from="periodYearMonth"/>
+            <order-by field-name="numeroCorrelativo"/>
+        </entity-find>
+        <script><![CDATA[
+            String serviceName = bookTypeEnumId == 'SvBookPurchases'
+                    ? 'sv.localization.IvaBookServices.get#IvaPurchasesBookSummary'
+                    : 'sv.localization.IvaBookServices.get#IvaSalesBookSummary'
+            Map summary = ec.service.sync().name(serviceName)
+                    .parameters([organizationPartyId:organizationPartyId, periodYearMonth:periodYearMonth]).call()
+            ivaBookTotals = summary.totals ?: [:]
+            ivaBookTypeEnumId = bookTypeEnumId
+            ivaBookTitle = bookTypeEnumId == 'SvBookPurchases' ? 'Libro IVA Compras' : 'Libro IVA Ventas'
+            generatedAt = ec.user.nowTimestamp.toString()
+            templateLocation = bookTypeEnumId == 'SvBookPurchases'
+                    ? 'component://moqui-sv-localization/template/book/IvaPurchasesBook.xsl-fo.ftl'
+                    : 'component://moqui-sv-localization/template/book/IvaSalesBook.xsl-fo.ftl'
+        ]]></script>
+    </actions>
+    <widgets>
+        <render-mode>
+            <text type="xsl-fo" location="${templateLocation}" template="true" encode="false" no-boundary-comment="true"/>
+        </render-mode>
+    </widgets>
+</screen>

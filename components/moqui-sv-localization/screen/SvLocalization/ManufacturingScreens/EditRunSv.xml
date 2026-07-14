@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Orden de Producción" default-menu-index="2">
+
+    <parameter name="workEffortId" required="true"/>
+
+    <transition name="updateRun"><service-call name="update#mantle.work.effort.WorkEffort"/>
+        <default-response url="."/></transition>
+    <transition name="issueMaterials"><service-call name="sv.localization.ManufacturingSvServices.issue#MaterialsFromBom"/>
+        <default-response url="."><parameter name="workEffortId"/></default-response></transition>
+    <transition name="receiveOutput"><service-call name="sv.localization.ManufacturingSvServices.receive#ProductionOutput"/>
+        <default-response url="."><parameter name="workEffortId"/></default-response></transition>
+    <transition name="completeRun"><service-call name="sv.localization.ManufacturingSvServices.complete#ProductionRun"/>
+        <default-response url="."><parameter name="workEffortId"/></default-response></transition>
+    <transition name="costSheet"><default-response url="../RunCostSheet"><parameter name="workEffortId"/></default-response></transition>
+    <transition name="auditTrail"><default-response url="../RunAuditTrail"><parameter name="workEffortId"/></default-response></transition>
+
+    <transition name="editFacility"><default-response url="//${appRoot}/Facility/EditFacility"/></transition>
+    <transition name="editProduct"><default-response url="//${appRoot}/Catalog/Product/EditProduct"/></transition>
+    <transition name="editParty"><default-response url="//${appRoot}/Party/EditParty"/></transition>
+
+    <transition-include name="getFacilityList" location="component://SimpleScreens/template/facility/FacilityTransitions.xml"/>
+    <transition-include name="searchPartyList" location="component://SimpleScreens/template/party/PartyForms.xml"/>
+
+    <actions>
+        <service-call name="mantle.work.ManufacturingServices.get#ProductionRunDisplayInfo"
+                      in-map="[workEffortId:workEffortId]" out-map="context"/>
+        <if condition="workEffort == null"><return error="true" message="Orden de producción no encontrada"/></if>
+
+        <!-- Solo roles operativos de planta ven los diálogos de Despachar BOM /
+             Recibir PT / Cerrar Orden. Quien está además en SvVentas (presupuesto,
+             facturación) o SvAuditor queda solo en lectura: el flujo operativo
+             corresponde a producción/bodega, no a presupuesto. -->
+        <set field="canEditRun" from="ec.user.isInGroup('SvAdmin') ||
+                (ec.user.isInGroup('SvProduccion') &amp;&amp; !ec.user.isInGroup('SvVentas') &amp;&amp; !ec.user.isInGroup('SvAuditor'))"/>
+
+        <entity-find entity-name="mantle.work.effort.WorkEffortProductDetail" list="produceList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <econdition field-name="typeEnumId" value="WeptProduce"/>
+            <order-by field-name="pseudoId"/>
+        </entity-find>
+        <entity-find entity-name="mantle.work.effort.WorkEffortProductDetail" list="consumeList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <econdition field-name="typeEnumId" value="WeptConsume"/>
+            <order-by field-name="pseudoId"/>
+        </entity-find>
+        <entity-find entity-name="mantle.work.effort.WorkEffortAndPartyDetail" list="partyList">
+            <date-filter/><econdition field-name="workEffortId"/>
+            <order-by field-name="firstName,lastName,organizationName"/>
+        </entity-find>
+        <entity-find entity-name="mantle.product.issuance.AssetIssuance" list="issuanceList">
+            <econdition field-name="workEffortId"/><order-by field-name="-issuedDate"/>
+        </entity-find>
+        <entity-find entity-name="mantle.product.receipt.AssetReceipt" list="receiptList">
+            <econdition field-name="workEffortId"/><order-by field-name="-receivedDate"/>
+        </entity-find>
+        <service-call name="sv.localization.ManufacturingSvServices.calculate#RunCost"
+                      in-map="[workEffortId:workEffortId]" out-map="runCost"/>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Orden de Producción ${workEffortId}"/>
+            <box-toolbar>
+                <link url="costSheet" text="Hoja de Costeo" link-type="anchor-button"
+                      parameter-map="[workEffortId:workEffortId]"/>
+                <link url="auditTrail" text="🕵 Trazabilidad" link-type="anchor-button"
+                      parameter-map="[workEffortId:workEffortId]"/>
+                <link url="../PrintRunPdf/download" text="PDF Orden" link-type="anchor-button" target-window="_blank"
+                      parameter-map="[workEffortId:workEffortId, report:'orden']"/>
+                <link url="../PrintRunPdf/download" text="PDF Requisición" link-type="anchor-button" target-window="_blank"
+                      parameter-map="[workEffortId:workEffortId, report:'requisicion']"/>
+                <link url="../PrintRunPdf/download" text="PDF Costeo" link-type="anchor-button" target-window="_blank"
+                      parameter-map="[workEffortId:workEffortId, report:'costeo']"/>
+                <link url="../PrintRunPdf/download" text="PDF Producto Terminado" link-type="anchor-button" target-window="_blank"
+                      parameter-map="[workEffortId:workEffortId, report:'productoTerminado']"/>
+                <section name="ProductionWriteActions" condition="canEditRun">
+                    <widgets>
+                        <container-dialog id="IssueMaterialsDialog" button-text="Despachar BOM" type="warning">
+                            <form-single name="IssueMaterialsForm" transition="issueMaterials">
+                                <field name="workEffortId"><default-field><hidden/></default-field></field>
+                                <field name="facilityId"><default-field title="Bodega de salida">
+                                    <drop-down allow-empty="true"><dynamic-options transition="getFacilityList" server-search="true" min-length="0"
+                                            parameter-map="[facilityTypeEnumId:'FcTpLine,FcTpPlant,FcTpWarehouse']"/></drop-down>
+                                </default-field></field>
+                                <field name="submitButton"><default-field title="Despachar Materiales"><submit/></default-field></field>
+                            </form-single>
+                        </container-dialog>
+                        <container-dialog id="ReceiveOutputDialog" button-text="Recibir PT" type="success">
+                            <form-single name="ReceiveOutputForm" transition="receiveOutput">
+                                <field name="workEffortId"><default-field><hidden/></default-field></field>
+                                <field name="facilityId"><default-field title="Bodega producto terminado">
+                                    <drop-down allow-empty="true"><dynamic-options transition="getFacilityList" server-search="true" min-length="0"
+                                            parameter-map="[facilityTypeEnumId:'FcTpLine,FcTpPlant,FcTpWarehouse']"/></drop-down>
+                                </default-field></field>
+                                <field name="submitButton"><default-field title="Registrar Producción"><submit/></default-field></field>
+                            </form-single>
+                        </container-dialog>
+                        <container-dialog id="CompleteRunDialog" button-text="Cerrar Orden" type="danger">
+                            <form-single name="CompleteRunForm" transition="completeRun">
+                                <field name="workEffortId"><default-field><hidden/></default-field></field>
+                                <field name="issueMaterials"><default-field title="Despachar BOM pendiente">
+                                    <check><option key="true" text="Sí"/></check>
+                                </default-field></field>
+                                <field name="receiveOutput"><default-field title="Recibir producto terminado">
+                                    <check><option key="true" text="Sí"/></check>
+                                </default-field></field>
+                                <field name="receiveFacilityId"><default-field title="Bodega de cierre">
+                                    <drop-down allow-empty="true"><dynamic-options transition="getFacilityList" server-search="true" min-length="0"
+                                            parameter-map="[facilityTypeEnumId:'FcTpLine,FcTpPlant,FcTpWarehouse']"/></drop-down>
+                                </default-field></field>
+                                <field name="submitButton"><default-field title="Cerrar"><submit/></default-field></field>
+                            </form-single>
+                        </container-dialog>
+                    </widgets>
+                </section>
+            </box-toolbar>
+            <box-body>
+                <container-row>
+                    <row-col lg="7">
+                        <form-single name="UpdateRun" transition="updateRun" map="workEffort">
+                            <field name="workEffortId"><default-field><hidden/></default-field></field>
+                            <field name="workEffortName"><default-field title="Nombre"><text-line size="70"/></default-field></field>
+                            <field name="facilityId"><default-field title="Bodega / Línea">
+                                <drop-down allow-empty="true"><dynamic-options transition="getFacilityList" server-search="true"
+                                        min-length="0" parameter-map="[facilityTypeEnumId:'FcTpLine,FcTpPlant,FcTpWarehouse']"/></drop-down>
+                            </default-field></field>
+                            <field name="estimatedStartDate"><default-field title="Fecha de Orden"><date-time/></default-field></field>
+                            <field name="estimatedCompletionDate"><default-field title="Entrega Estimada"><date-time/></default-field></field>
+                            <field name="estimatedWorkDuration"><default-field title="Horas Estimadas"><text-line size="8"/></default-field></field>
+                            <field name="actualCost"><default-field title="Mano de Obra / Costos Indirectos"><text-line size="10"/></default-field></field>
+                            <field name="description"><default-field title="Observaciones del pedido"><text-area rows="5" cols="80"/></default-field></field>
+                            <field name="submitButton">
+                                <conditional-field name="submitButton" condition="canEditRun" title="Actualizar Orden"><submit/></conditional-field>
+                                <default-field><label text=""/></default-field>
+                            </field>
+                        </form-single>
+                    </row-col>
+                    <row-col lg="5">
+                        <container-box>
+                            <box-header title="Resumen de Costos"/>
+                            <box-body>
+                                <label text="Material estimado: ${ec.l10n.format(runCost.materialCostEstimated ?: 0, '$ #,##0.00')}" type="p"/>
+                                <label text="Material real: ${ec.l10n.format(runCost.materialCostReal ?: 0, '$ #,##0.00')}" type="p"/>
+                                <label text="Mano de obra/indirectos: ${ec.l10n.format(runCost.laborCost ?: 0, '$ #,##0.00')}" type="p"/>
+                                <label text="Total: ${ec.l10n.format(runCost.totalCost ?: 0, '$ #,##0.00')}" type="strong"/>
+                            </box-body>
+                        </container-box>
+                    </row-col>
+                </container-row>
+            </box-body>
+        </container-box>
+
+        <container-row>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Producto Terminado"/>
+                    <box-body-nopad>
+                        <form-list name="ProduceListForm" list="produceList" skip-form="true">
+                            <field name="pseudoId"><default-field title="Código">
+                                <link url="editProduct" text="${pseudoId}" link-type="anchor" parameter-map="[productId:productId]"/>
+                            </default-field></field>
+                            <field name="productName"><default-field title="Producto"><display/></default-field></field>
+                            <field name="estimatedQuantity"><default-field title="Cantidad"><display format="#.##"/></default-field></field>
+                        </form-list>
+                    </box-body-nopad>
+                </container-box>
+            </row-col>
+            <row-col lg="6">
+                <container-box>
+                    <box-header title="Responsables"/>
+                    <box-body-nopad>
+                        <form-list name="PartyListForm" list="partyList" skip-form="true">
+                            <field name="partyId"><default-field title="Persona">
+                                <link url="editParty" text="${firstName ?: organizationName ?: partyId}" link-type="anchor"
+                                      parameter-map="[partyId:partyId]"/>
+                            </default-field></field>
+                            <field name="roleTypeId"><default-field title="Rol"><display/></default-field></field>
+                        </form-list>
+                    </box-body-nopad>
+                </container-box>
+            </row-col>
+        </container-row>
+
+        <container-box>
+            <box-header title="Corte de Material"/>
+            <box-body-nopad>
+                <form-list name="MaterialListForm" list="runCost.materialLines" skip-form="true">
+                    <field name="pseudoId"><default-field title="Código">
+                        <link url="editProduct" text="${pseudoId}" link-type="anchor" parameter-map="[productId:productId]"/>
+                    </default-field></field>
+                    <field name="productName"><default-field title="Material"><display/></default-field></field>
+                    <field name="estimatedQuantity"><default-field title="Cantidad"><display format="#.##"/></default-field></field>
+                    <field name="unitCost"><default-field title="C.U."><display format="$ #,##0.00"/></default-field></field>
+                    <field name="lineCost"><default-field title="Costo"><display format="$ #,##0.00"/></default-field></field>
+                </form-list>
+            </box-body-nopad>
+        </container-box>
+
+        <section name="MovementSection" condition="issuanceList || receiptList"><widgets>
+            <container-row>
+                <row-col lg="6">
+                    <container-box>
+                        <box-header title="Despachos Reales"/>
+                        <box-body-nopad>
+                            <form-list name="IssuanceListForm" list="issuanceList" skip-form="true">
+                                <field name="issuedDate"><default-field title="Fecha"><display/></default-field></field>
+                                <field name="productId"><default-field title="Producto"><display/></default-field></field>
+                                <field name="quantity"><default-field title="Cantidad"><display format="#.##"/></default-field></field>
+                            </form-list>
+                        </box-body-nopad>
+                    </container-box>
+                </row-col>
+                <row-col lg="6">
+                    <container-box>
+                        <box-header title="Producto Terminado Recibido"/>
+                        <box-body-nopad>
+                            <form-list name="ReceiptListForm" list="receiptList" skip-form="true">
+                                <field name="receivedDate"><default-field title="Fecha"><display/></default-field></field>
+                                <field name="productId"><default-field title="Producto"><display/></default-field></field>
+                                <field name="quantityAccepted"><default-field title="Cantidad"><display format="#.##"/></default-field></field>
+                            </form-list>
+                        </box-body-nopad>
+                    </container-box>
+                </row-col>
+            </container-row>
+        </widgets></section>
+    </widgets>
+</screen>

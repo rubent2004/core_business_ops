@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+    <service verb="validate" noun="Dui" type="script" authenticate="false"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="validateDui">
+        <in-parameters>
+            <parameter name="dui" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="normalizedValue"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="validate" noun="Nit" type="script" authenticate="false"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="validateNit">
+        <in-parameters>
+            <parameter name="nit" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="valid" type="Boolean"/>
+            <parameter name="normalizedValue"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="upsert" noun="PartyFiscalProfile" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="upsertPartyFiscalProfile">
+        <in-parameters>
+            <parameter name="partyId" required="true"/>
+            <parameter name="dui"/>
+            <parameter name="nit"/>
+            <parameter name="nrc"/>
+            <parameter name="tipoContribuyenteEnumId"/>
+            <parameter name="actividadEconomicaId"/>
+            <parameter name="tipoEstablecimientoMhCode"/>
+            <parameter name="codEstableMhCode"/>
+            <parameter name="codPuntoVentaMhCode"/>
+            <parameter name="codEstableCode"/>
+            <parameter name="codPuntoVentaCode"/>
+            <parameter name="nombreComercial"/>
+            <parameter name="responsableNombre"/>
+            <parameter name="responsableDui"/>
+            <parameter name="fechaInicioOperaciones" type="Date"/>
+            <parameter name="nupIsss"/>
+            <parameter name="nupAfp"/>
+            <parameter name="afpProviderEnumId"/>
+            <parameter name="fechaIngreso" type="Date"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="svFiscalProfileId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="store" noun="SvPostalAddress" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="storeSvPostalAddress">
+        <description>Creates or updates the SV fiscal postal address for a party, including departamento/municipio/distrito cascade.</description>
+        <in-parameters>
+            <parameter name="partyId" required="true"/>
+            <parameter name="contactMechId"/>
+            <parameter name="departamentoGeoId" required="true"/>
+            <parameter name="municipioGeoId" required="true"/>
+            <parameter name="distritoGeoId"/>
+            <parameter name="complemento" required="true"/>
+            <parameter name="contactMechPurposeId" default-value="PostalPrimary"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="contactMechId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="store" noun="SvDteContactInfo" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="storeSvDteContactInfo">
+        <description>Creates or updates phone and email for DTE purposes.</description>
+        <in-parameters>
+            <parameter name="partyId" required="true"/>
+            <parameter name="telefono"/>
+            <parameter name="correo"/>
+        </in-parameters>
+    </service>
+
+    <service verb="get" noun="SvMunicipiosForDepartamento" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="getSvMunicipiosForDepartamento" authenticate="false">
+        <in-parameters>
+            <parameter name="departamentoGeoId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="resultList" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="get" noun="SvDistritosForMunicipio" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="getSvDistritosForMunicipio" authenticate="false">
+        <in-parameters>
+            <parameter name="municipioGeoId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="resultList" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="check" noun="DteReadiness" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="checkDteReadiness">
+        <description>Checks if a party has all required fields to be a DTE receptor.</description>
+        <in-parameters>
+            <parameter name="partyId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="ready" type="Boolean"/>
+            <parameter name="readyForFc" type="Boolean"/>
+            <parameter name="readyForCcf" type="Boolean"/>
+            <parameter name="issues" type="List"/>
+        </out-parameters>
+    </service>
+    <service verb="create" noun="SvCustomer" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="createSvCustomer">
+        <description>Crea un cliente salvadoreño completo en un solo paso: Party + Person/Organization + SvFiscalProfile + PostalAddress + Phone + Email.</description>
+        <in-parameters>
+            <parameter name="roleTypeId" default-value="Customer"/>
+            <parameter name="partyTypeEnumId" default-value="PtyPerson"/>
+            <parameter name="firstName"/>
+            <parameter name="lastName"/>
+            <parameter name="organizationName"/>
+            <parameter name="dui"/>
+            <parameter name="nit"/>
+            <parameter name="nrc"/>
+            <parameter name="tipoContribuyenteEnumId"/>
+            <parameter name="actividadEconomicaId"/>
+            <parameter name="nombreComercial"/>
+            <parameter name="departamentoGeoId"/>
+            <parameter name="municipioGeoId"/>
+            <parameter name="distritoGeoId"/>
+            <parameter name="complemento"/>
+            <parameter name="telefono"/>
+            <parameter name="correo"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="partyId"/>
+        </out-parameters>
+    </service>
+    <service verb="create" noun="SvSupplier" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="createSvCustomer">
+        <description>Crea un proveedor salvadoreño completo en un solo paso (reusa createSvCustomer con rol Supplier):
+            Party + Person/Organization + SvFiscalProfile + PostalAddress + Phone + Email.</description>
+        <in-parameters>
+            <parameter name="roleTypeId" default-value="Supplier"/>
+            <parameter name="partyTypeEnumId" default-value="PtyOrganization"/>
+            <parameter name="firstName"/>
+            <parameter name="lastName"/>
+            <parameter name="organizationName"/>
+            <parameter name="dui"/>
+            <parameter name="nit"/>
+            <parameter name="nrc"/>
+            <parameter name="tipoContribuyenteEnumId"/>
+            <parameter name="actividadEconomicaId"/>
+            <parameter name="nombreComercial"/>
+            <parameter name="departamentoGeoId"/>
+            <parameter name="municipioGeoId"/>
+            <parameter name="distritoGeoId"/>
+            <parameter name="complemento"/>
+            <parameter name="telefono"/>
+            <parameter name="correo"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="partyId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="upload" noun="OrganizationLogo" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="uploadOrganizationLogo">
+        <description>Sube el logo de una organización y lo asocia al perfil fiscal SV.
+            El binario se persiste en `runtime/component/moqui-sv-localization/upload/logos/`
+            y `SvFiscalProfile.logoContentLocation` queda con la URL absoluta
+            (`file://...`) accesible para FOP al renderizar el PDF DTE. Acepta PNG/JPG
+            hasta 1 MB. Sobre-escribe el logo previo si existía.</description>
+        <in-parameters>
+            <parameter name="partyId" required="true"/>
+            <parameter name="logoFile" type="org.apache.commons.fileupload.FileItem"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="logoContentLocation"/>
+            <parameter name="filename"/>
+            <parameter name="size" type="Long"/>
+        </out-parameters>
+    </service>
+
+    <service verb="remove" noun="OrganizationLogo" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="removeOrganizationLogo">
+        <description>Elimina el logo configurado de una organización (limpia
+            SvFiscalProfile.logoContentLocation y borra el archivo si está en el directorio de uploads).</description>
+        <in-parameters>
+            <parameter name="partyId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="removed" type="Boolean"/>
+        </out-parameters>
+    </service>
+
+    <service verb="suggest" noun="TipoDte" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/PartyFiscalServices.groovy"
+             method="suggestTipoDte" authenticate="false">
+        <description>Sugiere el tipo de DTE basado en el perfil fiscal del receptor.</description>
+        <in-parameters>
+            <parameter name="partyId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="suggestedTipoDte"/>
+            <parameter name="suggestedLabel"/>
+            <parameter name="reason"/>
+        </out-parameters>
+    </service>
+
+</services>

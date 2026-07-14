@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Salarios Mínimos" default-menu-index="3">
+
+    <transition name="versionWage">
+        <service-call name="sv.localization.PayrollSvServices.version#MinimumWageSector"/>
+        <default-response url="."/>
+    </transition>
+
+    <actions>
+        <entity-find entity-name="sv.localization.payroll.SvMinimumWageSector" list="wageList">
+            <order-by field-name="sectorEnumId"/>
+            <order-by field-name="-fromDate"/>
+        </entity-find>
+        <set field="wagesBySector" from="wageList.groupBy { it.sectorEnumId }"/>
+        <set field="now" from="ec.user.nowTimestamp"/>
+    </actions>
+
+    <widgets>
+        <container-box type="warning">
+            <box-header title="Importante"/>
+            <box-body>
+                <label type="p" text="Cuando el gobierno actualiza los salarios mínimos, use 'Nueva vigencia' para crear la nueva tabla cerrando la vigencia anterior con la fecha del cambio. No edite directamente las filas históricas — eso corrompe la trazabilidad para auditoría."/>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Nueva vigencia de salario mínimo"/>
+            <box-toolbar>
+                <container-dialog id="NewWageVersion" button-text="Nueva vigencia" type="primary">
+                    <label type="p" text="Crea una nueva vigencia de salario mínimo para un sector. La vigencia actual se cierra automáticamente con thruDate = fecha efectiva."/>
+                    <form-single name="NewWageVersionForm" transition="versionWage">
+                        <field name="sectorEnumId"><default-field title="Sector">
+                            <drop-down><entity-options key="${enumId}" text="${description}">
+                                <entity-find entity-name="moqui.basic.Enumeration">
+                                    <econdition field-name="enumTypeId" value="SvMwSector"/>
+                                    <order-by field-name="sequenceNum"/>
+                                </entity-find>
+                            </entity-options></drop-down>
+                        </default-field></field>
+                        <field name="effectiveFromDate"><default-field title="Vigente desde">
+                            <date-time/>
+                        </default-field></field>
+                        <field name="monthlyAmount"><default-field title="Salario mensual (USD)">
+                            <text-line size="12"/>
+                        </default-field></field>
+                        <field name="dailyAmount"><default-field title="Salario diario (USD)">
+                            <text-line size="12"/>
+                        </default-field></field>
+                        <field name="description"><default-field title="Descripción / decreto">
+                            <text-line size="60"/>
+                        </default-field></field>
+                        <field name="submitButton"><default-field title="Crear vigencia"><submit/></default-field></field>
+                    </form-single>
+                </container-dialog>
+            </box-toolbar>
+            <box-body/>
+        </container-box>
+
+        <!-- Listado de vigencias agrupado por sector -->
+        <container-box>
+            <box-header title="Vigencias por sector"/>
+            <box-body-nopad>
+                <form-list name="WageList" list="wageList" skip-form="true">
+                    <row-actions>
+                        <set field="isActive" from="(fromDate == null || !fromDate.after(now)) &amp;&amp; (thruDate == null || thruDate.after(now))"/>
+                    </row-actions>
+                    <field name="sectorEnumId">
+                        <header-field title="Sector"/>
+                        <default-field>
+                            <display-entity entity-name="moqui.basic.Enumeration"
+                                    key-map="[enumId:sectorEnumId]" text="${description}"/>
+                        </default-field>
+                    </field>
+                    <field name="fromDate">
+                        <header-field title="Vigente desde"/>
+                        <default-field><display format="dd/MM/yyyy"/></default-field>
+                    </field>
+                    <field name="thruDate">
+                        <header-field title="Hasta"/>
+                        <default-field>
+                            <display format="dd/MM/yyyy" text="${thruDate ? ec.l10n.format(thruDate, 'dd/MM/yyyy') : 'Vigente'}"
+                                    style="${thruDate ? 'text-muted' : 'text-success'}"/>
+                        </default-field>
+                    </field>
+                    <field name="isActive">
+                        <header-field title="Estado"/>
+                        <default-field>
+                            <label text="ACTIVA" style="text-success" condition="isActive"/>
+                            <label text="cerrada" style="text-muted" condition="!isActive"/>
+                        </default-field>
+                    </field>
+                    <field name="monthlyAmount">
+                        <header-field title="Mensual"/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="dailyAmount">
+                        <header-field title="Diario"/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="description">
+                        <header-field title="Descripción"/>
+                        <default-field><display/></default-field>
+                    </field>
+                </form-list>
+            </box-body-nopad>
+        </container-box>
+    </widgets>
+</screen>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <service verb="create" noun="SvProductionRun" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="createSvProductionRun">
+        <description>Creates a Salvadoran manufacturing production run (WorkEffort) with the product to produce,
+            BOM lines from ProductAssoc or an optional source WorkEffort template, optional sales-order linkage,
+            and optional customer link.</description>
+        <in-parameters>
+            <parameter name="orderId"/>
+            <parameter name="orderPartSeqId"/>
+            <parameter name="productId" required="true"/>
+            <parameter name="quantity" type="BigDecimal" default-value="1"/>
+            <parameter name="facilityId" required="true"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="customerPartyId"/>
+            <parameter name="sourceWorkEffortId"/>
+            <parameter name="linkOrderItems" type="Boolean" default-value="true"/>
+            <parameter name="workEffortName"/>
+            <parameter name="estimatedStartDate" type="Timestamp"/>
+            <parameter name="estimatedCompletionDate" type="Timestamp"/>
+            <parameter name="estimatedWorkDuration" type="BigDecimal"/>
+            <parameter name="actualCost" type="BigDecimal"/>
+            <parameter name="priority" type="Integer"/>
+            <parameter name="description"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="workEffortId"/>
+            <parameter name="copiedBomCount" type="Integer"/>
+            <parameter name="linkedOrderItemCount" type="Integer"/>
+        </out-parameters>
+    </service>
+
+    <service verb="create" noun="SvProductionRunFromOrder" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="createSvProductionRunFromOrder">
+        <description>Creates a production run (WorkEffort) linked to a sales order part.
+            Sets up the product to produce and copies BOM from product associations or an optional source
+            WorkEffort template if available.</description>
+        <in-parameters>
+            <parameter name="orderId" required="true"/>
+            <parameter name="orderPartSeqId" required="true"/>
+            <parameter name="productId" required="true"/>
+            <parameter name="quantity" type="BigDecimal" default-value="1"/>
+            <parameter name="facilityId"/>
+            <parameter name="ownerPartyId"/>
+            <parameter name="customerPartyId"/>
+            <parameter name="sourceWorkEffortId"/>
+            <parameter name="linkOrderItems" type="Boolean" default-value="true"/>
+            <parameter name="workEffortName"/>
+            <parameter name="estimatedStartDate" type="Timestamp"/>
+            <parameter name="estimatedCompletionDate" type="Timestamp"/>
+            <parameter name="estimatedWorkDuration" type="BigDecimal"/>
+            <parameter name="actualCost" type="BigDecimal"/>
+            <parameter name="priority" type="Integer"/>
+            <parameter name="description"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="workEffortId"/>
+            <parameter name="copiedBomCount" type="Integer"/>
+            <parameter name="linkedOrderItemCount" type="Integer"/>
+        </out-parameters>
+    </service>
+
+    <service verb="calculate" noun="RunCost" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="calculateRunCost">
+        <description>Calculates total cost for a production run: material cost (from BOM × unit cost),
+            labor cost (from actualCost on WorkEffort), and indirect costs.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="materialCostEstimated" type="BigDecimal"/>
+            <parameter name="materialCostReal" type="BigDecimal"/>
+            <parameter name="laborCost" type="BigDecimal"/>
+            <parameter name="totalCost" type="BigDecimal"/>
+            <parameter name="materialLines" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="issue" noun="MaterialsFromBom" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="issueMaterialsFromBom">
+        <description>Issues materials from inventory based on the BOM (WorkEffortProduct WeptConsume lines).
+            Creates AssetIssuance records for each line, pulling from the specified facility.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+            <parameter name="facilityId"/>
+            <parameter name="allowPartial" type="Boolean" default-value="false"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="issuedCount" type="Integer"/>
+            <parameter name="totalIssued" type="BigDecimal"/>
+            <parameter name="issues" type="List"/>
+            <parameter name="missingMaterials" type="List"/>
+        </out-parameters>
+    </service>
+
+    <service verb="complete" noun="ProductionRun" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="completeProductionRun">
+        <description>Completes a production run: optionally issues BOM materials, optionally receives the produced
+            product into inventory, and marks the WorkEffort as complete.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+            <parameter name="issueMaterials" type="Boolean" default-value="true"/>
+            <parameter name="receiveOutput" type="Boolean" default-value="true"/>
+            <parameter name="issueFacilityId"/>
+            <parameter name="receiveFacilityId"/>
+            <parameter name="receivedByUserId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="issuedCount" type="Integer"/>
+            <parameter name="totalIssued" type="BigDecimal"/>
+            <parameter name="issues" type="List"/>
+            <parameter name="missingMaterials" type="List"/>
+            <parameter name="assetReceiptId"/>
+            <parameter name="assetId"/>
+            <parameter name="productId"/>
+            <parameter name="quantityAccepted" type="BigDecimal"/>
+            <parameter name="unitCost" type="BigDecimal"/>
+            <parameter name="statusId"/>
+        </out-parameters>
+    </service>
+
+    <service verb="receive" noun="ProductionOutput" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="receiveProductionOutput">
+        <description>Receives the finished product into inventory (creates AssetReceipt + Asset).
+            Uses the WeptProduce line from the production run BOM.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+            <parameter name="facilityId"/>
+            <parameter name="receivedByUserId"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="assetReceiptId"/>
+            <parameter name="assetId"/>
+            <parameter name="productId"/>
+            <parameter name="quantityAccepted" type="BigDecimal"/>
+            <parameter name="unitCost" type="BigDecimal"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="OrdenProduccionPdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="renderOrdenProduccionPdf">
+        <description>Renders a printable PDF production order for a WorkEffort production run.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="HojaRequisicionPdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="renderHojaRequisicionPdf">
+        <description>PDF Hoja de Requisición: lista de materiales que se solicitan a bodega
+            de materia prima e insumos para una orden de producción. Formato estándar con encabezado,
+            tabla de materiales (código, descripción, cantidad, bodega, despachado) y firmas
+            de Solicita/Entrega.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="ProductoTerminadoPdf" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="renderProductoTerminadoPdf">
+        <description>PDF Hoja de Producto Terminado: registro de recepción del producto terminado
+            al cierre de una orden de producción. Incluye producto, detalle de recepciones por
+            bodega+fecha+costo, resumen de costos (materiales+MO+GIF) y firmas de Entrega/Recibe.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+    <service verb="render" noun="HojaCierre" type="script"
+             location="component://moqui-sv-localization/service/sv/localization/ManufacturingSvServices.groovy"
+             method="renderHojaCierre">
+        <description>Renders a printable close/cost sheet PDF for a WorkEffort production run.</description>
+        <in-parameters>
+            <parameter name="workEffortId" required="true"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="rendered" type="Boolean"/>
+            <parameter name="templateLocation"/>
+            <parameter name="xslFoText"/>
+            <parameter name="pdfBytes"/>
+            <parameter name="pdfSize" type="Integer"/>
+            <parameter name="pageCount" type="Integer"/>
+            <parameter name="filename"/>
+            <parameter name="contentType"/>
+            <parameter name="message"/>
+        </out-parameters>
+    </service>
+
+</services>

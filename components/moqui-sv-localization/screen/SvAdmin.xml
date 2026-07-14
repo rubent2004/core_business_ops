@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Área administrativa SV (sólo SvAdmin). Agrupa la gestión de usuarios,
+    empleados y permisos en español, sin exponer las pantallas técnicas de
+    System/Security. Acceso restringido vía ArtifactGroup "SvScreenAdmin".
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Administración" default-menu-index="9"
+        menu-image="fa fa-user-shield" menu-image-type="icon" require-authentication="true">
+
+    <subscreens default-item="UsersRoles"/>
+
+    <widgets>
+        <subscreens-panel id="SvAdminPanel" type="tab"/>
+    </widgets>
+</screen>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Fixtures del simulador MH local. NO se cargan en producción (type=seed pero
+los enumTypeId tienen prefijo SvDteSim* — sólo los consume el simulador).
+
+Para añadir un emisor autorizado en dev: agregar un Enumeration con
+enumTypeId=SvDteSimAuthorizedNit y enumCode=<NIT 14 dígitos>.
+
+Para añadir un usuario MH demo: agregar Enumeration con enumTypeId=SvDteSimAuthUser,
+enumCode=<usuario>, description=<password>.
+-->
+<entity-facade-xml type="seed">
+
+    <!-- ====== NITs autorizados por el simulador (empresa demo ficticia) ====== -->
+    <moqui.basic.EnumerationType description="SV Sim: NIT autorizado a emitir" enumTypeId="SvDteSimAuthorizedNit"/>
+    <moqui.basic.Enumeration description="NIT demo ficticio (Metalúrgica del Pacífico)" enumId="SvNit05142107981015"
+            enumTypeId="SvDteSimAuthorizedNit" enumCode="05142107981015" sequenceNum="1"/>
+    <moqui.basic.Enumeration description="NIT genérico de pruebas" enumId="SvNit00000000000000"
+            enumTypeId="SvDteSimAuthorizedNit" enumCode="00000000000000" sequenceNum="2"/>
+
+    <!-- ====== Usuarios MH demo (enumCode=usuario, description=password) ====== -->
+    <moqui.basic.EnumerationType description="SV Sim: usuario MH" enumTypeId="SvDteSimAuthUser"/>
+    <moqui.basic.Enumeration description="demo1234" enumId="SvDteSimUserDemo"
+            enumTypeId="SvDteSimAuthUser" enumCode="demo" sequenceNum="1"/>
+
+</entity-facade-xml>

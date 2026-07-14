@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-include="false" standalone="true">
+    <parameter name="workEffortId" required="true"/>
+    <parameter name="report" default-value="requisicion"/>
+    <transition name="download" read-only="true">
+        <parameter name="workEffortId" required="true"/>
+        <parameter name="report" default-value="requisicion"/>
+        <parameter name="documentType"/>
+        <actions>
+            <script><![CDATA[
+                String requestedReport = (report ?: documentType ?: 'requisicion').toString()
+                if (requestedReport == 'requisition') requestedReport = 'requisicion'
+                if (requestedReport in ['finished', 'finishedProduct', 'producto']) requestedReport = 'productoTerminado'
+
+                String serviceName
+                switch (requestedReport) {
+                    case 'orden':
+                        serviceName = 'sv.localization.ManufacturingSvServices.render#OrdenProduccionPdf'
+                        break
+                    case 'productoTerminado':
+                        serviceName = 'sv.localization.ManufacturingSvServices.render#ProductoTerminadoPdf'
+                        break
+                    case 'costeo':
+                        serviceName = 'sv.localization.ManufacturingSvServices.render#HojaCierre'
+                        break
+                    case 'requisicion':
+                    default:
+                        serviceName = 'sv.localization.ManufacturingSvServices.render#HojaRequisicionPdf'
+                        break
+                }
+                Map rr = ec.service.sync().name(serviceName).parameters([workEffortId: workEffortId]).call()
+                if (!rr?.rendered || !rr?.pdfBytes) {
+                    ec.web.response.sendError(500, rr?.message ?: 'Error renderizando PDF de produccion')
+                    return
+                }
+                ec.web.response.setContentType(rr.contentType ?: 'application/pdf')
+                ec.web.response.setHeader('Content-Disposition', "inline; filename=\"${rr.filename ?: "produccion-${workEffortId}.pdf"}\"")
+                ec.web.response.setContentLength(((byte[]) rr.pdfBytes).length)
+                ec.web.response.outputStream.write((byte[]) rr.pdfBytes)
+            ]]></script>
+        </actions>
+        <default-response type="none"/>
+    </transition>
+    <actions>
+        <script><![CDATA[
+            String encWorkEffortId = java.net.URLEncoder.encode(workEffortId.toString(), 'UTF-8')
+            String encReport = java.net.URLEncoder.encode((report ?: documentType ?: 'requisicion').toString(), 'UTF-8')
+            sri.sendRedirectAndStopRender("download?workEffortId=${encWorkEffortId}&report=${encReport}")
+        ]]></script>
+    </actions>
+    <widgets>
+        <!-- La respuesta binaria se sirve desde la transición download. -->
+    </widgets>
+</screen>

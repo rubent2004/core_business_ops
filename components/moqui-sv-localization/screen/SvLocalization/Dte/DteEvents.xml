@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Eventos" default-menu-index="4">
+
+    <transition name="emitEvent"><service-call name="sv.localization.DteEventServices.emit#DteEvent"/><default-response url="."/></transition>
+    <transition name="validateEvent"><service-call name="sv.localization.DteEventServices.validate#DteEventJson"/><default-response url="."/></transition>
+    <transition name="signEvent"><service-call name="sv.localization.DteEventServices.sign#DteEvent"/><default-response url="."/></transition>
+    <transition name="transmitEvent"><service-call name="sv.localization.DteEventServices.transmit#DteEvent"/><default-response url="."/></transition>
+
+    <transition name="buildAndEmitEop"><actions>
+        <service-call name="sv.localization.DteEventServices.build#EopOperacionEspecial" in-map="context" out-map="built"/>
+        <if condition="built.eventJsonText">
+            <service-call name="sv.localization.DteEventServices.emit#DteEvent"
+                          in-map="[tipoEventoCode:'17', eventJsonText:built.eventJsonText, eventItems:built.eventItems]" out-map="context"/>
+        </if>
+    </actions><default-response url="."/></transition>
+
+    <transition name="buildAndEmitEret"><actions>
+        <service-call name="sv.localization.DteEventServices.build#EretFromDte" in-map="context" out-map="built"/>
+        <if condition="built.eventJsonText">
+            <service-call name="sv.localization.DteEventServices.emit#DteEvent"
+                          in-map="[tipoEventoCode:'18', eventJsonText:built.eventJsonText, eventItems:built.eventItems]" out-map="context"/>
+        </if>
+    </actions><default-response url="."/></transition>
+
+    <actions>
+        <entity-find entity-name="sv.localization.dte.DteFiscalEvent" list="eventList">
+            <order-by field-name="-fechaGeneracion"/>
+        </entity-find>
+        <!-- DTEs aceptados para selección -->
+        <entity-find entity-name="sv.localization.dte.DteEmision" list="acceptedDteList">
+            <econdition field-name="statusId" operator="in" value="DteAccepted,DteMockAccepted"/>
+            <order-by field-name="-fechaGeneracion"/>
+        </entity-find>
+        <!-- DTEs tipo FE/FEXE/FSEE para retorno -->
+        <entity-find entity-name="sv.localization.dte.DteEmision" list="returnableDteList">
+            <econdition field-name="statusId" operator="in" value="DteAccepted,DteMockAccepted"/>
+            <econdition field-name="tipoDteCode" operator="in" value="01,11,14"/>
+            <order-by field-name="-fechaGeneracion"/>
+        </entity-find>
+    </actions>
+
+    <widgets>
+        <container-row><row-col lg="6">
+            <!-- EOP Builder -->
+            <container-box>
+                <box-header title="Evento Operaciones Especiales (17)"/>
+                <box-body>
+                    <label text="Factura simplificada o control interno con líneas resumidas." type="p"/>
+                    <form-single name="EopBuilderForm" transition="buildAndEmitEop">
+                        <field name="organizationPartyId"><default-field title="Organización emisora">
+                            <text-line size="24"/>
+                        </default-field></field>
+                        <field name="operacionEspecialCode"><default-field title="Tipo operación">
+                            <drop-down no-current-selected-key="02">
+                                <option key="02" text="02 - Factura de venta simplificada"/>
+                                <option key="97" text="97 - Comprobantes de Control Interno"/>
+                            </drop-down>
+                        </default-field></field>
+                        <field name="fechaOperacion"><default-field title="Fecha operación">
+                            <date-time type="date"/>
+                        </default-field></field>
+                        <field name="descripcion"><default-field title="Descripción general">
+                            <text-line size="60"/>
+                        </default-field></field>
+                        <field name="eopItemsJson"><default-field title="Líneas EOP JSON">
+                            <text-area rows="8" cols="90"/>
+                        </default-field></field>
+                        <field name="submitEop"><default-field title="Emitir EOP"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </row-col><row-col lg="6">
+            <!-- ERET Builder -->
+            <container-box>
+                <box-header title="Evento de Retorno (18)"/>
+                <box-body>
+                    <label text="Retorno parcial sobre FE, FEXE o FSEE aceptado y sellado." type="p"/>
+                    <form-single name="EretBuilderForm" transition="buildAndEmitEret">
+                        <field name="dteEmisionId"><default-field title="DTE a devolver">
+                            <drop-down><list-options list="returnableDteList"
+                                key="${dteEmisionId}" text="${tipoDteCode} | ${numeroControl} | ${codigoGeneracion?.substring(0, 8)}..."/></drop-down>
+                        </default-field></field>
+                        <field name="returnItemsJson"><default-field title="Líneas a retornar JSON">
+                            <text-area rows="8" cols="90"/>
+                        </default-field></field>
+                        <field name="motivo"><default-field title="Motivo del retorno">
+                            <text-line size="50"/>
+                        </default-field></field>
+                        <field name="strict"><default-field title="Validación estricta">
+                            <drop-down no-current-selected-key="true"><option key="true" text="Sí"/><option key="false" text="No"/></drop-down>
+                        </default-field></field>
+                        <field name="submitEret"><default-field title="Emitir ERET"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </row-col></container-row>
+
+        <!-- JSON directo (avanzado) -->
+        <container-box>
+            <box-header title="Evento por JSON directo (avanzado)"/>
+            <box-body>
+                <form-single name="DteEventJsonForm" transition="emitEvent">
+                    <field name="tipoEventoCode"><default-field title="Tipo evento">
+                        <drop-down no-current-selected-key="17">
+                            <option key="17" text="17 - Evento de Operaciones Especiales"/>
+                            <option key="18" text="18 - Evento de Retorno"/>
+                            <option key="16" text="16 - Evento de Gestión"/>
+                        </drop-down>
+                    </default-field></field>
+                    <field name="eventJsonText"><default-field title="JSON oficial del evento">
+                        <text-area rows="12" cols="110"/>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Emitir evento"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <!-- Lista de eventos -->
+        <container-box>
+            <box-header title="Eventos fiscales emitidos"/>
+            <box-body-nopad>
+                <container style="table-responsive">
+                    <form-list name="DteEventList" list="eventList" skip-form="true">
+                        <field name="tipoEventoCode"><default-field title="Tipo"><display/></default-field></field>
+                        <field name="codigoGeneracion"><default-field title="Código generación"><display/></default-field></field>
+                        <field name="statusId"><default-field title="Estado">
+                            <display-entity entity-name="moqui.basic.StatusItem"/>
+                        </default-field></field>
+                        <field name="selloRecepcion"><default-field title="Sello"><display/></default-field></field>
+                        <field name="fechaGeneracion"><default-field title="Fecha"><display/></default-field></field>
+                        <field name="errorMessage"><default-field title="Error"><display/></default-field></field>
+                        <field name="actions"><default-field title="">
+                            <link url="validateEvent" text="Validar" link-type="anchor-button"
+                                  parameter-map="[dteFiscalEventId:dteFiscalEventId]"/>
+                            <link url="signEvent" text="Firmar" link-type="anchor-button"
+                                  parameter-map="[dteFiscalEventId:dteFiscalEventId]"/>
+                            <link url="transmitEvent" text="Transmitir" link-type="anchor-button"
+                                  parameter-map="[dteFiscalEventId:dteFiscalEventId]"/>
+                            <link url="/fop/apps/SvLocalization/Dte/PrintEventPdf" text="PDF" link-type="anchor-button" target-window="_blank"
+                                  parameter-map="[eventoTipo:(tipoEventoCode == '17' ? 'EOP' : 'RETORNO'), dteFiscalEventId:dteFiscalEventId]"/>
+                        </default-field></field>
+                    </form-list>
+                </container>
+            </box-body-nopad>
+        </container-box>
+    </widgets>
+</screen>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/entity-definition-3.xsd">
+
+    <!--
+        SvDteAccountMapping — Mapeo contable por tipo de DTE y rubro.
+
+        Cada combinación (tipoDteCode, direction, rubro) tiene un único
+        glAccountId que se usa al postear. El servicio post#DteAcctgTrans
+        consulta esta tabla para construir el AcctgTransEntry.
+
+        direction:
+          O (Outgoing) = venta — DTE emitido por nosotros
+          I (Incoming) = compra — DTE recibido de proveedor
+
+        rubro: codifica el componente del asiento, ej.
+          MAIN          → cuenta de débito o crédito principal
+          IVA           → IVA débito/crédito fiscal
+          IVA_RETE      → retención IVA 1%
+          IVA_PERCI     → percepción IVA 1%
+          RENTA_RETE    → retención renta 10% (FSE)
+          NETO_PAGAR    → contrapartida del asiento
+
+        debitCreditFlag: D o C — indica el lado del asiento.
+    -->
+    <entity entity-name="SvDteAccountMapping" package="sv.localization.accounting"
+            cache="true">
+        <description>Mapeo contable por tipo DTE, dirección y rubro.
+            Una sola fila por (tipoDteCode, direction, rubro). El glAccountId
+            es global; cada org asocia las cuentas a su libro mayor vía
+            mantle.ledger.account.GlAccountOrganization.</description>
+        <field name="tipoDteCode" type="text-short" is-pk="true">
+            <description>Código DTE de Hacienda: 01 FC, 03 CCF, 05 NC, 06 ND, 11 FEX, 14 FSE</description>
+        </field>
+        <field name="direction" type="text-indicator" is-pk="true">
+            <description>O=Outgoing (venta), I=Incoming (compra)</description>
+        </field>
+        <field name="rubro" type="text-short" is-pk="true">
+            <description>Componente del asiento: MAIN, IVA, IVA_RETE, IVA_PERCI, RENTA_RETE, NETO_PAGAR</description>
+        </field>
+        <field name="debitCreditFlag" type="text-indicator">
+            <description>D=débito, C=crédito</description>
+        </field>
+        <field name="glAccountId" type="id"/>
+        <field name="description" type="text-medium"/>
+
+        <relationship type="one" related="mantle.ledger.account.GlAccount">
+            <key-map field-name="glAccountId"/>
+        </relationship>
+    </entity>
+
+    <!--
+        SvPayrollAccountMapping — Mapeo contable por rubro de nómina.
+
+        Mucho más simple: una fila por componente de nómina con su cuenta.
+        El servicio post#PayrollAcctgTrans usa esto para construir el
+        asiento agregado de la corrida (no por empleado).
+    -->
+    <entity entity-name="SvPayrollAccountMapping" package="sv.localization.accounting"
+            cache="true">
+        <description>Mapeo contable por rubro de nómina. Los rubros son fijos:
+            SUELDOS_GASTO (debito), ISSS_EMP_PASIVO (credito ISSS empleado),
+            AFP_EMP_PASIVO (credito AFP empleado), RENTA_PASIVO (credito ISR
+            retenido), ISSS_PATR_GASTO (debito gasto patronal ISSS),
+            ISSS_PATR_PASIVO (credito), AFP_PATR_GASTO, AFP_PATR_PASIVO,
+            NETO_PAGAR (credito sueldos por pagar).</description>
+        <field name="rubro" type="text-short" is-pk="true"/>
+        <field name="debitCreditFlag" type="text-indicator"/>
+        <field name="glAccountId" type="id"/>
+        <field name="description" type="text-medium"/>
+
+        <relationship type="one" related="mantle.ledger.account.GlAccount">
+            <key-map field-name="glAccountId"/>
+        </relationship>
+    </entity>
+
+</entities>

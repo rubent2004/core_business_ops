@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Recepción" default-menu-index="2">
+
+    <transition name="receiveMaterial"><service-call name="sv.localization.InventorySvServices.receive#MaterialInventory"/>
+        <default-response url="."/></transition>
+    <transition name="editProduct"><default-response url="//${appRoot}/Catalog/Product/EditProduct"/></transition>
+    <transition name="editFacility"><default-response url="//${appRoot}/Facility/EditFacility"/></transition>
+    <transition name="assetDetail"><default-response url="//${appRoot}/Asset/Asset/AssetDetail"/></transition>
+
+    <transition-include name="searchPartyList" location="component://SimpleScreens/template/party/PartyForms.xml"/>
+    <transition-include name="getProductList" location="component://SimpleScreens/template/product/ProductTransitions.xml"/>
+    <transition-include name="getFacilityList" location="component://SimpleScreens/template/facility/FacilityTransitions.xml"/>
+    <transition-include name="getLocationList" location="component://SimpleScreens/template/facility/FacilityTransitions.xml"/>
+
+    <actions>
+        <!-- Filtrar el inventario reciente por la organización del usuario para
+             que cada empresa solo vea sus propios assets (evita mezcla entre empresas,
+             demos genéricos). Encuentra la org via PartyRelationship Employee. -->
+        <set field="userPartyId" from="ec.user.userAccount?.partyId"/>
+        <entity-find entity-name="mantle.party.PartyRelationship" list="orgRels" limit="1">
+            <econdition field-name="fromPartyId" from="userPartyId"/>
+            <econdition field-name="relationshipTypeEnumId" value="PrtEmployee"/>
+            <date-filter/>
+        </entity-find>
+        <set field="effectiveOwnerPartyId" from="ownerPartyId ?: (orgRels ? orgRels[0]?.toPartyId : null)"/>
+        <entity-find entity-name="mantle.product.asset.Asset" list="recentAssetList" limit="50">
+            <econdition field-name="assetTypeEnumId" value="AstTpInventory"/>
+            <econdition field-name="statusId" value="AstAvailable"/>
+            <econdition field-name="ownerPartyId" from="effectiveOwnerPartyId" ignore-if-empty="true"/>
+            <order-by field-name="-receivedDate"/>
+        </entity-find>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Recepción de Material e Inventario"/>
+            <box-body>
+                <form-single name="ReceiveMaterialForm" transition="receiveMaterial">
+                    <field name="productId"><default-field title="Producto">
+                        <drop-down><dynamic-options transition="getProductList" server-search="true" min-length="1"/></drop-down>
+                    </default-field></field>
+                    <field name="quantity"><default-field title="Cantidad"><text-line size="10"/></default-field></field>
+                    <field name="unitCost"><default-field title="Costo unitario"><text-line size="10" format="#,##0.0000"/></default-field></field>
+                    <field name="receivedDate" from="ec.user.nowTimestamp"><default-field title="Fecha de recepción"><date-time/></default-field></field>
+                    <field name="facilityId"><default-field title="Bodega">
+                        <drop-down><dynamic-options transition="getFacilityList" server-search="true" min-length="0"
+                                parameter-map="[facilityTypeEnumId:'FcTpLine,FcTpPlant,FcTpWarehouse']"/></drop-down>
+                    </default-field></field>
+                    <field name="locationSeqId"><default-field title="Ubicación">
+                        <drop-down allow-empty="true"><dynamic-options transition="getLocationList" server-search="true" min-length="0">
+                            <depends-on field="facilityId"/></dynamic-options></drop-down>
+                    </default-field></field>
+                    <field name="ownerPartyId" from="ownerPartyId ?: activeOrgId"><default-field title="Propietario">
+                        <drop-down allow-empty="true"><dynamic-options transition="searchPartyList" server-search="true" min-length="0"
+                                parameter-map="[roleTypeId:'OrgInternal,Supplier,Vendor']"/></drop-down>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Registrar Recepción"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Inventario recibido reciente"/>
+            <box-body-nopad>
+                <container style="table-responsive">
+                    <form-list name="RecentAssetList" list="recentAssetList" skip-form="true" paginate="true">
+                        <field name="assetId"><default-field title="Inventario">
+                            <link url="assetDetail" text="${assetId}" link-type="anchor" parameter-map="[assetId:assetId]"/>
+                        </default-field></field>
+                        <field name="productId"><default-field title="Producto">
+                            <link url="editProduct" text="${productId}" link-type="anchor" parameter-map="[productId:productId]"/>
+                        </default-field></field>
+                        <field name="facilityId"><default-field title="Bodega">
+                            <link url="editFacility" text="${facilityId}" link-type="anchor" parameter-map="[facilityId:facilityId]"/>
+                        </default-field></field>
+                        <field name="quantityOnHandTotal"><default-field title="Existencia"><display format="#,##0.####"/></default-field></field>
+                        <field name="acquireCost"><default-field title="Costo"><display format="$ #,##0.0000"/></default-field></field>
+                    </form-list>
+                </container>
+            </box-body-nopad>
+        </container-box>
+    </widgets>
+</screen>

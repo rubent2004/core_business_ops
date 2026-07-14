@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Buscar" default-menu-index="1">
+
+    <!-- Pantalla SV nativa para proveedores: espejo de FindCustomerSv.
+         Reemplaza la pantalla stock (FindSupplier) que arrastraba el formulario
+         de búsqueda genérico con tooltips que interceptaban el clic del modal. -->
+
+    <transition name="editSupplier"><default-response url="//${appRoot}/Supplier/EditSupplier"/></transition>
+    <transition name="createSvSupplier">
+        <service-call name="sv.localization.PartyFiscalServices.create#SvSupplier"/>
+        <default-response url="//${appRoot}/Supplier/EditSupplier"/>
+    </transition>
+    <transition name="getSvMunicipios">
+        <service-call name="sv.localization.PartyFiscalServices.get#SvMunicipiosForDepartamento"
+                      web-send-json-response="resultList"/>
+        <default-response type="none"/>
+    </transition>
+    <transition name="getSvDistritos">
+        <service-call name="sv.localization.PartyFiscalServices.get#SvDistritosForMunicipio"
+                      web-send-json-response="resultList"/>
+        <default-response type="none"/>
+    </transition>
+
+    <actions>
+        <set field="searchTerm" from="searchTerm?.trim() ?: null"/>
+        <set field="filterNit" from="filterNit?.trim() ?: null"/>
+        <set field="filterTipoContrib" from="filterTipoContrib?.trim() ?: null"/>
+
+        <script><![CDATA[
+            import org.moqui.entity.EntityCondition.ComparisonOperator as CO
+            import org.moqui.entity.EntityCondition.JoinOperator as JO
+            def cf = ec.entity.conditionFactory
+
+            // Limitar a terceros con rol Proveedor (Supplier).
+            Set supplierPartyIds = new HashSet()
+            ec.entity.find('mantle.party.PartyRole')
+                .condition('roleTypeId', 'Supplier').list()
+                .each { supplierPartyIds.add(it.partyId) }
+
+            Set matchPartyIds = null
+            if (searchTerm) {
+                matchPartyIds = new HashSet()
+                ec.entity.find('mantle.party.PartyIdentification').list().each { ident ->
+                    if (ident.partyIdTypeEnumId in ['PitNit', 'PitDui', 'PitNrc']) {
+                        if (ident.idValue && ident.idValue.toString().contains(searchTerm)) {
+                            matchPartyIds.add(ident.partyId)
+                        }
+                    }
+                }
+            }
+            if (filterNit) {
+                Set nitIds = new HashSet()
+                ec.entity.find('mantle.party.PartyIdentification')
+                    .condition('partyIdTypeEnumId', 'PitNit').list().each { ident ->
+                        if (ident.idValue && ident.idValue.toString().contains(filterNit)) nitIds.add(ident.partyId)
+                    }
+                matchPartyIds = matchPartyIds != null ? matchPartyIds.intersect(nitIds) : nitIds
+            }
+
+            def ef = ec.entity.find('sv.localization.search.SvPartyFiscalSearch').limit(50)
+            ef.condition(cf.makeCondition(
+                cf.makeCondition('disabled', CO.EQUALS, 'N'), JO.OR,
+                cf.makeCondition('disabled', CO.EQUALS, null)))
+
+            // Sólo proveedores.
+            if (supplierPartyIds.isEmpty()) {
+                ef.condition('partyId', '__NONE__')
+            } else {
+                ef.condition(cf.makeCondition('partyId', CO.IN, supplierPartyIds))
+            }
+
+            if (searchTerm) {
+                def likeConds = []
+                ['dui','nrc','organizationName','firstName','lastName','pseudoId','nombreComercial'].each { f ->
+                    likeConds.add(cf.makeCondition(f, CO.LIKE, "%${searchTerm}%"))
+                }
+                if (matchPartyIds && !matchPartyIds.isEmpty()) {
+                    likeConds.add(cf.makeCondition('partyId', CO.IN, matchPartyIds))
+                }
+                ef.condition(cf.makeCondition(likeConds, JO.OR))
+            } else if (matchPartyIds != null && !matchPartyIds.isEmpty()) {
+                ef.condition(cf.makeCondition('partyId', CO.IN, matchPartyIds))
+            } else if (filterNit) {
+                ef.condition('partyId', '__NONE__')
+            }
+            if (filterTipoContrib) ef.condition('tipoContribuyenteEnumId', filterTipoContrib)
+            ef.orderBy('organizationName,firstName,lastName')
+            partyList = ef.list()
+
+            def enrichedList = []
+            partyList.each { row ->
+                def nitIdent = ec.entity.find('mantle.party.PartyIdentification')
+                    .condition([partyId: row.partyId, partyIdTypeEnumId: 'PitNit']).one()
+                def m = new HashMap(row.getMap())
+                m.nit = nitIdent?.idValue
+                enrichedList.add(m)
+            }
+            partyList = enrichedList
+        ]]></script>
+    </actions>
+
+    <widgets>
+        <!-- Alta de proveedor: persona natural y empresa. Usan container-dialog (modal limpio). -->
+        <container-dialog id="NewSupplierPersonDialog" button-text="Nuevo proveedor persona natural" type="success">
+            <form-single name="CreateSupplierPersonForm" transition="createSvSupplier">
+                <field name="partyTypeEnumId"><default-field><hidden default-value="PtyPerson"/></default-field></field>
+                <field name="firstName"><default-field title="Nombre"><text-line size="25"/></default-field></field>
+                <field name="lastName"><default-field title="Apellido"><text-line size="25"/></default-field></field>
+                <field name="dui"><default-field title="DUI"><text-line size="14" maxlength="10"/></default-field></field>
+                <field name="nit"><default-field title="NIT"><text-line size="20" maxlength="17"/></default-field></field>
+                <field name="telefono"><default-field title="Teléfono"><text-line size="15"/></default-field></field>
+                <field name="correo"><default-field title="Correo"><text-line size="30"/></default-field></field>
+                <field name="departamentoGeoId"><default-field title="Departamento">
+                    <drop-down allow-empty="true"><entity-options key="${geoId}" text="${geoCodeAlpha2} - ${geoName}">
+                        <entity-find entity-name="moqui.basic.Geo">
+                            <econdition field-name="geoTypeEnumId" value="GEOT_STATE"/>
+                            <econdition field-name="geoId" operator="like" value="SV%"/>
+                            <order-by field-name="geoCodeAlpha2"/>
+                        </entity-find>
+                    </entity-options></drop-down>
+                </default-field></field>
+                <field name="municipioGeoId"><default-field title="Municipio">
+                    <drop-down><dynamic-options transition="getSvMunicipios" value-field="value" label-field="label">
+                        <depends-on field="departamentoGeoId"/>
+                    </dynamic-options></drop-down>
+                </default-field></field>
+                <field name="distritoGeoId"><default-field title="Distrito">
+                    <drop-down allow-empty="true"><dynamic-options transition="getSvDistritos" value-field="value" label-field="label">
+                        <depends-on field="municipioGeoId"/>
+                    </dynamic-options></drop-down>
+                </default-field></field>
+                <field name="complemento"><default-field title="Dirección">
+                    <text-line size="50" maxlength="200"/>
+                </default-field></field>
+                <field name="submitButton"><default-field title="Crear Proveedor"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+        <container-dialog id="NewSupplierOrgDialog" button-text="Nuevo proveedor empresa" type="success">
+            <form-single name="CreateSupplierOrgForm" transition="createSvSupplier">
+                <field name="partyTypeEnumId"><default-field><hidden default-value="PtyOrganization"/></default-field></field>
+                <field name="organizationName"><default-field title="Razón social"><text-line size="40"/></default-field></field>
+                <field name="nombreComercial"><default-field title="Nombre comercial"><text-line size="30"/></default-field></field>
+                <field name="nit"><default-field title="NIT"><text-line size="20" maxlength="17"/></default-field></field>
+                <field name="nrc"><default-field title="NRC"><text-line size="12" maxlength="8"/></default-field></field>
+                <field name="tipoContribuyenteEnumId"><default-field title="Tipo contribuyente">
+                    <drop-down allow-empty="true"><entity-options key="${enumId}" text="${description}">
+                        <entity-find entity-name="moqui.basic.Enumeration">
+                            <econdition field-name="enumTypeId" value="SvTipoContribuyente"/>
+                            <order-by field-name="sequenceNum"/>
+                        </entity-find>
+                    </entity-options></drop-down>
+                </default-field></field>
+                <field name="actividadEconomicaId"><default-field title="Actividad económica">
+                    <drop-down allow-empty="true"><entity-options key="${actividadEconomicaId}" text="${mhCode} - ${description}">
+                        <entity-find entity-name="sv.localization.party.SvEconomicActivity">
+                            <order-by field-name="mhCode"/>
+                        </entity-find>
+                    </entity-options></drop-down>
+                </default-field></field>
+                <field name="telefono"><default-field title="Teléfono"><text-line size="15"/></default-field></field>
+                <field name="correo"><default-field title="Correo"><text-line size="30"/></default-field></field>
+                <field name="departamentoGeoId"><default-field title="Departamento">
+                    <drop-down allow-empty="true"><entity-options key="${geoId}" text="${geoCodeAlpha2} - ${geoName}">
+                        <entity-find entity-name="moqui.basic.Geo">
+                            <econdition field-name="geoTypeEnumId" value="GEOT_STATE"/>
+                            <econdition field-name="geoId" operator="like" value="SV%"/>
+                            <order-by field-name="geoCodeAlpha2"/>
+                        </entity-find>
+                    </entity-options></drop-down>
+                </default-field></field>
+                <field name="municipioGeoId"><default-field title="Municipio">
+                    <drop-down><dynamic-options transition="getSvMunicipios" value-field="value" label-field="label">
+                        <depends-on field="departamentoGeoId"/>
+                    </dynamic-options></drop-down>
+                </default-field></field>
+                <field name="distritoGeoId"><default-field title="Distrito">
+                    <drop-down allow-empty="true"><dynamic-options transition="getSvDistritos" value-field="value" label-field="label">
+                        <depends-on field="municipioGeoId"/>
+                    </dynamic-options></drop-down>
+                </default-field></field>
+                <field name="complemento"><default-field title="Dirección">
+                    <text-line size="50" maxlength="200"/>
+                </default-field></field>
+                <field name="submitButton"><default-field title="Crear Proveedor Empresa"><submit/></default-field></field>
+            </form-single>
+        </container-dialog>
+
+        <container-box>
+            <box-header title="Buscar Proveedor"/>
+            <box-body>
+                <form-single name="SearchForm" transition="." pass-through-parameters="true">
+                    <field name="searchTerm"><default-field title="NIT, NRC o nombre">
+                        <text-line size="40"/>
+                    </default-field></field>
+                    <field name="filterNit"><default-field title="Filtrar NIT">
+                        <text-line size="20"/>
+                    </default-field></field>
+                    <field name="filterTipoContrib"><default-field title="Tipo contribuyente">
+                        <drop-down allow-empty="true"><entity-options key="${enumId}" text="${description}">
+                            <entity-find entity-name="moqui.basic.Enumeration">
+                                <econdition field-name="enumTypeId" value="SvTipoContribuyente"/>
+                                <order-by field-name="sequenceNum"/>
+                            </entity-find>
+                        </entity-options></drop-down>
+                    </default-field></field>
+                    <field name="submitButton"><default-field title="Buscar"><submit/></default-field></field>
+                    <field-layout>
+                        <field-ref name="searchTerm"/>
+                        <field-row><field-ref name="filterNit"/><field-ref name="filterTipoContrib"/></field-row>
+                        <field-ref name="submitButton"/>
+                    </field-layout>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <form-list name="SupplierSvList" list="partyList" skip-form="true">
+            <row-actions>
+                <set field="displayName" from="organizationName ?: ((firstName ?: '') + ' ' + (lastName ?: '')).trim()"/>
+            </row-actions>
+            <field name="pseudoId"><default-field title="ID">
+                <link url="editSupplier" text="${pseudoId}" link-type="anchor" parameter-map="[partyId:partyId]"/>
+            </default-field></field>
+            <field name="displayName"><default-field title="Nombre">
+                <link url="editSupplier" text="${displayName}" link-type="anchor" parameter-map="[partyId:partyId]"/>
+            </default-field></field>
+            <field name="nombreComercial"><default-field title="Comercial"><display/></default-field></field>
+            <field name="nit"><default-field title="NIT"><display/></default-field></field>
+            <field name="nrc"><default-field title="NRC"><display/></default-field></field>
+            <field name="tipoContribuyenteEnumId"><default-field title="Tipo">
+                <display-entity entity-name="moqui.basic.Enumeration" text="${description}"/>
+            </default-field></field>
+        </form-list>
+    </widgets>
+</screen>

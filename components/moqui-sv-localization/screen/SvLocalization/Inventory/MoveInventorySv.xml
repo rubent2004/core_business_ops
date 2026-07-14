@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Traslado" default-menu-index="3">
+
+    <transition name="moveInventory"><service-call name="sv.localization.InventorySvServices.move#Inventory"/>
+        <default-response url="."/></transition>
+    <transition name="selectAsset"><default-response url="."><parameter name="assetId"/></default-response></transition>
+    <transition name="assetDetail"><default-response url="//${appRoot}/Asset/Asset/AssetDetail"/></transition>
+
+    <transition-include name="getFacilityList" location="component://SimpleScreens/template/facility/FacilityTransitions.xml"/>
+    <transition-include name="getLocationList" location="component://SimpleScreens/template/facility/FacilityTransitions.xml"/>
+
+    <actions>
+        <!-- Filtrar el inventario disponible por organización del usuario para
+             evitar mezcla con assets de otras empresas. -->
+        <set field="userPartyId" from="ec.user.userAccount?.partyId"/>
+        <entity-find entity-name="mantle.party.PartyRelationship" list="orgRels" limit="1">
+            <econdition field-name="fromPartyId" from="userPartyId"/>
+            <econdition field-name="relationshipTypeEnumId" value="PrtEmployee"/>
+            <date-filter/>
+        </entity-find>
+        <set field="effectiveOwnerPartyId" from="ownerPartyId ?: (orgRels ? orgRels[0]?.toPartyId : null)"/>
+        <entity-find entity-name="mantle.product.asset.Asset" list="availableAssetList" limit="100">
+            <econdition field-name="assetTypeEnumId" value="AstTpInventory"/>
+            <econdition field-name="statusId" value="AstAvailable"/>
+            <econdition field-name="quantityOnHandTotal" operator="greater" from="0"/>
+            <econdition field-name="ownerPartyId" from="effectiveOwnerPartyId" ignore-if-empty="true"/>
+            <order-by field-name="facilityId,productId,receivedDate"/>
+        </entity-find>
+        <if condition="assetId"><entity-find-one entity-name="mantle.product.asset.Asset" value-field="selectedAsset"/></if>
+    </actions>
+
+    <widgets>
+        <container-box>
+            <box-header title="Traslado de Inventario entre Bodegas"/>
+            <box-body>
+                <form-single name="MoveInventoryForm" transition="moveInventory" map="selectedAsset">
+                    <field name="assetId" from="assetId ?: selectedAsset?.assetId"><default-field title="Inventario">
+                        <text-line size="24"/>
+                    </default-field></field>
+                    <field name="quantity"><default-field title="Cantidad a trasladar">
+                        <text-line size="10"/>
+                    </default-field></field>
+                    <field name="toFacilityId"><default-field title="Bodega destino">
+                        <drop-down><dynamic-options transition="getFacilityList" server-search="true" min-length="0"
+                                parameter-map="[facilityTypeEnumId:'FcTpLine,FcTpPlant,FcTpWarehouse']"/></drop-down>
+                    </default-field></field>
+                    <field name="toLocationSeqId"><default-field title="Ubicación destino">
+                        <drop-down allow-empty="true"><dynamic-options transition="getLocationList" server-search="true" min-length="0">
+                            <depends-on field="toFacilityId"/></dynamic-options></drop-down>
+                    </default-field></field>
+                    <field name="forceNewAsset" from="true"><default-field><hidden/></default-field></field>
+                    <field name="submitButton"><default-field title="Trasladar"><submit/></default-field></field>
+                </form-single>
+            </box-body>
+        </container-box>
+
+        <container-box>
+            <box-header title="Inventario disponible"/>
+            <box-body-nopad>
+                <container style="table-responsive">
+                    <form-list name="AvailableAssetList" list="availableAssetList" skip-form="true" paginate="true">
+                        <field name="assetId"><default-field title="Inventario">
+                            <link url="selectAsset" text="${assetId}" link-type="anchor" parameter-map="[assetId:assetId]"/>
+                        </default-field></field>
+                        <field name="productId"><default-field title="Producto"><display/></default-field></field>
+                        <field name="facilityId"><default-field title="Bodega"><display/></default-field></field>
+                        <field name="locationSeqId"><default-field title="Ubicación"><display/></default-field></field>
+                        <field name="availableToPromiseTotal"><default-field title="Disponible"><display format="#,##0.####"/></default-field></field>
+                    </form-list>
+                </container>
+            </box-body-nopad>
+        </container-box>
+    </widgets>
+</screen>

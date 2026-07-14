@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Editar Corrida" default-menu-include="false">
+
+    <parameter name="svPayrollRunId" required="true"/>
+
+    <transition name="calculatePayrollRun">
+        <service-call name="sv.localization.PayrollSvServices.calculate#PayrollRun"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="approvePayrollRun">
+        <service-call name="sv.localization.PayrollSvServices.approve#PayrollRun"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="updateRun">
+        <service-call name="update#sv.localization.payroll.SvPayrollRun"/>
+        <default-response url="."/>
+    </transition>
+
+    <transition name="back"><default-response url="PayrollRuns"/></transition>
+
+    <actions>
+        <entity-find-one entity-name="sv.localization.payroll.SvPayrollRun" value-field="run"/>
+        <if condition="run == null"><return error="true" message="Corrida ${svPayrollRunId} no encontrada"/></if>
+
+        <entity-find entity-name="sv.localization.payroll.SvPayrollRunEmployee" list="lineList">
+            <econdition field-name="svPayrollRunId"/>
+            <order-by field-name="-grossMonthlyAmount,employeePartyId"/>
+        </entity-find>
+
+        <entity-find-one entity-name="mantle.party.Organization" value-field="org">
+            <field-map field-name="partyId" from="run.organizationPartyId"/>
+        </entity-find-one>
+
+        <set field="canCalculate" from="run.statusId in ['SvPayCreated', 'SvPayCalculated']"/>
+        <set field="canApprove" from="run.statusId == 'SvPayCalculated'"/>
+        <set field="isLocked" from="run.statusId in ['SvPayApproved', 'SvPayPosted']"/>
+    </actions>
+
+    <widgets>
+        <!-- Header -->
+        <container-box>
+            <box-header title="Corrida ${run.svPayrollRunId} — ${run.periodYearMonth}"/>
+            <box-toolbar>
+                <link url="back" text="Volver" link-type="anchor-button"/>
+                <section name="CalcSection" condition="canCalculate"><widgets>
+                    <link url="calculatePayrollRun" text="Calcular" link-type="hidden-form"
+                          btn-type="primary"
+                          parameter-map="[svPayrollRunId:svPayrollRunId]"
+                          confirmation="Recalcular nómina para todos los empleados de ${org?.organizationName ?: run.organizationPartyId}?"/>
+                </widgets></section>
+                <section name="ApproveSection" condition="canApprove"><widgets>
+                    <link url="approvePayrollRun" text="Aprobar" link-type="hidden-form"
+                          btn-type="success"
+                          parameter-map="[svPayrollRunId:svPayrollRunId]"
+                          confirmation="Aprobar esta corrida bloqueará nuevos cálculos. ¿Continuar?"/>
+                </widgets></section>
+            </box-toolbar>
+            <box-body>
+                <container-row>
+                    <row-col lg="3">
+                        <label text="Organización: " type="strong"/>
+                        <label text="${org?.organizationName ?: run.organizationPartyId}"/>
+                    </row-col>
+                    <row-col lg="2">
+                        <label text="Estado: " type="strong"/>
+                        <display-entity entity-name="moqui.basic.StatusItem"
+                                key-map="[statusId:run.statusId]" text="${description}"/>
+                    </row-col>
+                    <row-col lg="2">
+                        <label text="Período: " type="strong"/>
+                        <label text="${run.periodYearMonth}"/>
+                    </row-col>
+                    <row-col lg="2">
+                        <label text="Fecha: " type="strong"/>
+                        <label text="${ec.l10n.format(run.runDate, 'dd/MM/yyyy')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Empleados procesados: " type="strong"/>
+                        <label text="${run.employeeCount ?: 0}"/>
+                    </row-col>
+                </container-row>
+                <container-row>
+                    <row-col lg="3">
+                        <label text="Bruto Total:" type="strong"/>
+                        <label text=" ${ec.l10n.format(run.totalGross ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Neto Total:" type="strong" style="text-success"/>
+                        <label text=" ${ec.l10n.format(run.totalNet ?: 0, '$ #,##0.00')}" style="text-success"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Costo Empresa:" type="strong"/>
+                        <label text=" ${ec.l10n.format(run.totalEmployerCost ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="Renta:" type="strong"/>
+                        <label text=" ${ec.l10n.format(run.totalRenta ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                </container-row>
+                <container-row>
+                    <row-col lg="3">
+                        <label text="ISSS empleado:" type="strong"/>
+                        <label text=" ${ec.l10n.format(run.totalIsssEmployee ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="AFP empleado:" type="strong"/>
+                        <label text=" ${ec.l10n.format(run.totalAfpEmployee ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="ISSS empleador:" type="strong"/>
+                        <label text=" ${ec.l10n.format(run.totalIsssEmployer ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                    <row-col lg="3">
+                        <label text="AFP empleador:" type="strong"/>
+                        <label text=" ${ec.l10n.format(run.totalAfpEmployer ?: 0, '$ #,##0.00')}"/>
+                    </row-col>
+                </container-row>
+            </box-body>
+        </container-box>
+
+        <!-- Líneas por empleado -->
+        <container-box>
+            <box-header title="Empleados (${lineList.size()})"/>
+            <box-body-nopad>
+                <form-list name="LineList" list="lineList" skip-form="true">
+                    <row-actions>
+                        <entity-find-one entity-name="mantle.party.PartyDetail" value-field="empParty">
+                            <field-map field-name="partyId" from="employeePartyId"/>
+                        </entity-find-one>
+                        <set field="empName" from="[empParty?.firstName, empParty?.lastName].findAll { it }.join(' ') ?: empParty?.organizationName ?: employeePartyId"/>
+                    </row-actions>
+                    <field name="employeePartyId">
+                        <header-field title="Empleado"/>
+                        <default-field><display text="${empName}"/></default-field>
+                    </field>
+                    <field name="statusId">
+                        <header-field title="Estado"/>
+                        <default-field>
+                            <display-entity entity-name="moqui.basic.StatusItem" text="${description}"/>
+                        </default-field>
+                    </field>
+                    <field name="grossMonthlyAmount">
+                        <header-field title="Bruto"/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="isssEmployee">
+                        <header-field title="ISSS"/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="afpEmployee">
+                        <header-field title="AFP"/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="rentaMonthly">
+                        <header-field title="Renta"/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="totalEmployeeDeductions">
+                        <header-field title="Total Ded."/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="netPay">
+                        <header-field title="Neto"/>
+                        <default-field><display format="$ #,##0.00" style="text-success"/></default-field>
+                    </field>
+                    <field name="employerCost">
+                        <header-field title="Costo Empresa"/>
+                        <default-field><display format="$ #,##0.00"/></default-field>
+                    </field>
+                    <field name="skipReason">
+                        <header-field title="Observaciones"/>
+                        <default-field><display/></default-field>
+                    </field>
+                </form-list>
+            </box-body-nopad>
+        </container-box>
+
+        <!-- Notas de la corrida -->
+        <section name="NotesSection" condition="run.notes || !isLocked"><widgets>
+            <container-box>
+                <box-header title="Notas"/>
+                <box-body>
+                    <form-single name="UpdateNotesForm" transition="updateRun" map="run">
+                        <field name="svPayrollRunId"><default-field><hidden/></default-field></field>
+                        <field name="notes"><default-field title="Notas">
+                            <text-area cols="80" rows="3"/>
+                        </default-field></field>
+                        <field name="submitButton"><default-field title="Guardar Notas"><submit/></default-field></field>
+                    </form-single>
+                </box-body>
+            </container-box>
+        </widgets></section>
+    </widgets>
+</screen>
