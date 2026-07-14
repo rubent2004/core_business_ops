@@ -31,8 +31,13 @@ Desktop.ini
 *.bak
 *.swp
 
-# Runtime / data (not in repo)
-runtime/
+# Runtime data (not in repo) — conf is included
+runtime/db/
+runtime/log/
+runtime/sessions/
+runtime/txlog/
+runtime/opensearch/
+runtime/elasticsearch/
 db/
 *.db
 *.mv.db
