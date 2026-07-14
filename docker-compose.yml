@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sara-core-business-ops
     volumes:
       - erp-db:/opt/moqui/runtime/db
       - erp-log:/opt/moqui/runtime/log
