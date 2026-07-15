@@ -7,7 +7,10 @@ services:
       - erp-db:/opt/moqui/runtime/db
       - erp-log:/opt/moqui/runtime/log
     environment:
-      - JAVA_OPTS=-Xms256m -Xmx1g
+      - JAVA_OPTS=${JAVA_OPTS:--Xms256m -Xmx1g}
+      # CORS origins (Moqui). Set in Dokploy → Environment. Comma-separated.
+      # Dokploy key name MUST be exactly: webapp_allow_origins
+      - webapp_allow_origins=${webapp_allow_origins:-}
     restart: unless-stopped
 
 volumes:

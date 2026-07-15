@@ -4,7 +4,10 @@
     <default-property name="instance_purpose" value="dev"/>
     <default-property name="default_locale" value="es_SV"/>
     <default-property name="default_time_zone" value="America/El_Salvador"/>
-    <default-property name="webapp_allow_origins" value="*"/>
+    <!-- CORS: NO hardcodear URLs aquí. Override con env webapp_allow_origins en Dokploy.
+         Ejemplo: webapp_allow_origins=https://core-business-ops.sararobotics.org
+         Varias: separadas por coma. Vacío = sin orígenes extra. -->
+    <default-property name="webapp_allow_origins" value=""/>
     <default-property name="entity_empty_db_load" value="all"/>
 
     <cache-list warm-on-start="false">
