@@ -1,43 +1,19 @@
-# Multi-stage: build Moqui WAR with the demo component, then run
-# Stage 1: Build
-FROM eclipse-temurin:21-jdk AS builder
+# Use the official Moqui demo image as base (has framework + all dependencies)
+FROM moqui/moquidemo:latest
 
-RUN apt-get update && apt-get install -y git unzip && rm -rf /var/lib/apt/lists/*
+# Copy our demo component into the runtime
+COPY components/moqui-sv-localization /opt/moqui/runtime/component/moqui-sv-localization
 
-WORKDIR /build
-
-# Clone Moqui framework
-RUN git clone --depth 1 https://github.com/moqui/moqui-framework.git framework
-
-# Copy demo component into runtime/component
-COPY components/ framework/runtime/component/
-
-# Build WAR + runtime
-WORKDIR /build/framework
-RUN ./gradlew build addRuntime -x test
-
-# Unzip the WAR and overlay the full runtime on top
-RUN mkdir -p /opt/moqui && \
-    cd /opt/moqui && \
-    unzip -q /build/framework/moqui-plus-runtime.war && \
-    cp -r /build/framework/runtime /opt/moqui/runtime
-
-# Stage 2: Runtime
-FROM eclipse-temurin:21-jre
-
-WORKDIR /opt/moqui
-
-COPY --from=builder /opt/moqui/ .
-
-# Copy the demo conf file (not in WAR or framework repo)
+# Copy our dev conf
 COPY runtime/conf/MoquiDevConf.xml /opt/moqui/runtime/conf/MoquiDevConf.xml
 
-VOLUME ["/opt/moqui/runtime/db", "/opt/moqui/runtime/log"]
+# Remove the default demo data (we have our own)
+RUN rm -f /opt/moqui/runtime/component/moqui-sv-localization/data/SvDemoData.xml 2>/dev/null || true
 
 EXPOSE 80
 
 ENTRYPOINT ["java", "-cp", ".", "MoquiStart"]
 CMD ["conf=conf/MoquiDevConf.xml", "port=80"]
 
-HEALTHCHECK --interval=30s --timeout=60s --start-period=180s \
+HEALTHCHECK --interval=30s --timeout=60s --start-period=300s \
     CMD curl -f http://localhost/status || exit 1
