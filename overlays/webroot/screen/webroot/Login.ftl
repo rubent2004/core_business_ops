@@ -336,23 +336,6 @@ body.bg-light, body.bg-dark { background: var(--cf-bg-deep) !important; }
 .alert-success { background: rgba(16, 185, 129, 0.08) !important; color: #10B981 !important; border-color: rgba(16, 185, 129, 0.3) !important; }
 .alert .close { color: inherit; opacity: 0.7; }
 
-/* Test Login botoncito chico abajo */
-#TestLoginLink {
-    margin-top: 14px;
-    text-align: center;
-}
-#TestLoginLink .btn-sm {
-    background: transparent !important;
-    border: 1px dashed var(--cf-border) !important;
-    color: var(--cf-text-dim) !important;
-    font-size: 10px !important;
-    padding: 6px 12px !important;
-    letter-spacing: 0.12em !important;
-    font-weight: 600 !important;
-    box-shadow: none !important;
-}
-#TestLoginLink .btn-sm:hover { color: var(--cf-cyan) !important; border-color: var(--cf-cyan) !important; transform: none; }
-
 /* Browser warning */
 #browser-warning { padding: 14px; background: rgba(248, 113, 113, 0.08); border-radius: 10px; margin-bottom: 18px; }
 #browser-warning h4 { font-size: 13px; }
@@ -541,11 +524,6 @@ body.bg-light, body.bg-dark { background: var(--cf-bg-deep) !important; }
 
 <script>
 $(function () {
-    // Mover el TestLogin form (renderizado fuera por Login.xml) dentro del card
-    var $testLogin = $('#TestLoginLink');
-    if ($testLogin.length) {
-        $testLogin.appendTo('.cf-body');
-    }
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var $target = $(e.target);
         window.location.hash = $target.attr('href');

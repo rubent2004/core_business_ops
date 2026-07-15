@@ -582,7 +582,7 @@
             netPay="385.92" employerCost="499.88" statusId="SvPayLinePaid"/>
 
     <!-- ================================================================ -->
-    <!-- USUARIOS DEMO (password = moqui, hash SHA stock de Moqui)         -->
+    <!-- USUARIOS DEMO (password = sara2026, hash SHA-1)                  -->
     <!-- Sobrescribe John Doe del seed Moqui + cuentas SV por rol.        -->
     <!-- ================================================================ -->
 
@@ -593,8 +593,8 @@
     <mantle.party.PartyRole partyId="MP_EMP_JOSE_M" roleTypeId="Employee"/>
     <moqui.security.UserAccount userId="EX_JOHN_DOE" username="jose.menjivar"
             userFullName="José Menjívar" partyId="MP_EMP_JOSE_M"
-            currentPassword="16ac58bbfa332c1c55bd98b53e60720bfa90d394" passwordHashType="SHA"
-            passwordHint="framework name, lowercase" currencyUomId="USD" locale="es_SV"
+            currentPassword="0781436b5378fd9f0cd417d1f4832dfd35e8a333" passwordHashType="SHA"
+            passwordHint="sara + año" currencyUomId="USD" locale="es_SV"
             timeZone="America/El_Salvador" emailAddress="jose.menjivar@metalpacifico.com.sv"/>
     <moqui.security.UserGroupMember userGroupId="SvAdmin" userId="EX_JOHN_DOE" fromDate="1704067200000"/>
     <moqui.security.UserGroupMember userGroupId="MarbleErpAdmin" userId="EX_JOHN_DOE" fromDate="1704067200000"/>
@@ -602,8 +602,8 @@
     <!-- Gerente / admin operativo -->
     <moqui.security.UserAccount userId="MP_USER_ADMIN" username="andrea.beltran"
             userFullName="Andrea Beltrán Solís" partyId="MP_EMP_ANDREA"
-            currentPassword="16ac58bbfa332c1c55bd98b53e60720bfa90d394" passwordHashType="SHA"
-            passwordHint="framework name, lowercase" currencyUomId="USD" locale="es_SV"
+            currentPassword="0781436b5378fd9f0cd417d1f4832dfd35e8a333" passwordHashType="SHA"
+            passwordHint="sara + año" currencyUomId="USD" locale="es_SV"
             timeZone="America/El_Salvador" emailAddress="andrea.beltran@metalpacifico.com.sv"/>
     <moqui.security.UserGroupMember userGroupId="ALL_USERS" userId="MP_USER_ADMIN" fromDate="1704067200000"/>
     <moqui.security.UserGroupMember userGroupId="ADMIN" userId="MP_USER_ADMIN" fromDate="1704067200000"/>
@@ -613,8 +613,8 @@
     <!-- Producción -->
     <moqui.security.UserAccount userId="MP_USER_PROD" username="carlos.rivas"
             userFullName="Carlos Rivas Handal" partyId="MP_EMP_CARLOS"
-            currentPassword="16ac58bbfa332c1c55bd98b53e60720bfa90d394" passwordHashType="SHA"
-            passwordHint="framework name, lowercase" currencyUomId="USD" locale="es_SV"
+            currentPassword="0781436b5378fd9f0cd417d1f4832dfd35e8a333" passwordHashType="SHA"
+            passwordHint="sara + año" currencyUomId="USD" locale="es_SV"
             timeZone="America/El_Salvador" emailAddress="carlos.rivas@metalpacifico.com.sv"/>
     <moqui.security.UserGroupMember userGroupId="ALL_USERS" userId="MP_USER_PROD" fromDate="1704067200000"/>
     <moqui.security.UserGroupMember userGroupId="SvProduccion" userId="MP_USER_PROD" fromDate="1704067200000"/>
@@ -622,8 +622,8 @@
     <!-- Bodega -->
     <moqui.security.UserAccount userId="MP_USER_BODEGA" username="maria.guzman"
             userFullName="María Guzmán Portillo" partyId="MP_EMP_MARIA"
-            currentPassword="16ac58bbfa332c1c55bd98b53e60720bfa90d394" passwordHashType="SHA"
-            passwordHint="framework name, lowercase" currencyUomId="USD" locale="es_SV"
+            currentPassword="0781436b5378fd9f0cd417d1f4832dfd35e8a333" passwordHashType="SHA"
+            passwordHint="sara + año" currencyUomId="USD" locale="es_SV"
             timeZone="America/El_Salvador" emailAddress="maria.guzman@metalpacifico.com.sv"/>
     <moqui.security.UserGroupMember userGroupId="ALL_USERS" userId="MP_USER_BODEGA" fromDate="1704067200000"/>
     <moqui.security.UserGroupMember userGroupId="SvBodega" userId="MP_USER_BODEGA" fromDate="1704067200000"/>
