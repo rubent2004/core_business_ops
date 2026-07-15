@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This software is in the public domain under CC0 1.0 Universal plus a
+Grant of Patent License.
+
+To the extent possible under law, the author(s) have dedicated all
+copyright and related and neighboring rights to this software to the
+public domain worldwide. This software is distributed without any
+warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication
+along with this software (see the LICENSE.md file). If not, see
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Panel de RR.HH." default-menu-index="1">
+
+    <widgets>
+        <container style="dashboard-grid">
+            <!-- SV Payroll -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-money" type="i"/></container>
+                <link url="//${appRoot}/SvLocalization/Payroll/PayrollDashboard" text="Panel de Nómina" link-type="anchor" style="card-link"/>
+                <label text="Revise corridas, cálculos y estado operativo de nómina SV." type="p" style="card-desc"/>
+            </container>
+            <!-- Payroll Runs -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-calendar-check-o" type="i"/></container>
+                <link url="//${appRoot}/SvLocalization/Payroll/PayrollRuns" text="Corridas de Nómina" link-type="anchor" style="card-link"/>
+                <label text="Cree, revise y procese períodos de pago de empleados." type="p" style="card-desc"/>
+            </container>
+            <!-- Payroll Reports -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-file-pdf-o" type="i"/></container>
+                <link url="//${appRoot}/SvLocalization/Payroll/PayrollReports" text="Reportes de Nómina" link-type="anchor" style="card-link"/>
+                <label text="Consulte reportes, boletas y resultados de cálculo salarial." type="p" style="card-desc"/>
+            </container>
+            <!-- Employees -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-users" type="i"/></container>
+                <link url="//${appRoot}/Party/FindParty" text="Empleados" parameter-map="[roleTypeId:'Employee']" link-type="anchor" style="card-link"/>
+                <label text="Busque y gestione los empleados de la organización, su información de contacto y roles." type="p" style="card-desc"/>
+            </container>
+            <!-- Labor Rates -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-calculator" type="i"/></container>
+                <link url="../EditRateAmounts" text="Tarifas de Mano de Obra" link-type="anchor" style="card-link"/>
+                <label text="Configure y ajuste las tarifas de facturación y costos estándar o personalizados." type="p" style="card-desc"/>
+            </container>
+        </container>
+    </widgets>
+</screen>

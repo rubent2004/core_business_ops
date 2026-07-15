@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This software is in the public domain under CC0 1.0 Universal plus a
+Grant of Patent License.
+
+To the extent possible under law, the author(s) have dedicated all
+copyright and related and neighboring rights to this software to the
+public domain worldwide. This software is distributed without any
+warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication
+along with this software (see the LICENSE.md file). If not, see
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Dashboard" default-menu-index="1">
+
+    <transition name="editParty"><default-response url="//${appRoot}/Party/EditParty"/></transition>
+    <transition name="findInvoice"><default-response url="../Invoice/FindInvoice"/></transition>
+    <transition name="editPaymentMethod"><default-response url="//${appRoot}/Party/PaymentMethod/EditPaymentMethod"/></transition>
+    <transition name="paymentMethodTrans"><default-response url="//${appRoot}/Party/PaymentMethod/PaymentMethodTrans"/></transition>
+
+    <widgets>
+        <container style="q-mt-md">
+            <label text="Fiscal El Salvador" type="h3" style="text-h3 q-mb-sm"/>
+            <container style="dashboard-grid">
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-id-card-o" type="i"/></container>
+                    <link url="//${appRoot}/SvLocalization/Dte/DteDashboard" text="Panel DTE" link-type="anchor" style="card-link"/>
+                    <label text="Monitoree emisión, aceptación, rechazos, contingencias y certificado MH." type="p" style="card-desc"/>
+                </container>
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-search" type="i"/></container>
+                    <link url="../Invoice/FindInvoice" text="Buscar por DTE" link-type="anchor" style="card-link"/>
+                    <label text="Encuentre facturas por documento tributario y revise su estado electrónico." type="p" style="card-desc"/>
+                </container>
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-book" type="i"/></container>
+                    <link url="//${appRoot}/SvLocalization/Books/IvaSalesBook" text="Libro IVA Ventas" link-type="anchor" style="card-link"/>
+                    <label text="Genere y revise el libro de ventas del período fiscal." type="p" style="card-desc"/>
+                </container>
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-bookmark" type="i"/></container>
+                    <link url="//${appRoot}/SvLocalization/Books/IvaPurchasesBook" text="Libro IVA Compras" link-type="anchor" style="card-link"/>
+                    <label text="Genere y revise el libro de compras del período fiscal." type="p" style="card-desc"/>
+                </container>
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-balance-scale" type="i"/></container>
+                    <link url="//${appRoot}/SvLocalization/Acctg/DteReconciliation" text="Conciliación DTE" link-type="anchor" style="card-link"/>
+                    <label text="Compare DTE, facturación y contabilidad antes de cerrar." type="p" style="card-desc"/>
+                </container>
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-lock" type="i"/></container>
+                    <link url="//${appRoot}/SvLocalization/Acctg/PeriodClose" text="Cierre Fiscal" link-type="anchor" style="card-link"/>
+                    <label text="Cree, cierre o reabra períodos fiscales con validación operativa." type="p" style="card-desc"/>
+                </container>
+            </container>
+        </container>
+
+        <!-- Facturas y Pagos Section -->
+        <container style="q-mt-md">
+            <label text="Facturas y Pagos" type="h3" style="text-h3 q-mb-sm"/>
+            <container style="dashboard-grid">
+                <!-- Invoices -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-file-text-o" type="i"/></container>
+                    <link url="../Invoice/FindInvoice" text="Facturas" link-type="anchor" style="card-link"/>
+                    <label text="Gestione facturas de compra y venta, y el estado de facturación." type="p" style="card-desc"/>
+                </container>
+                <!-- Aging -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-clock-o" type="i"/></container>
+                    <link url="../Invoice/Aging" text="Antigüedad de Saldos" link-type="anchor" style="card-link"/>
+                    <label text="Analice el vencimiento de las cuentas por cobrar y pagar." type="p" style="card-desc"/>
+                </container>
+                <!-- Payments -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-credit-card" type="i"/></container>
+                    <link url="../Payment/FindPayment" text="Pagos" link-type="anchor" style="card-link"/>
+                    <label text="Realice el seguimiento y procesamiento de pagos entrantes y salientes." type="p" style="card-desc"/>
+                </container>
+                <!-- Bulk Checks -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-print" type="i"/></container>
+                    <link url="../Payment/BulkPaymentCheck" text="Cheques en Lote" link-type="anchor" style="card-link"/>
+                    <label text="Imprima y procese cheques de pago a proveedores en lote." type="p" style="card-desc"/>
+                </container>
+                <!-- Financial Accounts -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-university" type="i"/></container>
+                    <link url="../FinancialAccount/FindFinancialAccount" text="Cuentas Financieras" link-type="anchor" style="card-link"/>
+                    <label text="Gestione cuentas bancarias, de tarjetas de crédito y depósitos." type="p" style="card-desc"/>
+                </container>
+            </container>
+        </container>
+
+        <!-- Libro Mayor Section -->
+        <container style="q-mt-xl">
+            <label text="Libro Mayor" type="h3" style="text-h3 q-mb-sm"/>
+            <container style="dashboard-grid">
+                <!-- Reports -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-line-chart" type="i"/></container>
+                    <link url="../Reports" text="Reportes Contables" link-type="anchor" style="card-link"/>
+                    <label text="Visualice balance general, estado de resultados e informes contables." type="p" style="card-desc"/>
+                </container>
+                <!-- Transactions -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-exchange" type="i"/></container>
+                    <link url="../Transaction" text="Transacciones" link-type="anchor" style="card-link"/>
+                    <label text="Revise los asientos de diario y las transacciones financieras." type="p" style="card-desc"/>
+                </container>
+                <!-- Transaction Entries -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-list" type="i"/></container>
+                    <link url="../Transaction/FindTransactionEntry" text="Entradas de Transacción" link-type="anchor" style="card-link"/>
+                    <label text="Consulte los detalles de cada asiento de transacción de débito/crédito." type="p" style="card-desc"/>
+                </container>
+                <!-- GL Accounts -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-book" type="i"/></container>
+                    <link url="../GlAccount" text="Cuentas GL" link-type="anchor" style="card-link"/>
+                    <label text="Configure y revise el catálogo de cuentas contables (Plan de Cuentas)." type="p" style="card-desc"/>
+                </container>
+                <!-- GL Journals -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-folder-open-o" type="i"/></container>
+                    <link url="../FindJournal" text="Diarios GL" link-type="anchor" style="card-link"/>
+                    <label text="Gestione y contabilice transacciones en los diarios contables." type="p" style="card-desc"/>
+                </container>
+                <!-- Time Periods -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-calendar" type="i"/></container>
+                    <link url="../TimePeriod" text="Periodos de Tiempo" link-type="anchor" style="card-link"/>
+                    <label text="Defina los años fiscales, trimestres y periodos contables." type="p" style="card-desc"/>
+                </container>
+                <!-- Budgets -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-calculator" type="i"/></container>
+                    <link url="../Budget" text="Presupuestos" link-type="anchor" style="card-link"/>
+                    <label text="Establezca, controle y compare presupuestos financieros." type="p" style="card-desc"/>
+                </container>
+            </container>
+        </container>
+
+        <dynamic-container id="OrgInternalSummary" transition="OrgInternalSummary"/>
+    </widgets>
+</screen>

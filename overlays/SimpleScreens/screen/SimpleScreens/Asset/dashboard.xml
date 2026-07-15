@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This software is in the public domain under CC0 1.0 Universal plus a
+Grant of Patent License.
+
+To the extent possible under law, the author(s) have dedicated all
+copyright and related and neighboring rights to this software to the
+public domain worldwide. This software is distributed without any
+warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication
+along with this software (see the LICENSE.md file). If not, see
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Panel" default-menu-index="1">
+
+    <transition name="assetOnHand"><default-response url="//${appRoot}/Accounting/Reports/AssetOnHand"/></transition>
+
+    <widgets>
+        <container style="dashboard-grid">
+            <!-- SV Inventory Receipt -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-plus-square" type="i"/></container>
+                <link url="../ReceiveMaterialSv" text="Recepción de Inventario" link-type="anchor" style="card-link"/>
+                <label text="Agregue existencias con costo unitario, bodega, ubicación y propietario." type="p" style="card-desc"/>
+            </container>
+            <!-- SV Inventory Transfer -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-exchange" type="i"/></container>
+                <link url="../MoveInventorySv" text="Traslado de Inventario" link-type="anchor" style="card-link"/>
+                <label text="Mueva inventario entre bodegas con trazabilidad operativa." type="p" style="card-desc"/>
+            </container>
+            <!-- SV Kardex -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-list-alt" type="i"/></container>
+                <link url="../KardexSv" text="Kardex" link-type="anchor" style="card-link"/>
+                <label text="Revise movimientos, saldos y costo promedio por producto y bodega." type="p" style="card-desc"/>
+            </container>
+            <!-- Asset Summary -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-bar-chart" type="i"/></container>
+                <link url="../Asset/FindSummary" text="Resumen de Activos" link-type="anchor" style="card-link"/>
+                <label text="Vea las métricas resumidas y los valores totales de todo el inventario." type="p" style="card-desc"/>
+            </container>
+            <!-- Assets -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-cube" type="i"/></container>
+                <link url="../Asset/FindAsset" text="Activos" link-type="anchor" style="card-link"/>
+                <label text="Busque, revise y realice el seguimiento de los activos físicos y el inventario." type="p" style="card-desc"/>
+            </container>
+            <!-- Move Asset -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-exchange" type="i"/></container>
+                <link url="../Asset/SelectAsset" text="Mover Activo" link-type="anchor" style="card-link"/>
+                <label text="Transfiera activos físicos entre instalaciones o ubicaciones." type="p" style="card-desc"/>
+            </container>
+            <!-- Physical Inventory -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-clipboard" type="i"/></container>
+                <link url="../PhysicalInventory" text="Inventario Físico" link-type="anchor" style="card-link"/>
+                <label text="Realice recuentos de stock y concilie los registros del sistema con el inventario físico." type="p" style="card-desc"/>
+            </container>
+            <!-- Containers -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-archive" type="i"/></container>
+                <link url="../Container" text="Contenedores" link-type="anchor" style="card-link"/>
+                <label text="Gestione los contenedores de transporte y almacenamiento, cajas o contenedores." type="p" style="card-desc"/>
+            </container>
+            <!-- Lots -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-list-ol" type="i"/></container>
+                <link url="../EditLots" text="Lotes" link-type="anchor" style="card-link"/>
+                <label text="Gestione lotes de producción, seguimiento de lotes y fechas de vencimiento." type="p" style="card-desc"/>
+            </container>
+            <!-- Pools -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-clone" type="i"/></container>
+                <link url="../AssetPool" text="Grupos de Activos" link-type="anchor" style="card-link"/>
+                <label text="Configure grupos de activos para alquiler, arrendamiento o uso compartido." type="p" style="card-desc"/>
+            </container>
+            <!-- On Hand Report -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-file-text-o" type="i"/></container>
+                <link url="assetOnHand" text="Reporte Disponible" link-type="anchor" style="card-link"/>
+                <label text="Genere reportes en tiempo real de las cantidades de productos disponibles." type="p" style="card-desc"/>
+            </container>
+        </container>
+    </widgets>
+</screen>

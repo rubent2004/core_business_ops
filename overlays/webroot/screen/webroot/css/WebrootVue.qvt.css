@@ -1,0 +1,704 @@
+/* This software is in the public domain under CC0 1.0 Universal plus a Grant of Patent License. */
+
+a { color:var(--q-color-primary); text-decoration:none; }
+.q-menu a, .q-toolbar a { color:inherit; }
+
+.text-success { color:var(--q-color-positive); }
+.text-danger { color:var(--q-color-negative); }
+.text-mono { font-family: monospace,monospace; }
+strong, .text-strong { font-weight:bold; }
+
+form, fieldset { border:none; display:contents; }
+
+/* Quasar styles have huge h? sizes by default, trim down to something more reasonable */
+h1, .text-h1 { font-size:2.5rem; line-height:2.5rem; letter-spacing:initial; }
+h2, .text-h2 { font-size:2rem; line-height:2rem; letter-spacing:initial; }
+h3, .text-h3 { font-size:1.8rem; line-height:1.8rem; letter-spacing:initial; }
+h4, .text-h4 { font-size:1.4rem; line-height:1.4rem; letter-spacing:initial; margin-block-start:0.25em; margin-block-end:0.25em; }
+h5, .text-h5 { font-size:1.2rem; line-height:1.2rem; letter-spacing:initial; margin-block-start:0.25em; margin-block-end:0.25em; }
+h6, .text-h6 { font-size:1.0rem; line-height:1.0rem; letter-spacing:initial; margin-block-start:0.25em; margin-block-end:0.25em; }
+
+p { margin-bottom:8px; } /* orig 16px */
+pre { text-wrap: normal; white-space: pre-line; word-wrap: normal; word-break: normal; }
+
+body.dev #top { background: #5d5d5d!important; }
+body.test #top { background: #224422!important; }
+
+/* example for header that changes light and dark along with rest of screen:
+#top { background:white!important; color:black; }
+body.body--dark #top { background:black!important; color:white; }
+
+body.dev #top { background:lightblue!important; color:black; }
+body.dev.body--dark #top { background:#0c1b29!important; color:white; }
+
+body.test #top { background:lightgreen!important; color:black; }
+body.test.body--dark #top { background:#224422!important; color:white; }
+*/
+
+.body--dark .q-menu { background-color:black; }
+.body--dark img.invertible { -webkit-filter: invert(90%); filter: invert(90%); }
+
+@media (min-width:576px) {
+    .q-dark, .q-card { background:transparent; }
+}
+.q-card__actions h5 { font-size: 1.1rem; display:inline-block; margin-block-start:0; margin-block-end:0; }
+.q-dialog .q-card { background-color:white; }
+.body--dark .q-dialog .q-card { background-color:black; }
+
+.non-selectable { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+
+.q-btn { margin:2px; }
+.q-btn--dense .q-btn__wrapper { padding:4px 8px; }
+.q-btn .q-icon, .q-btn .q-spinner { font-size:18px; padding:2px 0; } /* was 1.715em ~= 24px */
+/* using q-btn flat for link style buttons, reduce margin/padding/height to match inline text */
+.m-link.q-btn--flat { margin:0; }
+.m-link.q-btn--flat .q-btn__wrapper { padding:0 4px; min-height:1.5em; }
+.m-link.q-btn--flat .q-btn__content { line-height:1.5; }
+/* don't let buttons wrap, ugly */
+.q-btn__content { flex-wrap: nowrap; }
+
+form.q-form { width:100%; }
+
+/* BEGIN q-field label move up to overlay outline */
+/* need small (6px) top margin so floating label does not overlap elements above, but to make all q-field consistent apply too all (not just .q-field--labeled.q-field--dense) */
+.q-field--dense { margin:6px 0 6px 0; }
+/* don't double margin for q-field within q-field */
+.q-field--dense .q-field--dense, .row .q-field--dense { margin:0; }
+/* move field lable up to 'notch' in outline (like https://material.io/components/text-fields) */
+.q-field--dense .q-field__label { top:0; padding-left:4px; padding-right:4px; background-color:white; }
+.body--dark .q-field--dense .q-field__label { background-color:black; }
+/* make notch fit text, not full width */
+.q-field--dense.q-field--float .q-field__label { right:auto; }
+/* move input text up 6px OOTB padding-top:14px */
+.q-field--labeled.q-field--dense .q-field__native, .q-field--labeled.q-field--dense .q-field__prefix { padding-top:8px; }
+/* move drop-down input up 6px; this padding-top defaults to 14px, have to move up 12px to handle wrapped field padding */
+.q-field--auto-height.q-field--dense.q-field--labeled .q-field__control-container { padding-top:0; }
+/* fix blue focus border on top of label instead of behind */
+.q-field__label { z-index:10; }
+/* fix disabled opacity, was 0.6 which caused border to bleed through */
+.q-field--disabled .q-field__control > div { opacity:1 !important; }
+/* END q-field label move */
+
+.q-field--focused .q-field__input { border-bottom: var(--q-color-primary) solid 1px; margin-left:8px; }
+
+.q-field--dense .q-field__marginal { height:auto; min-height:40px; }
+.q-field__prepend { max-width:75%; }
+.q-field__marginal .q-checkbox__label { font-size:10px; } /* orig from q-field__marginal 24px */
+
+/* instead of always having 20px bottom area only do when there is an error - may need adjustment for other field bottom uses */
+.q-field--with-bottom { padding-bottom:0; }
+.q-field--with-bottom.q-field--error { padding-bottom:16px; }
+.q-field__bottom { padding-top:4px; }
+
+.q-item__section--avatar { min-width:30px; } /* orig 56px */
+.q-drawer .q-item__section--side { padding-right:4px; } /* orig 16px */
+
+/* Application drawer: denser enterprise navigation with clearer hierarchy. */
+body.qapps .q-drawer {
+    background:#f7f9fc;
+    border-right:1px solid #d7dee8;
+    box-shadow:8px 0 20px rgba(34, 49, 73, 0.08);
+}
+body.qapps .q-drawer__content {
+    scrollbar-width:thin;
+    scrollbar-color:#8b97a7 #edf1f6;
+}
+body.qapps .q-drawer__content::-webkit-scrollbar { width:8px; }
+body.qapps .q-drawer__content::-webkit-scrollbar-track { background:#edf1f6; }
+body.qapps .q-drawer__content::-webkit-scrollbar-thumb {
+    background:#8b97a7;
+    border:2px solid #edf1f6;
+    border-radius:8px;
+}
+body.qapps .q-drawer .q-list {
+    padding:8px 8px 14px 8px;
+}
+body.qapps .q-drawer .q-item {
+    min-height:30px;
+    margin:1px 0;
+    padding:0 8px;
+    border-radius:7px;
+    color:#253246;
+    font-size:13px;
+    line-height:1.25;
+    transition:background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+body.qapps .q-drawer .q-item:hover {
+    background:#e8eef7;
+    color:#10243d;
+}
+body.qapps .q-drawer .q-item .q-focus-helper {
+    border-radius:7px;
+}
+body.qapps .q-drawer .q-expansion-item--expanded > .q-expansion-item__container > .q-item {
+    background:#eef5ff;
+    color:#0f4f8f;
+    font-weight:600;
+}
+body.qapps .q-drawer .q-expansion-item--expanded > .q-expansion-item__container > .q-expansion-item__content {
+    margin:2px 0 4px 16px;
+    padding-left:8px;
+    border-left:1px solid #c8d5e4;
+}
+body.qapps .q-drawer .q-expansion-item__content .q-item {
+    min-height:28px;
+    color:#2f3b4f;
+    font-size:12.5px;
+}
+body.qapps .q-drawer .q-expansion-item__content .q-expansion-item__content {
+    margin-left:14px;
+    border-left-color:#d9e1ec;
+}
+body.qapps .q-drawer .q-item__section--avatar {
+    min-width:24px;
+}
+body.qapps .q-drawer .q-item__section--side {
+    padding-right:6px;
+    color:#5f6f83;
+}
+body.qapps .q-drawer .q-icon,
+body.qapps .q-drawer i.fa {
+    font-size:17px;
+}
+body.qapps .q-drawer a {
+    color:inherit;
+}
+body.qapps .q-drawer .q-list > .q-expansion-item:first-child > .q-expansion-item__container > .q-item {
+    margin-bottom:4px;
+    background:#253246;
+    color:#fff;
+    font-weight:600;
+}
+body.body--dark.qapps .q-drawer {
+    background:#151922;
+    border-right-color:#30394a;
+    box-shadow:8px 0 20px rgba(0, 0, 0, 0.35);
+}
+body.body--dark.qapps .q-drawer .q-item {
+    color:#e5ebf3;
+}
+body.body--dark.qapps .q-drawer .q-item:hover {
+    background:#263143;
+    color:#fff;
+}
+body.body--dark.qapps .q-drawer .q-expansion-item--expanded > .q-expansion-item__container > .q-item {
+    background:#173653;
+    color:#d8ecff;
+}
+body.body--dark.qapps .q-drawer .q-expansion-item--expanded > .q-expansion-item__container > .q-expansion-item__content {
+    border-left-color:#3a4a60;
+}
+body.body--dark.qapps .q-drawer .q-list > .q-expansion-item:first-child > .q-expansion-item__container > .q-item {
+    background:#e8eef7;
+    color:#172032;
+}
+
+.m-container-box .q-card__actions { padding:8px 8px 0 8px; }
+.q-card__section--vert { padding:8px; } /* orig 16px */
+
+.big-row { display:flex; flex-wrap:wrap; justify-content:flex-start; align-content:center; }
+.big-row.text-center { justify-content:center; }
+.big-row-item {}
+.big-row-item .q-field { display:inline-flex; }
+
+.q-table--dense .q-table .form-list-nav-row th:first-child { padding:4px 0; }
+.form-list-nav-row .q-bar { background-color:transparent; }
+.form-list-nav-row, .form-list-nav-row .q-btn { font-size:13px; }
+
+.form-date-find { display:inline-flex; }
+
+/* ====== div based table styles ====== */
+
+.table { display: table; width: 100%; }
+.thead { display: table-header-group; font-weight: bold; }
+.tfoot { display: table-footer-group; font-weight: bold; }
+.tbody { display: table-row-group; }
+.tr { display: table-row; }
+.td, .th { display: table-cell; vertical-align: middle; }
+td, .td { min-height:21px; }
+
+/* ====== quasar table styles adapted to div based table styles ====== */
+/* NOTE: these are based on quasar.css version 1.12.11 */
+/* lines 4216-4531 */
+.q-table .thead .tr, .q-table .tbody .td { height: 48px; }
+.q-table .th { font-weight: 500; font-size: 13px; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+.q-table .th, .q-table .td { padding: 7px 16px; background-color: inherit; }
+.q-table .thead, .q-table .td, .q-table .th { border-style: solid; border-width: 0; }
+.q-table .tbody .td { font-size: 14px; } /* was 13px in quasar css */
+
+.q-table--no-wrap .th, .q-table--no-wrap .td { white-space: nowrap; }
+.q-table--grid .q-table__middle .thead, .q-table--grid .q-table__middle .thead .th { border: 0 !important; }
+
+.q-table--horizontal-separator .thead .th, .q-table--cell-separator .thead .th, .q-table--horizontal-separator .tbody .tr:not(:last-child) .td,
+    .q-table--cell-separator .tbody .tr:not(:last-child) .td { border-bottom-width: 1px; }
+.q-table--vertical-separator .td, .q-table--cell-separator .td, .q-table--vertical-separator .th, .q-table--cell-separator .th { border-left-width: 1px; }
+.q-table--vertical-separator .thead .tr:last-child .th, .q-table--cell-separator .thead .tr:last-child .th, .q-table--vertical-separator.q-table--loading .tr:nth-last-child(2) .th,
+.q-table--cell-separator.q-table--loading .tr:nth-last-child(2) .th { border-bottom-width: 1px; }
+.q-table--vertical-separator .td:first-child, .q-table--cell-separator .td:first-child, .q-table--vertical-separator .th:first-child,
+    .q-table--cell-separator .th:first-child { border-left: 0; }
+.q-table--dense .q-table .th, .q-table--dense .q-table .td { padding: 4px 8px; }
+.q-table--dense .q-table .thead .tr, .q-table--dense .q-table .tbody .tr, .q-table--dense .q-table .tbody .td { height: 28px; }
+.q-table--dense .q-table .th:first-child, .q-table--dense .q-table .td:first-child { padding-left: 16px; }
+.q-table--dense .q-table .th:last-child, .q-table--dense .q-table .td:last-child { padding-right: 16px; }
+.q-table .thead, .q-table .tr, .q-table .th, .q-table .td { border-color: rgba(0,0,0,0.12); }
+.q-table .tbody .td { position: relative; }
+.q-table .tbody .td:before, .q-table .tbody .td:after { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; }
+.q-table .tbody .td:before { background: rgba(0,0,0,0.03); }
+.q-table .tbody .td:after { background: rgba(0,0,0,0.06); }
+.q-table .tbody .tr.selected .td:after { content: ''; }
+body.desktop .q-table .tr:not(.q-tr--no-hover):hover .td:not(.q-td--no-hover):before { content: ''; }
+.q-table--dark .q-table__bottom, .q-table--dark .thead, .q-table--dark .tr, .q-table--dark .th, .q-table--dark .td { border-color: rgba(255,255,255,0.28); }
+.q-table--dark .tbody .td:before { background: rgba(255,255,255,0.07); }
+.q-table--dark .tbody .td:after { background: rgba(255,255,255,0.1); }
+
+/* lines 5730-5735 */
+.q-table .q-virtual-scroll__padding .tr { height: 0 !important; }
+.q-table .q-virtual-scroll__padding .td { padding: 0 !important; }
+
+/* ====== Old Handy Styles ====== */
+
+/* Description List Horizontal - based on Bootstrap concept */
+dl { margin-top:8px; margin-bottom:8px; }
+dt { font-weight:700; }
+dd { margin-left:0; }
+@media (min-width:768px) {
+    .dl-horizontal dt { float:left; width:160px; clear:left; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .dl-horizontal dd { margin-left:180px; }
+}
+.dl-horizontal dd:before, .dl-horizontal dd:after { display:table; content:" "; }
+.dl-horizontal dd:after { clear:both; }
+
+ul.tree-list, ul.tree-list ul { list-style-type: none; padding: 4px 4px 4px 20px; }
+
+ul.float-box { display: inline-block; list-style: none outside none; margin: 0 0 -8px 0; padding: 0; }
+ul.float-box li { display: inline-block; line-height: 18px; margin: 0 8px 8px 0; padding: 8px; float: left; }
+ul.float-box li.box-narrow { max-width: 300px; }
+
+ul.float-plain { display: inline-block; list-style: none outside none; margin: 0 0 -8px 0; padding: 0; }
+ul.float-plain li { display: inline-block; line-height: 18px; margin: 0 8px 8px 0; padding: 8px; float: left; }
+ul.float-plain.condensed { margin: 0; }
+ul.float-plain.condensed li { margin: 0 4px 0 0; padding: 4px; }
+
+/* ==================== MODERN MINIMALIST DIAGRAM SEQUENCE ==================== */
+.diagram-sequence {
+    font-size: 14px;
+    text-align: center;
+    width: 1050px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px 8px;
+}
+
+/* Lane Columns Styled as Sleek Modern Cards */
+.diagram-sequence > div {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    padding: 30px 24px;
+    box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.08), 0 2px 8px -1px rgba(148, 163, 184, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 580px;
+}
+.body--dark .diagram-sequence > div {
+    background: #111827;
+    border-color: #1f2937;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+.diagram-sequence > div:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+    border-color: #cbd5e1;
+    transform: translateY(-4px);
+}
+.body--dark .diagram-sequence > div:hover {
+    border-color: #374151;
+}
+
+.diagram-sequence p {
+    margin-bottom: 12px;
+}
+
+/* Beautiful Transition Flow Items */
+.diagram-sequence-item {
+    position: relative;
+    border-bottom: 1.5px solid #e2e8f0;
+    margin: 4px 4px 14px 4px;
+    padding-bottom: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.body--dark .diagram-sequence-item {
+    border-bottom-color: #1f2937;
+}
+
+/* High-Premium Link Styling */
+.diagram-sequence-item a {
+    color: #475569;
+    font-weight: 500;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+}
+.body--dark .diagram-sequence-item a {
+    color: #9ca3af;
+}
+
+.diagram-sequence-item a strong {
+    color: #0f172a;
+    font-weight: 700;
+}
+.body--dark .diagram-sequence-item a strong {
+    color: #f3f4f6;
+}
+
+.diagram-sequence-item.smaller {
+    font-size: 13px;
+}
+.diagram-sequence-item.smaller a {
+    padding: 3px 8px;
+}
+
+/* State management & hover animations */
+.diagram-sequence-item:hover {
+    border-bottom-color: var(--q-color-primary);
+}
+.diagram-sequence-item:hover a {
+    color: var(--q-color-primary) !important;
+    background: rgba(15, 79, 143, 0.06);
+    transform: scale(1.02);
+}
+.diagram-sequence-item:hover a strong {
+    color: var(--q-color-primary) !important;
+}
+.body--dark .diagram-sequence-item:hover a {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Interactive Flow Arrows */
+.diagram-sequence-item i.left {
+    position: absolute;
+    font-size: 14px;
+    bottom: -9px;
+    left: -4px;
+    color: #94a3b8;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.diagram-sequence-item i.left:before {
+    content: "\f053";
+}
+.diagram-sequence-item i.right {
+    position: absolute;
+    font-size: 14px;
+    bottom: -9px;
+    right: -4px;
+    color: #94a3b8;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.diagram-sequence-item i.right:before {
+    content: "\f054";
+}
+
+.diagram-sequence-item:hover i.left {
+    color: var(--q-color-primary);
+    transform: translateX(-5px) scale(1.2);
+}
+.diagram-sequence-item:hover i.right {
+    color: var(--q-color-primary);
+    transform: translateX(5px) scale(1.2);
+}
+
+/* Color-Coded Header Lanes (Actors) */
+.diagram-sequence-actor {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+    transition: all 0.3s ease;
+}
+.body--dark .diagram-sequence-actor {
+    background: #030712;
+}
+
+/* Dynamic Accent Colors for each Lane */
+.diagram-sequence > div:nth-child(1) .diagram-sequence-actor {
+    border-left: 5px solid var(--q-color-primary);
+    color: var(--q-color-primary);
+}
+.diagram-sequence > div:nth-child(2) .diagram-sequence-actor {
+    border-left: 5px solid #10b981; /* Fresh Emerald */
+    color: #10b981;
+}
+.diagram-sequence > div:nth-child(3) .diagram-sequence-actor {
+    border-left: 5px solid #6366f1; /* Premium Indigo */
+    color: #6366f1;
+}
+
+.diagram-sequence > div:hover .diagram-sequence-actor {
+    transform: scale(1.02);
+}
+/* ============================================================================ */
+
+/* misc library styles */
+/* simplemde */
+.editor-toolbar.fullscreen { z-index:100!important; top:50px!important; }
+.CodeMirror-fullscreen, .editor-preview-side { z-index:100!important; top:100px!important; }
+/* jsdiff */
+.compare del { background-color:#f2dede; text-decoration:none; }
+.compare ins { background-color:#dff0d8; text-decoration:none; }
+
+/* ====== print style overrides ====== */
+
+@media print {
+    *, *:before, *:after { background: transparent none !important; }
+    body { background: white none !important; font-size: 10px; }
+
+    #top, #footer { display: none; }
+    .q-page-container { padding:0!important; }
+    .q-drawer, .q-tabs, .q-btn, .form-list-nav-row { display: none; }
+
+    tbody>tr:nth-child(even)>td, .tbody .tr:nth-child(even)>.td { background-color: #EEEEEE !important; }
+}
+
+.ScreenTreeNested { margin: 4px 0 4px 12px; padding: 0 0 0 12px; border-left: 1px dashed lightgrey; }
+
+/* ==================== FRESH MODERN INTERFACE ENHANCEMENTS ==================== */
+/* Elegant stats pills */
+.big-row {
+    gap: 8px !important;
+    display: inline-flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.big-row-item {
+    margin: 4px 0;
+}
+.big-row-item .q-btn {
+    border-radius: 20px !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 6px 14px !important;
+    box-shadow: none !important;
+    text-transform: none !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.body--dark .big-row-item .q-btn {
+    background: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #d1d5db !important;
+}
+.big-row-item .q-btn:hover {
+    background: var(--q-color-primary) !important;
+    color: #ffffff !important;
+    border-color: var(--q-color-primary) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 79, 143, 0.2) !important;
+}
+.body--dark .big-row-item .q-btn:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Rounded, polished badge pills inside buttons */
+.big-row-item .q-badge {
+    background: #64748b !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    font-size: 11px !important;
+    padding: 3px 7px !important;
+    font-weight: 700 !important;
+    margin-left: 8px !important;
+}
+.big-row-item .q-btn:hover .q-badge {
+    background: #ffffff !important;
+    color: var(--q-color-primary) !important;
+}
+
+/* Subtle, clean section headers */
+.big-row h4, .big-row .text-h4 {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: #64748b !important;
+    margin: 0 12px 0 12px !important;
+}
+.body--dark .big-row h4, .body--dark .big-row .text-h4 {
+    color: #9ca3af !important;
+}
+
+/* Custom modern search layout bar spacing */
+.diagram-sequence-container form.q-form,
+.row form.q-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.row-col .q-field--dense {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.body--dark .row-col .q-field--dense {
+    background: #1e293b;
+}
+
+/* ============================================================================ */
+
+/* Modern Grid Navigation Cards for secondary Dashboards */
+.dashboard-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 20px !important;
+    padding: 24px 0 !important;
+    justify-content: flex-start !important;
+}
+
+.dashboard-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    min-height: 180px !important;
+    width: 280px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    box-shadow: 0 4px 12px -2px rgba(148, 163, 184, 0.06) !important;
+    position: relative !important;
+    cursor: pointer !important;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03) !important;
+    border-color: #cbd5e1 !important;
+    transform: translateY(-4px) !important;
+}
+
+.body--dark .dashboard-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.body--dark .dashboard-card:hover {
+    border-color: #475569 !important;
+}
+
+/* Card Icon Box */
+.dashboard-card .card-icon {
+    font-size: 20px !important;
+    color: #0f4f8f !important;
+    background: rgba(15, 79, 143, 0.06) !important;
+    padding: 10px !important;
+    border-radius: 12px !important;
+    margin-bottom: 16px !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    pointer-events: none !important;
+}
+.dashboard-card .card-icon * {
+    pointer-events: none !important;
+}
+
+.body--dark .dashboard-card .card-icon {
+    color: #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.1) !important;
+}
+
+.dashboard-card:hover .card-icon {
+    background: #0f4f8f !important;
+    color: #ffffff !important;
+}
+
+.body--dark .dashboard-card:hover .card-icon {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+/* Card Title/Link and Button resets */
+.dashboard-card a.card-link,
+.dashboard-card button.card-link,
+.dashboard-card .card-link {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    text-decoration: none !important;
+    margin-bottom: 8px !important;
+    transition: all 0.2s ease !important;
+    padding: 0 !important;
+    display: inline-block !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: left !important;
+    outline: none !important;
+    font-family: inherit !important;
+    cursor: pointer !important;
+    width: 100% !important;
+}
+
+.body--dark .dashboard-card a.card-link,
+.body--dark .dashboard-card button.card-link,
+.body--dark .dashboard-card .card-link {
+    color: #f3f4f6 !important;
+}
+
+.dashboard-card:hover a.card-link,
+.dashboard-card:hover button.card-link,
+.dashboard-card:hover .card-link {
+    color: #0f4f8f !important;
+}
+
+.body--dark .dashboard-card:hover a.card-link,
+.body--dark .dashboard-card:hover button.card-link,
+.body--dark .dashboard-card:hover .card-link {
+    color: #3b82f6 !important;
+}
+
+/* Clickable Card Overlay using pseudo-elements */
+.dashboard-card a.card-link::after,
+.dashboard-card button.card-link::after,
+.dashboard-card .card-link::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10 !important;
+    cursor: pointer !important;
+}
+
+/* Card Description */
+.dashboard-card .card-desc {
+    font-size: 13px !important;
+    color: #64748b !important;
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+    line-height: 1.5 !important;
+    position: relative !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+}
+
+.body--dark .dashboard-card .card-desc {
+    color: #9ca3af !important;
+}

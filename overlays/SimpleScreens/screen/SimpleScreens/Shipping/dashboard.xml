@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This software is in the public domain under CC0 1.0 Universal plus a
+Grant of Patent License.
+
+To the extent possible under law, the author(s) have dedicated all
+copyright and related and neighboring rights to this software to the
+public domain worldwide. This software is distributed without any
+warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication
+along with this software (see the LICENSE.md file). If not, see
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Panel" default-menu-index="1">
+
+    <transition name="findOrder"><default-response url="//${appRoot}/Order/FindOrder"/></transition>
+    <transition name="packShipment"><default-response url="//${appRoot}/Shipping/PackShipment"/></transition>
+    <transition name="selectAsset"><default-response url="//${appRoot}/Asset/SelectAsset"/></transition>
+
+    <actions>
+        <entity-find entity-name="moqui.basic.EnumGroupMember" list="productItemTypeEgms" cache="true">
+            <econdition field-name="enumGroupEnumId" value="EngItemsProduct"/></entity-find>
+        <set field="itemTypeEnumIdList" from="productItemTypeEgms*.enumId"/>
+        <!-- Reservation Summary -->
+        <entity-find entity-name="mantle.facility.FacilityShippingReservationSummary" list="fsrsList">
+            <econdition field-name="partStatusId" value="OrderApproved"/>
+            <select-field field-name="facilityId,shipmentMethodEnumId,carrierPartyId,quantity,quantityNotAvailable,quantityNotIssued"/>
+        </entity-find>
+        <!-- Reservation Summary for Pick Locations -->
+        <entity-find entity-name="mantle.facility.FacilityShippingReservationSummary" list="fsrsPickList">
+            <econdition field-name="partStatusId" value="OrderApproved"/>
+            <econdition field-name="locationTypeEnumId" value="FltPick"/>
+            <select-field field-name="facilityId,shipmentMethodEnumId,carrierPartyId,quantity,quantityNotAvailable,quantityNotIssued"/>
+        </entity-find>
+    </actions>
+    <widgets>
+        <container-row><row-col md="8">
+            <container style="dashboard-grid">
+                <!-- Picklists -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-list-ul" type="i"/></container>
+                    <link url="../Picklist" text="Listas de Preparación" link-type="anchor" style="card-link"/>
+                    <label text="Genere y gestione listas de preparación para envíos salientes." type="p" style="card-desc"/>
+                </container>
+                <!-- Pick Location Moves -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-arrows" type="i"/></container>
+                    <link url="../PickLocationMoves" text="Movimientos de Ubicación" link-type="anchor" style="card-link"/>
+                    <label text="Coordine traslados desde almacenamiento a ubicaciones de preparación." type="p" style="card-desc"/>
+                </container>
+                <!-- Move Assets -->
+                <container style="dashboard-card">
+                    <container style="card-icon"><container style="fa fa-exchange" type="i"/></container>
+                    <link url="selectAsset" text="Mover Activos" link-type="anchor" style="card-link"/>
+                    <label text="Traslade activos de stock entre ubicaciones dentro de la instalación." type="p" style="card-desc"/>
+                </container>
+            </container>
+        </row-col><row-col md="4">
+            <form-single name="PackShipmentForm" transition="packShipment" focus-field="shipmentId">
+                <field name="shipmentId"><default-field title=""><text-line size="20"/></default-field></field>
+                <field name="packButton"><default-field title="Empacar Envío"><submit/></default-field></field>
+                <field-layout><field-row-big><field-ref name="shipmentId"/><field-ref name="packButton"/></field-row-big></field-layout>
+            </form-single>
+        </row-col></container-row>
+
+        <form-list name="FacilitySummary" list="facilitySummaryList" skip-form="true" paginate-always-show="false">
+            <entity-find entity-name="mantle.facility.FacilityShippingSummary">
+                <search-form-inputs default-order-by="pseudoId,shipmentMethodSequenceNum,carrierPartyId"/>
+                <econdition field-name="facilityTypeEnumId" value="FcTpWarehouse"/>
+                <econdition field-name="partStatusId" value="OrderApproved"/>
+                <econdition field-name="vendorRoleTypeId" value="OrgInternal"/>
+                <econdition field-name="itemTypeEnumId" operator="in" from="itemTypeEnumIdList"/>
+                <select-field field-name="facilityId,pseudoId,facilityName,shipmentMethodEnumId"/>
+            </entity-find>
+            <row-actions>
+                <!-- Shipment method description -->
+                <entity-find-one entity-name="moqui.basic.Enumeration" value-field="shipMethEnum" cache="true">
+                    <field-map field-name="enumId" from="shipmentMethodEnumId"/></entity-find-one>
+                <!-- Reservation Summary -->
+                <set field="resSummary" from="fsrsList.find({ it.facilityId == facilityId &amp;&amp; it.shipmentMethodEnumId == shipmentMethodEnumId &amp;&amp; it.carrierPartyId == carrierPartyId})"/>
+                <set field="resPickSummary" from="fsrsPickList.find({ it.facilityId == facilityId &amp;&amp; it.shipmentMethodEnumId == shipmentMethodEnumId &amp;&amp; it.carrierPartyId == carrierPartyId})"/>
+
+                <set field="resQuantity" from="resSummary?.quantity ?: 0.0"/>
+                <set field="resPickQuantity" from="resPickSummary?.quantity ?: 0.0"/>
+            </row-actions>
+
+            <field name="pseudoId">
+                <header-field title="Instalación" show-order-by="true"/>
+                <default-field><display text="FacilityNameTemplate"/></default-field>
+            </field>
+            <field name="shipmentMethodSequenceNum">
+                <header-field title="Método de Envío" show-order-by="true"/>
+                <default-field><display text="${shipmentMethodSequenceNum != null ? shipmentMethodSequenceNum + ' - ' : ''}${shipMethEnum?.description ?: ''}"/></default-field>
+            </field>
+            <field name="carrierPartyId">
+                <header-field title="Transportista" show-order-by="true"/>
+                <default-field><display-entity entity-name="mantle.party.Party" text="${carrierPartyId == '_NA_' ? 'N/A' : pseudoId}"/></default-field>
+            </field>
+            <field name="quantityTotal"><default-field title="Cant. Pedido Aprob."><link url="findOrder" link-type="anchor"
+                    text="${ec.l10n.format(quantityTotal, '#,##0.###')}"
+                    parameter-map="[orderType:'Sales', statusId:'OrderApproved', facilityId:facilityId, shipmentMethodEnumId:shipmentMethodEnumId, carrierPartyId:carrierPartyId]"/></default-field></field>
+
+            <!-- reserved, not available, not issued -->
+            <!-- really useful? <field name="resQuantity"><default-field title="Res Qty"><display/></default-field></field> -->
+            <field name="quantityNotAvailable" from="resSummary?.quantityNotAvailable"><default-field title="No Disp.">
+                <display/></default-field></field>
+            <field name="quantityNotIssued" from="resSummary?.quantityNotIssued"><default-field title="No Emitido">
+                <display/></default-field></field>
+
+            <!-- quantity in Pick locations -->
+            <field name="resPickQuantity"><default-field title="Cant. Ubic. Prep."><display style="${(resPickQuantity == resQuantity) ? 'text-success' : 'text-danger'}"/></default-field></field>
+
+            <!-- TODO: quantity on shipment and picklist? -->
+        </form-list>
+    </widgets>
+</screen>

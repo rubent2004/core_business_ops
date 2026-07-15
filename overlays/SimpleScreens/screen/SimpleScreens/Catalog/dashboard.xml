@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This software is in the public domain under CC0 1.0 Universal plus a
+Grant of Patent License.
+
+To the extent possible under law, the author(s) have dedicated all
+copyright and related and neighboring rights to this software to the
+public domain worldwide. This software is distributed without any
+warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication
+along with this software (see the LICENSE.md file). If not, see
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Panel" default-menu-index="1">
+
+    <widgets>
+        <container style="dashboard-grid">
+            <!-- Product Fiscal Setup -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-check-square-o" type="i"/></container>
+                <link url="../Product" text="Productos y Fiscalidad" link-type="anchor" style="card-link"/>
+                <label text="Configure productos, precios y datos fiscales SV desde la pestaña Fiscal." type="p" style="card-desc"/>
+            </container>
+            <!-- Product Kardex -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-list-alt" type="i"/></container>
+                <link url="//${appRoot}/Asset/KardexSv" text="Kardex por Producto" link-type="anchor" style="card-link"/>
+                <label text="Revise existencia, costo promedio y movimientos por producto." type="p" style="card-desc"/>
+            </container>
+            <!-- Inventory Receipt -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-plus-square" type="i"/></container>
+                <link url="//${appRoot}/Asset/ReceiveMaterialSv" text="Recibir Producto" link-type="anchor" style="card-link"/>
+                <label text="Agregue existencias del producto con costo unitario y bodega." type="p" style="card-desc"/>
+            </container>
+            <!-- Products -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-cubes" type="i"/></container>
+                <link url="../Product" text="Productos" link-type="anchor" style="card-link"/>
+                <label text="Administre los artículos del catálogo, precios, contenidos y asociaciones." type="p" style="card-desc"/>
+            </container>
+            <!-- Search Products -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-search" type="i"/></container>
+                <link url="../Search" text="Buscar Productos" link-type="anchor" style="card-link"/>
+                <label text="Encuentre y filtre productos rápidamente con opciones de búsqueda avanzada." type="p" style="card-desc"/>
+            </container>
+            <!-- Categories -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-tags" type="i"/></container>
+                <link url="../Category" text="Categorías" link-type="anchor" style="card-link"/>
+                <label text="Organice sus productos en árboles de categorías jerárquicos." type="p" style="card-desc"/>
+            </container>
+            <!-- Features -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-sliders" type="i"/></container>
+                <link url="../Feature" text="Características" link-type="anchor" style="card-link"/>
+                <label text="Defina las dimensiones, tamaños, colores y atributos de los productos." type="p" style="card-desc"/>
+            </container>
+            <!-- Feature Groups -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-folder-open" type="i"/></container>
+                <link url="../FeatureGroup" text="Grupos de Características" link-type="anchor" style="card-link"/>
+                <label text="Agrupe características similares para facilitar la configuración." type="p" style="card-desc"/>
+            </container>
+        </container>
+    </widgets>
+</screen>

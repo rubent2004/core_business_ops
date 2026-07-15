@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This software is in the public domain under CC0 1.0 Universal plus a
+Grant of Patent License.
+
+To the extent possible under law, the author(s) have dedicated all
+copyright and related and neighboring rights to this software to the
+public domain worldwide. This software is distributed without any
+warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication
+along with this software (see the LICENSE.md file). If not, see
+<http://creativecommons.org/publicdomain/zero/1.0/>.
+-->
+<screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/xml-screen-3.xsd"
+        default-menu-title="Panel" default-menu-index="1">
+
+    <widgets>
+        <container style="dashboard-grid">
+            <!-- Production Runs -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-industry" type="i"/></container>
+                <link url="../Run" text="Órdenes de Producción" link-type="anchor" style="card-link"/>
+                <label text="Planifique, programe y realice el seguimiento de las órdenes de producción." type="p" style="card-desc"/>
+            </container>
+            <!-- Costing and Traceability -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-calculator" type="i"/></container>
+                <link url="../Run" text="Costeo y Trazabilidad" link-type="anchor" style="card-link"/>
+                <label text="Abra una orden para revisar hoja de costeo, consumo, producción y auditoría." type="p" style="card-desc"/>
+            </container>
+            <!-- Inventory Receipt -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-plus-square" type="i"/></container>
+                <link url="//${appRoot}/Asset/ReceiveMaterialSv" text="Recibir Material" link-type="anchor" style="card-link"/>
+                <label text="Registre entrada de materias primas o producto terminado con costo." type="p" style="card-desc"/>
+            </container>
+            <!-- Kardex -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-list-alt" type="i"/></container>
+                <link url="//${appRoot}/Asset/KardexSv" text="Kardex de Materiales" link-type="anchor" style="card-link"/>
+                <label text="Verifique movimientos y costo promedio de materiales usados en producción." type="p" style="card-desc"/>
+            </container>
+            <!-- Inventory Assets -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-cubes" type="i"/></container>
+                <link url="//${appRoot}/Asset/Asset/FindSummary" text="Activos de Inventario" parameter-map="[assetTypeEnumId:'AstTpInventory']" link-type="anchor" style="card-link"/>
+                <label text="Revise los niveles de inventario de materias primas y componentes." type="p" style="card-desc"/>
+            </container>
+            <!-- Equipment Assets -->
+            <container style="dashboard-card">
+                <container style="card-icon"><container style="fa fa-cogs" type="i"/></container>
+                <link url="//${appRoot}/Asset/Asset/FindAsset" text="Activos de Equipamiento" parameter-map="[assetTypeEnumId:'AstTpEquipment']" link-type="anchor" style="card-link"/>
+                <label text="Gestione y supervise la maquinaria y equipos de producción." type="p" style="card-desc"/>
+            </container>
+        </container>
+    </widgets>
+</screen>
