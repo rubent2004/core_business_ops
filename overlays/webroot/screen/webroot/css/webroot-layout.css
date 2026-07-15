@@ -1,0 +1,1089 @@
+/* This software is in the public domain under CC0 1.0 Universal plus a Grant of Patent License. */
+
+/* ========================== body, etc ========================== */
+
+html, body, #apps-root { height: 100%; }
+/* body { padding-top: 51px; } /* this is the initial load setting, will get set dynamically for navbar-fixed-top */
+#top { height: 51px; }
+#top .navbar { margin-bottom: 0; border-radius: 0; }
+/* note that with fixed height for #top .navbar if overflow hidden drop-down menus don't show; would be nice to have some way for icons to disappear instead of wrapping below... */
+@media (min-width: 768px) { #top .navbar { height: 51px; overflow-y: visible; } .navbar-text { margin-left: 8px; } }
+/* #top, #content>.inner, #footer are the main page structure elements */
+#content { overflow: visible; background: transparent; min-height: calc(100% - 101px); }
+/* inner contains a bootstrap container-fluid div which has 16px left/right padding */
+.inner { overflow: visible; background: transparent; border: 0; padding: 16px 0 58px 0; /* padding bottom is footer height (48) plus 10px */ }
+#footer { width: 100%; position: relative; height: 50px; margin: 0 auto 0 auto; /* negative value of footer height */ }
+#footer p { padding: 0.2em 0 0 0; font-size: 0.9em; margin: 0; text-align: center; }
+
+#apps-footer-content { margin-top: 4px; text-align: center; }
+
+#dynamic-menus .glyphicon, #dynamic-menus .fa { top: 0; font-size: 10px; }
+#navbar-buttons .btn .label { top: -2px; }
+#notify-history-menu ul { min-width: 500px; }
+#notify-history-menu li { padding: 8px; }
+#notify-history-menu li div { margin-bottom: 0; }
+
+/* ====================== headings, general ====================== */
+
+div.message { border: 1px solid #DDDDDF; }
+div.error span { color: red; }
+
+strong, .text-strong { font-weight: bold; }
+tt, pre, pre code { font-family: "Courier New", Courier, monospace; }
+p, pre { white-space: pre-line; word-wrap: normal; word-break: normal; }
+.bg-dark pre { background-color: #3a3a3a; color: #EEE; border-color: #222; }
+pre.pre-plain { white-space: pre; }
+p { margin: 0 0 8px 0; }
+.padding-top-8 { padding-top: 8px; }
+.padding-top-16 { padding-top: 16px; }
+address { margin-bottom: 4px; }
+
+form { display: inline; }
+
+a.disabled { pointer-events: none; text-decoration: none; }
+
+ul.tree-list, ul.tree-list ul { list-style-type: none; padding: 4px 4px 4px 20px; }
+
+/* ======================= XML Screen Styles ======================= */
+
+/* styles for non-dynamic table layout, not using jquery-layout */
+div.container-panel-outer {  }
+div.container-panel-middle { display: table; table-layout: auto; width: 100%; height: 100%; }
+div.container-panel-left { display: table-cell; /*width: 180px;*/ padding-right: 8px; height: 100%; vertical-align: top; }
+div.container-panel-center-only { display: table-cell; width: 100%; height: 100%; padding: 0 8px 0 8px; vertical-align: top; }
+div.container-panel-center-left { display: table-cell; height: 100%; padding: 0 8px 0 8px; vertical-align: top; }
+div.container-panel-center-both { display: table-cell; height: 100%; padding: 0 8px 0 8px; vertical-align: top; }
+div.container-panel-center-right { display: table-cell; height: 100%; padding: 0 8px 0 8px; vertical-align: top; }
+div.container-panel-right { display: table-cell; padding-left: 8px; height: 100%; vertical-align: top; }
+div.container-panel-header { width: 100%; }
+div.container-panel-footer { width: 100%; }
+
+/* ======================= XML Form Styles ======================= */
+
+/* these are still used when a row has more than 2 fields in it */
+.big-row-item { display: inline-block; margin-left: 15px; margin-right: 15px; }
+.big-row-item input, .big-row-item select, .big-row-item span.select2-container { display: inline-block; }
+.big-row-item>.form-group { margin-bottom: 0; }
+.big-row-item>.form-group>label { display: block; text-align: left; }
+
+/* These are for form-list titles and order by links */
+.form-title { white-space: nowrap; font-weight: bold; }
+.form-order-by { margin: 0; white-space: nowrap; height: 18px; display: inline-block; vertical-align: top; }
+.form-order-by a { display: block; height: 10px; font-size: 14px; margin: -2px 0; }
+.form-header-field { white-space: nowrap; padding-top: 4px; }
+
+td span.form-display { display: inline-block; width: 100%; }
+
+.form-date-find, .form-range-find { display: inline-block; padding-bottom: 4px; }
+.form-text-find input, .form-range-find input { display: inline-block; }
+
+td .Long, td .Double, td .Float, td .Integer { text-align: center; }
+td .BigDecimal, td .currency { text-align: right; }
+
+/* by CSS spec either x or y not visible changes the visible to auto, this breaks bootstrap-datetimepicker, select2 still works:
+.table-scroll-wrapper { overflow-x: auto; overflow-y: visible; } */
+/* this fixes bootstrap-datetimepicker but causes horizontal scroll bar to overlap elements below, and for some reason breaks find screens like FindOrder
+.table-scroll-wrapper { overflow-x: auto; overflow-y: visible; padding-bottom: 300px; margin-bottom: -300px; padding-top: 300px; margin-top: -300px; } */
+.table-condensed .form-group { margin-bottom: 0; }
+td.form-list-sub-row-cell { padding: 0 !important; }
+.form-list-sub-rows { margin-left: 23px; padding-left: 8px; border-left: 1px dashed #8c8c8c; }
+.form-list-sub-rows>table { margin-bottom: 0; }
+
+/* ======================= Handy Styles ======================= */
+
+ul.float-box { display: inline-block; list-style: none outside none; margin: 0 0 -8px 0; padding: 0; }
+ul.float-box li { display: inline-block; line-height: 18px; margin: 0 8px 8px 0; padding: 8px; float: left; }
+ul.float-box li.box-narrow { max-width: 300px; }
+
+ul.float-plain { display: inline-block; list-style: none outside none; margin: 0 0 -8px 0; padding: 0; }
+ul.float-plain li { display: inline-block; line-height: 18px; margin: 0 8px 8px 0; padding: 8px; float: left; }
+ul.float-plain.condensed { margin: 0; }
+ul.float-plain.condensed li { margin: 0 4px 0 0; padding: 4px; }
+
+.shaded-area { padding: 8px; margin-bottom: 8px; line-height: 18px; }
+span.shaded-area { display: inline-block; white-space: normal; }
+.shaded-area.condensed { padding: 4px; margin-bottom: 4px; }
+
+.diagram-sequence { font-size: 16px; text-align: center; width: 900px; max-width: 100%; margin-left: auto; margin-right: auto; }
+.diagram-sequence>div { border-right: rgb(127, 127, 127) dashed thin; }
+.diagram-sequence>div:first-child { border-left: rgb(127, 127, 127) dashed thin;  }
+.diagram-sequence>div:last-child {  }
+.diagram-sequence p { margin-bottom: 10px; }
+.diagram-sequence-item { position: relative; border-bottom: rgb(127, 127, 127) solid 2px; margin-bottom: 8px; }
+.diagram-sequence-item.smaller { font-size: 14px; }
+.diagram-sequence-item i.left { position: absolute; font-size: 14px; bottom: -8px; left: -2px; color: rgb(127, 127, 127); }
+.diagram-sequence-item i.left:before { content:"\f053" }
+.diagram-sequence-item i.right { position: absolute; font-size: 14px; bottom: -8px; right: -2px; color: rgb(127, 127, 127); }
+.diagram-sequence-item i.right:before { content:"\f054" }
+.diagram-sequence-actor { font-size: larger; font-weight: bold; margin-bottom: 14px; border-top: rgb(127, 127, 127) solid 1px; border-bottom: rgb(127, 127, 127) solid 1px; }
+
+/* ================ Extensions for bootstrap.min.css =============== */
+
+.col { display:inline-block; }
+
+.progress { margin-bottom: 8px; }
+
+/* Styles to get around default Bootstrap input width:100%; note margin-right on .input-group is enough for a 14px icon but nothing more! */
+.form-control { display: inline; min-width: 20px; width: auto; max-width: 100%; }
+.input-group { display: inline-block; white-space: nowrap; margin-right: 0; margin-top: -2px; }
+.input-group .form-control { display: inline; min-width: 20px; width: auto; }
+.input-group .input-group-addon, .input-group .input-group-btn { display: inline; line-height: 34px; padding: 8px 12px; }
+
+/* Similar styles to Bootstrap .form-control-static, applied more specifically and without explicit class */
+.form-group > div > p, .form-group > div > span.text-inline, .form-group > div > a:not(.btn) {
+    display: inline-block; min-height: 34px; padding-top: 7px; padding-bottom: 7px; margin-bottom: 0; }
+table .form-group > div > a:not(.btn), table .form-group > div > span.text-inline { min-height: 10px; padding-top: 0; padding-bottom: 0; }
+.form-header-field > button.btn, .form-group > div > a.btn { margin-top: 2px !important; }
+
+.nav.nav-tabs { margin-bottom: 8px; }
+/* Make it apparent that you can click the current or current parent tab */
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus { cursor: pointer; }
+
+/* Bootstrap by default has a 20px height for this, for 30px height shift up 5px */
+.navbar-brand>img { height: 30px; margin-top: -5px; }
+/* Bootstrap has no margin for a.navbar-btn so add them; note margin-right in bootstrap is -15px because of other styles, so for a margin of 10px set to -5px */
+.navbar-right.btn, .navbar-right .btn { margin-right: 0; margin-left: 0; }
+.navbar-right.btn-group { margin-right: 0; margin-left: 0; }
+.nav>li>a { padding-left: 6px; padding-right: 6px; }
+.navbar-collapse { padding-right: 0; }
+
+.pagination { margin: 6px 0; } /* default 20px 0 */
+nav.form-list-nav .pagination { margin: 6px 6px 0 6px; }
+nav.form-list-nav>form.form-inline { display: inline-block; margin: 2px 6px 0 0; float: left; }
+nav.form-list-nav>.btn { display: inline-block; margin: 6px 8px 0 0; float: left; }
+nav.form-list-nav>.btn-group { display: inline-block; margin: 6px 8px 0 0; float: left; }
+nav.form-list-nav>.btn-group>.btn { margin: 0; }
+nav.form-list-nav>span.select2-container { float: left; margin: 6px 0 6px 0; min-width: 100px; max-width: 160px; }
+
+/* Extend the Bootstrap panel, add support for a panel-toolbar, treat h5 and span just like bootstrap panel-title */
+.panel .panel-heading { position: relative; }
+.panel .panel-heading .panel-toolbar { position: absolute; top: 0; right: 0; }
+.panel .panel-toolbar .label { display: inline-block; margin: 4px 4px 4px 0; }
+.panel .panel-heading>h5, .panel .panel-heading>span { display: inline-block; margin-top: 0; margin-bottom: 0; font-size: 16px; }
+.panel, .panel .panel-body { background: transparent; }
+.panel-body>table.table { margin: -15px; width: calc(100% + 30px); max-width: none; }
+.panel { margin-bottom: 12px; } /* default 20px */
+.panel-body { padding: 8px; } /* default 15px */
+
+.btn { margin: 4px 4px 4px 0; }
+.btn-group .btn { margin-right: 0; }
+.btn-group { margin-right: 4px; margin-left: 4px; }
+
+/* nav .btn-group { padding-left: 4px; } */
+/* was: .btn-group-condensed>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle) */
+.btn-group-condensed>.btn:not(.dropdown-toggle) {
+    padding-left: 4px; padding-right: 4px; border-left: 0; border-right: 0; }
+.btn-group-condensed>.btn:first-child { padding-right: 4px; border-right: 0; }
+.btn-group-condensed>.btn:last-child { padding-left: 4px; border-left: 0; }
+
+/* Variations on Bootstrap default table styles */
+.table>thead>tr>th { vertical-align: top; }
+.table>tbody>tr>td { vertical-align: middle; }
+.table { margin-bottom: 8px; }
+
+.well>.list-inline { margin-bottom: 0; }
+
+/* ================ Other, Fix Styles =============== */
+
+input[type=radio], input[type=checkbox] { height: auto; }
+
+.select2-container { display: inline-block; min-width: 60px; max-width: 100%; margin-top: -2px; }
+.date-period .select2-container--bootstrap { display: inline-block; }
+
+a.jstree-anchor { white-space: normal; }
+.jstree-default .jstree-anchor { height: auto; }
+
+.modal-dialog { text-align: left; } /* needed when right aligning the dialog button */
+
+.datepicker { white-space: initial; } /* needed to wrap the months in select month panel */
+
+/* style for bootstrap-notify (growl alerts) */
+.notify-container { padding-right: 30px; }
+
+/* overrides default display: inline-block to fix being pushed down, higher margin-top for tt-menu to compensate for no height */
+.twitter-typeahead { display: inline !important; }
+.tt-menu { width: 360px; margin: 18px 0; padding: 8px 0; border: 1px solid rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; overflow: hidden; }
+.tt-suggestion { padding: 4px 8px; }
+.tt-suggestion p { margin: 0; }
+
+/* ======================= Screen-specific ======================= */
+
+.app-list-link { font-size: 1.5em; display: block; width: 320px; margin: 8px auto 8px auto; }
+
+.ScreenTreeNested { margin: 4px 0 4px 12px; padding: 0 0 0 12px; border-left: 1px dashed lightgrey; }
+
+.Login .form-signin { display: block; width: 380px; padding: 10px; margin: 0 auto; border-radius: 3px; }
+.Login .form-signin input { width: 100%; height: auto; font-size: 1.2em; }
+.Login .form-signin input.top { margin-bottom: -1px; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.Login .form-signin input.middle { margin-bottom: -1px; border-radius: 0; }
+.Login .form-signin input.bottom { border-top-left-radius: 0; border-top-right-radius: 0; margin-bottom: 10px; }
+
+/* wiki screen, including CodeMirror class */
+#wiki-page-area { width: 100%; overflow-x: scroll; overflow-y: visible; }
+#wiki-page-area th, #wiki-page-area td { padding: 2px 4px 2px 4px; border: thin solid lightgrey; }
+.CodeMirror, .CodeMirror-scroll { min-height: 600px; min-width: 800px; }
+
+/* ======================= Image thumbnail hover styles ======================= */
+
+span.hover-image-container img.hover-image { position: absolute; display: none;}
+
+span.hover-image-container img.hover-image { background-color: #FFF6E8; padding: 6px;
+    -webkit-box-shadow: 0 0 6px rgba(132, 132, 132, .75); -moz-box-shadow: 0 0 6px rgba(132, 132, 132, .75); box-shadow: 0 0 6px rgba(132, 132, 132, .75);
+    -webkit-border-radius: 4px; -moz-border-radius: 4px;border-radius: 4px; }
+
+span.hover-image-container:hover img.hover-image { display: initial; margin : 10px 0 0 5px; }
+
+/* ======================= hide-nav (mainly for printing) ======================= */
+
+.hide-nav button, .hide-nav a.btn { display: none; }
+.hide-nav .form-list-nav { display: none; }
+.hide-nav .nav { display: none; }
+body.hide-nav { padding-top: 0; } /* don't do body padding-top for nav bar */
+
+@media print {
+    /* use white background for all, bootstrap uses white background for tables but leaves all else transparent */
+    *, *:before, *:after { background: transparent none !important; }
+    body, #content, .inner, .container-fluid { background: white none !important; }
+    /* don't show URL for links as bootstrap does by default, makes a mess */
+    a[href]:after { content: ""; }
+    body { font-size: 10px; }
+    /* condense more for printing (bootstrap default 5px), note still has border between rows */
+    .table-condensed tbody tr td { padding-top: 0; padding-bottom: 0; }
+
+    button, a.btn { display: none !important; }
+    #footer, .nav, .form-order-by, .form-list-nav-row { display: none; }
+    body { padding-top: 0; } /* don't do body padding-top for nav bar */
+    #content { min-height: 100%; } /* make body content full height, no -50px for footer */
+    #top { height: 0; }
+
+    .modal { background: white !important; }
+    body.modal-open { visibility: hidden; }
+    body.modal-open .modal.in { visibility: visible; }
+    .chart-container canvas { min-height: 100%; max-width: 100%; max-height: 100%; height: auto!important; width: auto!important; }
+
+    .table-striped>tbody>tr:nth-child(even)>td { background-color: #EEEEEE !important; }
+    .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 { float: left; }
+    .col-sm-12{width:100%;}.col-sm-11{width:91.66666667%;}.col-sm-10{width:83.33333333%;}.col-sm-9{width:75%;}.col-sm-8{width:66.66666667%;}.col-sm-7{width:58.33333333%;}
+    .col-sm-6{width:50%;}.col-sm-5{width:41.66666667%;}.col-sm-4{width:33.33333333%;}.col-sm-3{width:25%;}.col-sm-2{width:16.66666667%;}.col-sm-1{width:8.33333333%;}
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 { float: left; }
+    .col-md-12{width:100%;}.col-md-11{width:91.66666667%;}.col-md-10{width:83.33333333%;}.col-md-9{width:75%;}.col-md-8{width:66.66666667%;}.col-md-7{width:58.33333333%;}
+    .col-md-6{width:50%;}.col-md-5{width:41.66666667%;}.col-md-4{width:33.33333333%;}.col-md-3{width:25%;}.col-md-2{width:16.66666667%;}.col-md-1{width:8.33333333%;}
+}
+
+/* =========================================================
+   CORE Business/Ops — Sidebar vertical (estilo Superset)
+   Activado al sustituir la antigua navbar por #cf-sidebar.
+   ========================================================= */
+:root {
+    --cf-sidebar-width: 248px;
+    --cf-sidebar-collapsed-width: 72px;
+    --cf-sidebar-bg: #1a2540;
+    --cf-sidebar-bg-2: #131c33;
+    --cf-sidebar-fg: #e6ecf5;
+    --cf-sidebar-fg-dim: #8a96b3;
+    --cf-sidebar-active: #1f4cff;
+    --cf-sidebar-active-bg: #243561;
+    --cf-sidebar-hover-bg: #1f2c4d;
+    --cf-sidebar-border: #2a3858;
+
+    /* Colores por grupo (BUSINESS / OPS / FISCAL) */
+    --cf-group-home: #94a3b8;       /* gris-azulado, neutro */
+    --cf-group-business: #2563eb;   /* azul corporativo */
+    --cf-group-ops: #ea580c;        /* naranja taller */
+    --cf-group-fiscal: #16a34a;     /* verde compliance */
+    --cf-group-other: #6b7280;      /* gris */
+}
+
+/* Ocultar navbar antigua si quedan restos */
+#top { display: none !important; }
+
+body { padding-top: 0 !important; }
+html, body, #apps-root { background: #f5f7fb; }
+
+/* Sidebar fija a la izquierda */
+.cf-sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: var(--cf-sidebar-width);
+    background: var(--cf-sidebar-bg);
+    color: var(--cf-sidebar-fg);
+    display: flex;
+    flex-direction: column;
+    z-index: 1030;
+    font-size: 14px;
+    box-shadow: 1px 0 0 var(--cf-sidebar-border);
+    overflow: hidden;
+    transition: width 0.18s ease;
+}
+
+/* Header con marca */
+.cf-side-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--cf-sidebar-border);
+    min-height: 64px;
+    flex: 0 0 auto;
+}
+.cf-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--cf-sidebar-fg) !important;
+    text-decoration: none !important;
+    flex: 1;
+    min-width: 0;
+}
+.cf-brand-logo {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    object-fit: contain;
+    background: #2657d6;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+/* Monograma SVG inline en el brand del sidebar — adopta el color del texto */
+.cf-brand-mark {
+    width: 38px; height: 38px;
+    color: var(--cf-sidebar-fg);
+    flex-shrink: 0;
+    filter: drop-shadow(0 1px 3px rgba(34,211,238,0.18));
+}
+
+/* Selector de idioma en el footer del sidebar */
+#locale-menu-link {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+    padding-right: 7px !important;
+    width: auto !important;
+    min-width: 44px !important;
+}
+#locale-menu-link .cf-locale-current {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--cf-sidebar-fg-dim);
+}
+#locale-menu:hover #locale-menu-link .cf-locale-current { color: #fff; }
+.cf-locale-menu .cf-flag { display: inline-block; margin-right: 8px; font-size: 14px; vertical-align: middle; }
+.cf-locale-menu > li > a { padding: 8px 12px !important; }
+.cf-brand-text { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.cf-brand-title { font-weight: 700; font-size: 14px; letter-spacing: 0.5px; }
+.cf-brand-sub { font-size: 11px; color: var(--cf-sidebar-fg-dim); letter-spacing: 0.6px; }
+.cf-sidebar-toggle {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--cf-sidebar-fg-dim);
+    flex: 0 0 auto;
+}
+.cf-sidebar-toggle:hover,
+.cf-sidebar-toggle:focus {
+    background: var(--cf-sidebar-hover-bg);
+    color: #fff;
+    outline: none;
+}
+
+.cf-side-section-label {
+    padding: 14px 18px 6px 18px;
+    font-size: 11px;
+    color: var(--cf-sidebar-fg-dim);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    flex: 0 0 auto;
+}
+
+/* Lista de items */
+.cf-side-nav {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px 8px 10px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #596987 transparent;
+}
+.cf-side-nav::-webkit-scrollbar { width: 8px; }
+.cf-side-nav::-webkit-scrollbar-track { background: transparent; }
+.cf-side-nav::-webkit-scrollbar-thumb {
+    background: #596987;
+    border-radius: 999px;
+    border: 2px solid var(--cf-sidebar-bg);
+}
+.cf-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 34px;
+    padding: 8px 10px;
+    margin: 2px 0;
+    border-radius: 6px;
+    color: var(--cf-sidebar-fg) !important;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
+    white-space: nowrap;
+    min-width: 0;
+}
+.cf-nav-item:hover { background: var(--cf-sidebar-hover-bg); color: #fff !important; }
+.cf-nav-item.cf-active {
+    background: var(--cf-sidebar-active-bg);
+    color: #fff !important;
+    box-shadow: inset 3px 0 0 var(--cf-sidebar-active);
+}
+.cf-nav-icon { width: 18px; text-align: center; font-size: 15px; color: var(--cf-sidebar-fg-dim); flex-shrink: 0; }
+.cf-nav-item.cf-active .cf-nav-icon,
+.cf-nav-item:hover .cf-nav-icon { color: #fff; }
+.cf-nav-icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 0.78;
+    filter: brightness(0) invert(72%) sepia(13%) saturate(501%) hue-rotate(185deg);
+}
+.cf-nav-item.cf-active .cf-nav-icon-img,
+.cf-nav-item:hover .cf-nav-icon-img {
+    opacity: 1;
+    filter: brightness(0) invert(100%);
+}
+.cf-nav-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Grupos coloreados del sidebar (BUSINESS / OPS / FISCAL) */
+.cf-nav-group {
+    --cf-group-color: var(--cf-group-other);
+    margin: 14px 0 4px 0;
+}
+.cf-nav-group:first-child { margin-top: 4px; }
+.cf-nav-group-business { --cf-group-color: var(--cf-group-business); }
+.cf-nav-group-ops      { --cf-group-color: var(--cf-group-ops); }
+.cf-nav-group-fiscal   { --cf-group-color: var(--cf-group-fiscal); }
+.cf-nav-group-home     { --cf-group-color: var(--cf-group-home); }
+.cf-nav-group-other    { --cf-group-color: var(--cf-group-other); }
+
+.cf-nav-group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 16px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--cf-sidebar-fg-dim);
+    border-left: 3px solid var(--cf-group-color);
+    margin: 0 0 4px 0;
+}
+.cf-nav-group-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--cf-group-color);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
+    flex-shrink: 0;
+}
+.cf-nav-group-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.cf-nav-group-count {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--cf-sidebar-fg-dim);
+    background: rgba(255,255,255,0.06);
+    padding: 1px 7px;
+    border-radius: 999px;
+    letter-spacing: 0;
+}
+
+/* Item activo dentro de un grupo lleva el color del grupo como acento principal */
+.cf-nav-group .cf-nav-item.cf-active {
+    background: color-mix(in srgb, var(--cf-group-color) 22%, transparent);
+    color: #fff !important;
+    box-shadow: inset 3px 0 0 var(--cf-group-color);
+}
+.cf-nav-group .cf-nav-item.cf-active .cf-nav-icon {
+    color: var(--cf-group-color);
+}
+.cf-nav-group .cf-nav-item:hover {
+    background: color-mix(in srgb, var(--cf-group-color) 12%, var(--cf-sidebar-hover-bg));
+}
+.cf-nav-group .cf-nav-item-sub {
+    margin-left: 3px;
+}
+
+/* Badge contador con color sutil del grupo cuando hay items */
+.cf-nav-group .cf-nav-group-count {
+    background: color-mix(in srgb, var(--cf-group-color) 18%, rgba(255,255,255,0.04));
+    color: color-mix(in srgb, var(--cf-group-color) 70%, #fff);
+}
+
+/* Root-level item (CORE Business/Ops) — oculto por defecto en marble porque
+   el brand del header del sidebar ya lo identifica. Aparece solo si hay más
+   de una app de primer nivel disponible para el usuario. */
+.cf-nav-item-root { display: none; }
+.cf-side-nav:has(.cf-nav-item-root + .cf-nav-item-root) .cf-nav-item-root {
+    display: flex;
+    color: var(--cf-sidebar-fg-dim) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+/* Footer */
+.cf-side-footer {
+    border-top: 1px solid var(--cf-sidebar-border);
+    padding: 10px 12px 12px 12px;
+    background: var(--cf-sidebar-bg-2);
+    flex: 0 0 auto;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.16);
+}
+.cf-side-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+.cf-side-actions .dropdown {
+    position: static;
+}
+.cf-side-actions .dropdown-menu {
+    top: auto !important;
+    right: auto !important;
+    bottom: calc(100% + 8px) !important;
+    left: 0 !important;
+    width: calc(var(--cf-sidebar-width) - 24px) !important;
+    min-width: 0 !important;
+    max-width: calc(var(--cf-sidebar-width) - 24px) !important;
+    max-height: 280px;
+    overflow: auto;
+    border: 1px solid #d9dee8;
+    border-radius: 8px;
+    box-shadow: 0 16px 36px rgba(9, 18, 38, 0.28);
+    z-index: 1060;
+}
+.cf-side-actions .dropdown-menu > li > a,
+.cf-side-actions .dropdown-menu .alert {
+    white-space: normal;
+    word-break: break-word;
+}
+.cf-side-actions .dropdown-menu .alert {
+    margin: 0;
+    padding: 8px 10px;
+}
+.cf-side-actions .my-account-nav,
+.cf-side-actions #active-org-menu {
+    display: flex;
+    gap: 4px;
+    float: none !important;
+    margin: 0 !important;
+}
+.cf-side-actions .navbar-btn,
+.cf-side-actions .btn,
+.cf-side-actions .dropdown-toggle {
+    position: relative;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 6px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--cf-sidebar-fg-dim) !important;
+    box-shadow: none !important;
+}
+.cf-side-actions .navbar-btn:hover,
+.cf-side-actions .btn:hover,
+.cf-side-actions .dropdown-toggle:hover {
+    background: var(--cf-sidebar-hover-bg) !important;
+    color: #fff !important;
+}
+.cf-side-actions .label {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #596987;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 14px;
+}
+.cf-icon-btn > a, .cf-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    color: var(--cf-sidebar-fg-dim) !important;
+    text-decoration: none !important;
+    font-size: 14px;
+}
+.cf-icon-btn > a:hover, .cf-icon-btn:hover > a { background: var(--cf-sidebar-hover-bg); color: #fff !important; }
+
+.cf-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 4px;
+    min-width: 0;
+}
+.cf-user-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #2657d6;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.cf-user-info { flex: 1 1 auto; min-width: 0; line-height: 1.15; }
+.cf-user-name { color: var(--cf-sidebar-fg); font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cf-user-role { color: var(--cf-sidebar-fg-dim); font-size: 11px; }
+.cf-user-logout {
+    color: var(--cf-sidebar-fg-dim) !important;
+    width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 6px;
+}
+.cf-user-logout:hover { background: rgba(220, 53, 69, 0.18); color: #ff7886 !important; }
+
+/* Desplazar el contenido principal a la derecha de la sidebar sin sumar ancho extra al viewport */
+#content, #footer {
+    margin-left: var(--cf-sidebar-width);
+    width: calc(100vw - var(--cf-sidebar-width));
+    box-sizing: border-box;
+}
+#content {
+    min-height: 100vh;
+    overflow: auto;
+    transition: margin-left 0.18s ease, width 0.18s ease;
+}
+.inner { padding: 16px 0 58px 0; }
+
+/* Breadcrumb superior */
+#cf-breadcrumb {
+    margin-left: var(--cf-sidebar-width);
+    width: calc(100vw - var(--cf-sidebar-width));
+    padding: 10px 24px;
+    background: #fff;
+    border-bottom: 1px solid #e3e7ef;
+    font-size: 13px;
+    color: #6b7280;
+    transition: margin-left 0.18s ease, width 0.18s ease;
+}
+.cf-crumb { color: #6b7280 !important; text-decoration: none !important; }
+.cf-crumb:hover { color: #1f4cff !important; }
+.cf-crumb-current { color: #1f2937 !important; font-weight: 600; }
+.cf-crumb-sep { margin: 0 8px; color: #c5cad3; font-size: 11px; }
+
+/* Caret a la derecha cuando un item tiene sub-items expandidos */
+.cf-nav-caret { margin-left: auto; font-size: 11px; color: var(--cf-sidebar-fg-dim); }
+.cf-nav-item.cf-active .cf-nav-caret { color: #fff; }
+
+/* Sub-nivel (hijos de la app activa) */
+.cf-nav-sub {
+    margin: 4px 0 8px 14px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(138, 150, 179, 0.28);
+}
+.cf-nav-item-sub {
+    min-height: 30px;
+    padding: 6px 9px;
+    font-size: 12.5px;
+    color: #b8c3d8 !important;
+}
+.cf-nav-item-sub:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff !important;
+}
+.cf-nav-item-sub.cf-active {
+    background: rgba(31, 76, 255, 0.18);
+    color: #fff !important;
+    box-shadow: inset 2px 0 0 var(--cf-sidebar-active);
+    font-weight: 600;
+}
+.cf-nav-item-sub .cf-nav-icon { font-size: 11px; }
+
+/* Evitar overflow horizontal de la pantalla: el contenido scrollea dentro de su área */
+#content > .inner { min-width: 720px; }
+
+/* Sidebar colapsable */
+body.cf-sidebar-collapsed .cf-sidebar {
+    width: var(--cf-sidebar-collapsed-width);
+}
+body.cf-sidebar-collapsed .cf-side-header {
+    justify-content: center;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+body.cf-sidebar-collapsed .cf-brand {
+    flex: 0 0 auto;
+}
+body.cf-sidebar-collapsed .cf-brand-text,
+body.cf-sidebar-collapsed .cf-side-section-label,
+body.cf-sidebar-collapsed .cf-nav-label,
+body.cf-sidebar-collapsed .cf-nav-caret,
+body.cf-sidebar-collapsed .cf-user-info,
+body.cf-sidebar-collapsed .cf-user-logout,
+body.cf-sidebar-collapsed .cf-side-actions,
+body.cf-sidebar-collapsed .cf-nav-group-label,
+body.cf-sidebar-collapsed .cf-nav-group-count,
+body.cf-sidebar-collapsed .cf-nav-group-dot {
+    display: none !important;
+}
+
+/* Modo colapsado: el header de grupo se convierte en una línea fina
+   coloreada que separa visualmente los items por categoría. */
+body.cf-sidebar-collapsed .cf-nav-group-header {
+    padding: 0;
+    margin: 8px 16px 6px 16px;
+    height: 2px;
+    border-left: 0;
+    border-radius: 2px;
+    background: var(--cf-group-color);
+    opacity: 0.7;
+}
+body.cf-sidebar-collapsed .cf-nav-group { margin: 4px 0; }
+body.cf-sidebar-collapsed .cf-nav-group:first-child { margin-top: 0; }
+body.cf-sidebar-collapsed .cf-nav-group:first-child .cf-nav-group-header { display: none; }
+body.cf-sidebar-collapsed .cf-brand-logo,
+body.cf-sidebar-collapsed .cf-brand-mark {
+    width: 34px;
+    height: 34px;
+}
+body.cf-sidebar-collapsed .cf-sidebar-toggle {
+    position: absolute;
+    top: 72px;
+    left: 20px;
+    width: 32px;
+    height: 32px;
+}
+body.cf-sidebar-collapsed .cf-side-nav {
+    padding: 46px 10px 10px 10px;
+}
+body.cf-sidebar-collapsed .cf-nav-sub {
+    display: block !important;
+    margin: 4px 0 0 0;
+    padding-left: 0;
+    border-left: 0;
+}
+body.cf-sidebar-collapsed .cf-nav-item {
+    width: 52px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+}
+
+/* Tooltip flotante al hover en sidebar colapsado.
+   Aparece a la derecha del icono con el label del item. */
+body.cf-sidebar-collapsed .cf-nav-item::after {
+    content: attr(title);
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: #0f172a;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 1040;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+body.cf-sidebar-collapsed .cf-nav-item::before {
+    content: "";
+    position: absolute;
+    left: calc(100% + 2px);
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right-color: #0f172a;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease;
+    z-index: 1041;
+}
+body.cf-sidebar-collapsed .cf-nav-item:hover::after,
+body.cf-sidebar-collapsed .cf-nav-item:hover::before {
+    opacity: 1;
+}
+body.cf-sidebar-collapsed .cf-nav-item:hover::after {
+    transform: translateY(-50%) translateX(2px);
+}
+body.cf-sidebar-collapsed .cf-nav-icon {
+    width: 20px;
+    font-size: 16px;
+}
+body.cf-sidebar-collapsed .cf-side-footer {
+    padding: 12px 10px;
+}
+body.cf-sidebar-collapsed .cf-user {
+    justify-content: center;
+    padding: 0;
+}
+body.cf-sidebar-collapsed #content,
+body.cf-sidebar-collapsed #footer,
+body.cf-sidebar-collapsed #cf-breadcrumb {
+    margin-left: var(--cf-sidebar-collapsed-width);
+    width: calc(100vw - var(--cf-sidebar-collapsed-width));
+}
+
+/* Responsive: sidebar más estrecha en pantallas medias */
+@media (max-width: 1100px) {
+    :root { --cf-sidebar-width: 208px; }
+    .cf-brand-title { font-size: 13px; }
+    .cf-brand-sub { font-size: 10px; }
+    .cf-nav-item { gap: 8px; padding-left: 9px; padding-right: 9px; }
+    #content > .inner { min-width: 680px; }
+}
+/* Responsive: ocultar sidebar en pantallas estrechas */
+@media (max-width: 768px) {
+    .cf-sidebar { transform: translateX(-100%); transition: transform 0.2s ease; }
+    .cf-sidebar.cf-open { transform: translateX(0); }
+    #content, #footer, #cf-breadcrumb {
+        margin-left: 0;
+        width: 100vw;
+    }
+    #content > .inner {
+        min-width: 0;
+        width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+/* Impresión: sin sidebar */
+@media print {
+    .cf-sidebar, #cf-breadcrumb { display: none !important; }
+    #content, #footer { margin-left: 0 !important; }
+}
+
+/* =========================================================
+   Modo OSCURO comprehensivo — body.bg-dark
+   Cambia fondos de cards/tablas/inputs/modales, no solo texto.
+   ========================================================= */
+body.bg-dark {
+    --cf-dark-bg: #0f1729;
+    --cf-dark-surface: #1a2540;
+    --cf-dark-surface-2: #243561;
+    --cf-dark-border: #2a3858;
+    --cf-dark-text: #e6ecf5;
+    --cf-dark-text-dim: #8a96b3;
+    --cf-dark-accent: #22D3EE;
+    background: var(--cf-dark-bg) !important;
+    color: var(--cf-dark-text);
+}
+
+/* Layout shells */
+body.bg-dark #apps-root,
+body.bg-dark #content,
+body.bg-dark #content > .inner,
+body.bg-dark .container-fluid { background: var(--cf-dark-bg) !important; }
+
+/* Cards / boxes / panels — donde van las pantallas Moqui */
+body.bg-dark .container-box,
+body.bg-dark .panel,
+body.bg-dark .panel-default,
+body.bg-dark .well,
+body.bg-dark .alert,
+body.bg-dark .modal-content,
+body.bg-dark .dropdown-menu,
+body.bg-dark .nav-tabs,
+body.bg-dark .tab-content,
+body.bg-dark .container > .row > div[class^="col-"] > .container-box,
+body.bg-dark [class*="box-"],
+body.bg-dark .form-list,
+body.bg-dark .form-single,
+body.bg-dark [class^="panel"] {
+    background: var(--cf-dark-surface) !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark .panel-heading,
+body.bg-dark .modal-header,
+body.bg-dark .box-header {
+    background: var(--cf-dark-surface-2) !important;
+    border-bottom: 1px solid var(--cf-dark-border) !important;
+    color: var(--cf-dark-text) !important;
+}
+body.bg-dark .panel-body,
+body.bg-dark .modal-body,
+body.bg-dark .box-body,
+body.bg-dark .box-body-nopad { background: var(--cf-dark-surface) !important; color: var(--cf-dark-text) !important; }
+body.bg-dark .panel-footer,
+body.bg-dark .modal-footer { background: var(--cf-dark-surface-2) !important; border-top: 1px solid var(--cf-dark-border) !important; color: var(--cf-dark-text) !important; }
+
+/* Tablas — la queja principal del usuario */
+body.bg-dark table,
+body.bg-dark .table,
+body.bg-dark .table-responsive,
+body.bg-dark table > thead,
+body.bg-dark table > tbody,
+body.bg-dark table > tfoot {
+    background: var(--cf-dark-surface) !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark table th,
+body.bg-dark .table th {
+    background: var(--cf-dark-surface-2) !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark table td,
+body.bg-dark .table td {
+    background: transparent !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark .table-striped > tbody > tr:nth-of-type(odd) > td,
+body.bg-dark .table-striped > tbody > tr:nth-of-type(odd) {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+body.bg-dark .table-hover > tbody > tr:hover > td,
+body.bg-dark table tbody tr:hover {
+    background: rgba(34, 211, 238, 0.06) !important;
+}
+
+/* Form controls */
+body.bg-dark .form-control,
+body.bg-dark input[type="text"],
+body.bg-dark input[type="email"],
+body.bg-dark input[type="password"],
+body.bg-dark input[type="number"],
+body.bg-dark input[type="search"],
+body.bg-dark input[type="date"],
+body.bg-dark input[type="datetime-local"],
+body.bg-dark textarea,
+body.bg-dark select {
+    background: var(--cf-dark-bg) !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark .form-control::placeholder,
+body.bg-dark input::placeholder,
+body.bg-dark textarea::placeholder { color: var(--cf-dark-text-dim) !important; }
+body.bg-dark .form-control:focus,
+body.bg-dark input:focus,
+body.bg-dark textarea:focus,
+body.bg-dark select:focus {
+    border-color: var(--cf-dark-accent) !important;
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15) !important;
+}
+
+/* Select2 dropdown */
+body.bg-dark .select2-container--bootstrap .select2-selection,
+body.bg-dark .select2-container--default .select2-selection {
+    background: var(--cf-dark-bg) !important;
+    border-color: var(--cf-dark-border) !important;
+    color: var(--cf-dark-text) !important;
+}
+body.bg-dark .select2-container .select2-selection__rendered,
+body.bg-dark .select2-selection__placeholder { color: var(--cf-dark-text) !important; }
+body.bg-dark .select2-dropdown,
+body.bg-dark .select2-results__option {
+    background: var(--cf-dark-surface) !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark .select2-results__option--highlighted { background: var(--cf-dark-accent) !important; color: #052028 !important; }
+
+/* Tabs / navs */
+body.bg-dark .nav-tabs > li > a,
+body.bg-dark .nav > li > a { color: var(--cf-dark-text-dim) !important; border-color: var(--cf-dark-border) !important; background: transparent !important; }
+body.bg-dark .nav-tabs > li > a:hover,
+body.bg-dark .nav > li > a:hover { background: var(--cf-dark-surface-2) !important; color: var(--cf-dark-text) !important; }
+body.bg-dark .nav-tabs > li.active > a,
+body.bg-dark .nav-tabs > li.active > a:focus,
+body.bg-dark .nav-tabs > li.active > a:hover {
+    background: var(--cf-dark-surface) !important;
+    color: var(--cf-dark-accent) !important;
+    border-color: var(--cf-dark-border) !important;
+    border-bottom-color: transparent !important;
+}
+body.bg-dark .nav-tabs { border-bottom-color: var(--cf-dark-border) !important; }
+
+/* Labels / text */
+body.bg-dark label,
+body.bg-dark .control-label { color: var(--cf-dark-text) !important; }
+body.bg-dark .text-muted { color: var(--cf-dark-text-dim) !important; }
+body.bg-dark h1, body.bg-dark h2, body.bg-dark h3,
+body.bg-dark h4, body.bg-dark h5, body.bg-dark h6 { color: var(--cf-dark-text) !important; }
+
+/* Buttons (preserve primary/danger) */
+body.bg-dark .btn-default {
+    background: var(--cf-dark-surface-2) !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark .btn-default:hover { background: var(--cf-dark-border) !important; color: var(--cf-dark-text) !important; }
+
+/* Links */
+body.bg-dark a { color: var(--cf-dark-accent); }
+body.bg-dark a:hover { color: #67e8f9; }
+
+/* Dropdown items */
+body.bg-dark .dropdown-menu > li > a { color: var(--cf-dark-text); }
+body.bg-dark .dropdown-menu > li > a:hover,
+body.bg-dark .dropdown-menu > li > a:focus { background: var(--cf-dark-surface-2) !important; color: var(--cf-dark-text) !important; }
+
+/* Breadcrumb top */
+body.bg-dark #cf-breadcrumb { background: var(--cf-dark-surface) !important; border-bottom-color: var(--cf-dark-border) !important; }
+body.bg-dark #cf-breadcrumb .cf-crumb { color: var(--cf-dark-text-dim); }
+body.bg-dark #cf-breadcrumb .cf-crumb-current { color: var(--cf-dark-text); }
+
+/* Pagination */
+body.bg-dark .pagination > li > a,
+body.bg-dark .pagination > li > span {
+    background: var(--cf-dark-surface) !important;
+    color: var(--cf-dark-text) !important;
+    border-color: var(--cf-dark-border) !important;
+}
+body.bg-dark .pagination > .active > a,
+body.bg-dark .pagination > .active > span {
+    background: var(--cf-dark-accent) !important;
+    color: #052028 !important;
+    border-color: var(--cf-dark-accent) !important;
+}
+
+/* Alerts */
+body.bg-dark .alert-info { background: rgba(34, 211, 238, 0.08) !important; border-color: rgba(34, 211, 238, 0.3) !important; color: var(--cf-dark-accent) !important; }
+body.bg-dark .alert-success { background: rgba(16, 185, 129, 0.08) !important; border-color: rgba(16, 185, 129, 0.3) !important; color: #34d399 !important; }
+body.bg-dark .alert-warning { background: rgba(251, 191, 36, 0.08) !important; border-color: rgba(251, 191, 36, 0.3) !important; color: #fcd34d !important; }
+body.bg-dark .alert-danger { background: rgba(248, 113, 113, 0.08) !important; border-color: rgba(248, 113, 113, 0.3) !important; color: #fca5a5 !important; }
+
+/* Pre/code blocks */
+body.bg-dark pre, body.bg-dark code { background: var(--cf-dark-bg) !important; color: var(--cf-dark-text) !important; border-color: var(--cf-dark-border) !important; }

@@ -1,13 +1,19 @@
-# Use the official Moqui demo image as base (has framework + all dependencies)
+# Moqui demo image (framework + MarbleERP + SimpleScreens + deps)
 FROM moqui/moquidemo:latest
 
-# Copy our demo component into the runtime
+# SARA localization (screens, services, fiscal SV)
 COPY components/moqui-sv-localization /opt/moqui/runtime/component/moqui-sv-localization
 
-# Copy our dev conf
+# SARA UI shell: login, dark sidebar, CORE BUSINESS/OPS groups, logos
+COPY overlays/webroot/ /opt/moqui/runtime/base-component/webroot/
+
+# Brand MarbleERP as CORE Business/Ops
+COPY overlays/MarbleERP/screen/marble.xml /opt/moqui/runtime/component/MarbleERP/screen/marble.xml
+
+# Runtime conf
 COPY runtime/conf/MoquiDevConf.xml /opt/moqui/runtime/conf/MoquiDevConf.xml
 
-# Remove the default demo data (we have our own)
+# Keep packaged demo seed out of the way if present as duplicate name
 RUN rm -f /opt/moqui/runtime/component/moqui-sv-localization/data/SvDemoData.xml 2>/dev/null || true
 
 EXPOSE 80
