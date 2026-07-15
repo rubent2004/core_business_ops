@@ -4,6 +4,5 @@
     <depends-on name="mantle-udm" version="2.2.1"/>
     <depends-on name="mantle-usl" version="3.0.0"/>
     <depends-on name="SimpleScreens" version="2.2.2"/>
-    <depends-on name="MarbleERP" version="1.0.1"/>
     <depends-on name="moqui-fop" version="2.0.0"/>
 </component>
